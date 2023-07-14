@@ -10,7 +10,6 @@ from recommender_script import Recommendation, Recommendation_due
 from expl_script import Spiegazione
 from flask import Flask, request
 
-#app = Flask(__name__)
 
 # Definizione degli stati di conversazione
 GENDER, AGE, HT_LIFESTYLE_IMPORTANCE, HT_LIFESTYLE, CM, KG, COOK_EXP, MAX_COST_REC, TIME_COOK, GOALS, MOOD, PH_ACTIVITY, SLEEP,STRESS, DEPRESS, LOWNICKEL, VEGETERIAN, LACTOSEFREE,GLUTENFREE,LIGHT, DIABETES, PREGNANT, CATEGORY= range(23)
@@ -52,10 +51,6 @@ def age(update: Update, context):
         return AGE
     else:
         context.user_data['age'] = user_age
-        # Rimuove la tastiera dei pulsanti
-        #reply_markup = ReplyKeyboardRemove()
-        #update.message.reply_text('Hai selezionato: {}\nHai {} anni.'.format(context.user_data['gender'], context.user_data['age']),
-         #                        reply_markup=reply_markup)
         keyboard = [['Molto importante', 'Importante','Poco importante'], ['Non importante','Assolutamente non importante']]
         reply_markup = ReplyKeyboardMarkup(keyboard, one_time_keyboard=True, resize_keyboard=True, button_color='black', font_size=10, font_family='Arial')
         update.message.reply_text('Quanto è importante per te avere uno stile di vita salutare?\n(Hai a disposizione dei pulsanti per rispondere alla mia domanda)',reply_markup=reply_markup)
@@ -110,7 +105,6 @@ def ht_lifestyle(update: Update, context):
             context.user_data['ht_lifestyle'] = 1
         reply_markup = ReplyKeyboardRemove()
         update.message.reply_text('Sapresti dirmi la tua altezza in cm?', reply_markup=reply_markup)
-        #update.message.reply_text('Cerchi sempre di prediligere cibi salutari?\n(Sempre/Spesso/Raramente/Mai))')
         return CM
 
 ##########################################################################################################################################
@@ -149,7 +143,6 @@ def weight(update: Update, context):
         keyboard = [['Molto facile', 'Facile','Media'],['Difficile','Molto difficile']]
         reply_markup = ReplyKeyboardMarkup(keyboard, one_time_keyboard=True, resize_keyboard=True, button_color='black', font_size=9, font_family='Arial')
         update.message.reply_text('Come dovrebbe essere la preparazione di un piatto fatto da te?\n(Hai a disposizione dei pulsanti per rispondere alla mia domanda)',reply_markup=reply_markup)
-        #update.message.reply_text('Grazie! Potresti dirmi gentilmente la tua occupazione?\n(Studente/Impiegato azienda privata/Impiegato azienda pubblica/Imprenditore/Libero professionista/Disoccupato)')
         return COOK_EXP
 
 ##########################################################################################################################################
@@ -176,7 +169,6 @@ def cook_exp(update: Update, context):
         keyboard = [['Molto basso', 'Basso'],['Medio','Elevato', 'Non importante']]
         reply_markup = ReplyKeyboardMarkup(keyboard, one_time_keyboard=True, resize_keyboard=True, button_color='black', font_size=9, font_family='Arial')
         update.message.reply_text('Quanto potrebbe essere il tuo budget per preparare una ricetta?\n(Hai a disposizione dei pulsanti per rispondere alla mia domanda)',reply_markup=reply_markup)
-        #update.message.reply_text('Va bene. Quanto potrebbe essere il tuo budget per preparare una ricetta?\n(Davvero basso/Basso/Medio/Alto/Non importante)')
         return MAX_COST_REC
 
 ##########################################################################################################################################
@@ -219,7 +211,6 @@ def time_cook(update: Update, context):
         keyboard = [['Perderne', 'Acquisirne'],['Nessuno']]
         reply_markup = ReplyKeyboardMarkup(keyboard, one_time_keyboard=True, resize_keyboard=True, button_color='black', font_size=10, font_family='Arial')
         update.message.reply_text('Qual è il tuo obiettivo in termini di peso?\n(Hai a disposizione dei pulsanti per rispondere alla mia domanda)',reply_markup=reply_markup)
-        #update.message.reply_text('Grazie! Qual è il tuo obiettivo?\n(Perdere peso/Prendere peso/Nessun obiettivo)')
         return GOALS
 
 ##########################################################################################################################################
@@ -241,7 +232,6 @@ def goals(update: Update, context):
         keyboard = [['Bene', 'Neutro'],['Male']]
         reply_markup = ReplyKeyboardMarkup(keyboard, one_time_keyboard=True, resize_keyboard=True, button_color='black', font_size=10, font_family='Arial')
         update.message.reply_text('Come ti senti attualmente?\n(Hai a disposizione dei pulsanti per rispondere alla mia domanda)',reply_markup=reply_markup)
-        #update.message.reply_text('Va bene. Qual è il tuo mood attuale?\n(Sto bene/Neutro/Sto male)')
         return MOOD
     
 ##########################################################################################################################################
@@ -263,7 +253,6 @@ def mood(update: Update, context):
         keyboard = [['Tanta', 'Media'],['Poca']]
         reply_markup = ReplyKeyboardMarkup(keyboard, one_time_keyboard=True, resize_keyboard=True, button_color='black', font_size=10, font_family='Arial')
         update.message.reply_text('Quanta attività fisica fai in una settimana?\n(Hai a disposizione dei pulsanti per rispondere alla mia domanda)',reply_markup=reply_markup)
-        #update.message.reply_text('Quanta attività fisica fai in una settimana?\n(Tanta (9h o più)/ Media (più o meno 6h)/ Poca(meno di 3h))')
         return PH_ACTIVITY
     
 ##########################################################################################################################################
@@ -285,7 +274,6 @@ def ph_activity(update: Update, context):
         keyboard = [['8-', '8+']]
         reply_markup = ReplyKeyboardMarkup(keyboard, one_time_keyboard=True, resize_keyboard=True, button_color='black', font_size=10, font_family='Arial')
         update.message.reply_text('Quante ore dormi al giorno?\n(Hai a disposizione dei pulsanti per rispondere alla mia domanda)',reply_markup=reply_markup)
-        #update.message.reply_text('Quante ore dormi al giorno? (<8h/>=8h)')
         return SLEEP
 
 ##########################################################################################################################################
@@ -305,7 +293,6 @@ def sleep(update: Update, context):
         keyboard = [['Si', 'No']]
         reply_markup = ReplyKeyboardMarkup(keyboard, one_time_keyboard=True, resize_keyboard=True, button_color='black', font_size=10, font_family='Arial')
         update.message.reply_text('Ti senti stressato in questo periodo?\n(Hai a disposizione dei pulsanti per rispondere alla mia domanda)',reply_markup=reply_markup)
-        #update.message.reply_text('Ti senti stressato in questo periodo? (Sì/No))')
         return STRESS
     
 ##########################################################################################################################################
@@ -325,7 +312,7 @@ def stress(update: Update, context):
         keyboard = [['Si', 'No']]
         reply_markup = ReplyKeyboardMarkup(keyboard, one_time_keyboard=True, resize_keyboard=True, button_color='black', font_size=10, font_family='Arial')
         update.message.reply_text('Ti senti depresso in questo periodo?\n(Hai a disposizione dei pulsanti per rispondere alla mia domanda)',reply_markup=reply_markup)
-        #update.message.reply_text('Ti senti depresso in questo periodo? (Sì/No))')
+
         return DEPRESS
 
 ##########################################################################################################################################
@@ -345,7 +332,6 @@ def depress(update: Update, context):
         keyboard = [['Si','No']]
         reply_markup = ReplyKeyboardMarkup(keyboard, one_time_keyboard=True, resize_keyboard=True, button_color='black', font_size=10, font_family='Arial')
         update.message.reply_text('Grazie! Ancora poche domande ed abbiamo terminato. Hai bisogno di ricette con basso Nickel?\n(Hai a disposizione dei pulsanti per rispondere alla mia domanda)',reply_markup=reply_markup)
-        #update.message.reply_text('Hai delle restrizioni da dover seguire?\n(Vegetariano/Gluten-Free/Intollerante al lattosio/Nickel basso/Ricette Light/No)')
         return LOWNICKEL
     
 ##########################################################################################################################################
@@ -398,7 +384,6 @@ def lactosefree(update: Update, context):
         keyboard = [['Si','No']]
         reply_markup = ReplyKeyboardMarkup(keyboard, one_time_keyboard=True, resize_keyboard=True, button_color='black', font_size=10, font_family='Arial')
         update.message.reply_text('Sei intollerante al glutine?\n(Hai a disposizione dei pulsanti per rispondere alla mia domanda)',reply_markup=reply_markup)
-        #update.message.reply_text('Hai delle restrizioni da dover seguire?\n(Vegetariano/Gluten-Free/Intollerante al lattosio/Nickel basso/Ricette Light/No)')
         return GLUTENFREE
 
 def glutenfree(update: Update, context):
@@ -475,31 +460,7 @@ def category(update: Update, context):
         context.user_data['category'] = user_category
         reply_markup = ReplyKeyboardRemove()
         update.message.reply_text('Grazie mille per le tue risposte! Ora, chiedendomi aiuto ti dirò cosa posso fare per te!',reply_markup=reply_markup)
-        #update.message.reply_text('Infine, puoi dirmi degli ingredienti che ti piacciono molto per consigliarti un eventuale ricetta\n(Hai a disposizione dei pulsanti per rispondere alla mia domanda)',reply_markup=reply_markup)
-        return ConversationHandler.END #INGREDIENTS
-"""
-def ingredients(update: Update, context):
-    user_ingredients= update.message.text.lower()
-    # Controllo sulla validità della depressione
-    if user_ingredients is None:
-        update.message.reply_text("Gentilmente rispondimi con degli ingredienti che ti piacerebbero.")
-        return INGREDIENTS
-    else:
-        context.user_data['ingredients'] = user_ingredients
-        update.message.reply_text('Grazie mille per le tue risposte! Ora, chiedendomi aiuto ti dirò cosa posso fare per te!')
-        # Salvataggio dei dati in un file CSV
-        with open('utenti.csv', mode='a', newline='') as file:
-            writer = csv.writer(file,lineterminator='\r\n')
-            writer.writerow([update.effective_user.id, update.effective_user.name,context.user_data['gender'], context.user_data['age'],context.user_data['ht_lifestyle_importance'],
-                            context.user_data['ht_lifestyle'],context.user_data['height'], context.user_data['weight'],context.user_data['cook_exp'], context.user_data['max_cost_rec'],context.user_data['time_cook'],context.user_data['goals'],context.user_data['mood'],context.user_data['ph_activity'],
-                            context.user_data['sleep'],context.user_data['stress'],context.user_data['depress'],context.user_data['nickel'],context.user_data['vegetarian'],context.user_data['lactosefree'],
-                            context.user_data['glutenfree'], context.user_data['light'], context.user_data['diabetes'], context.user_data['pregnant'],context.user_data['category'],context.user_data['ingredients']])
-            print(writer)
-
-    return ConversationHandler.END
-"""
-#def start_dialogflow():
-  #  subprocess.call(['start', 'dialogflow.bat'], shell=True)
+        return ConversationHandler.END 
 
 #Funzione per gestire eventuali errori
 def error(update, context):
@@ -609,13 +570,8 @@ def main():
             AGE: [MessageHandler(Filters.text, age)],
             HT_LIFESTYLE_IMPORTANCE:[MessageHandler(Filters.text, ht_lifestyle_importance)],
             HT_LIFESTYLE:[MessageHandler(Filters.text,ht_lifestyle )],
-            #HT_FOOD_CHOICES:[MessageHandler(Filters.text, ht_food_choices)],
-            #NUT_VALUE_FOOD:[MessageHandler(Filters.text, nut_value_food)],
             CM:[MessageHandler(Filters.text, height)],
             KG:[MessageHandler(Filters.text, weight)],
-            #EMPLOYEMENT:[MessageHandler(Filters.text, employement)],
-            #REC_WEB_USAGE:[MessageHandler(Filters.text, rec_web_usage)],
-            #FREQ_HOME_MEALS:[MessageHandler(Filters.text, freq_home_meals)],
             COOK_EXP:[MessageHandler(Filters.text, cook_exp)],
             MAX_COST_REC:[MessageHandler(Filters.text, max_cost_rec)],
             TIME_COOK:[MessageHandler(Filters.text, time_cook)],
@@ -633,7 +589,6 @@ def main():
             DIABETES:[MessageHandler(Filters.text, diabetes)],
             PREGNANT:[MessageHandler(Filters.text, pregnant)],
             CATEGORY:[MessageHandler(Filters.text, category)]
-           # INGREDIENTS:[MessageHandler(Filters.text, ingredients)]
         },
             fallbacks=[MessageHandler(Filters.text, unknown)]
         
@@ -652,21 +607,3 @@ def main():
     updater.idle()
     
 main()
-   
-"""
-    @app.route('/webhook', methods=['POST'])
-    def webhook():
-        update = telegram.Update.de_json(request.get_json(force=True), updater.bot)
-        updater.dispatcher.process_update(update)
-        return 'ok'
-
-    updater.start_webhook(
-        listen="0.0.0.0",
-        port=int(os.environ.get('PORT', 5000)),
-        url_path=keys.API_TOKEN,
-        webhook_url='https://foodrecsys.herokuapp.com/webhook'
-    )
-
-    if __name__ == '__main__':
-        app.run()
-"""
