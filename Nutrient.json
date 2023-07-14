@@ -1,0 +1,272 @@
+{
+	"sugars": {
+		"benefits" : ["migliora l'approvvigionamento energetico",
+			"migliorano il tuo mood",
+			"migliorano la tua capacità di pensiero",
+			"aiutano la milza e la regolazione del fegato",
+			"prevengono la trombosi",
+			"aumentano il flusso di sangue",
+			"prevengono la sclerosi",
+			"riducono vari tipi di stress",
+			"riducono la pressione sanguigna",
+			"migliorano la salute del cervello"
+		],
+		"risksTooMuch" : [
+			"carie",
+			"invecchiamento accelerato",
+			"obesità",
+			"diabete",
+			"malattie cardiache",
+			"cancro",
+			"mood swings",
+			"malattia parodontale",
+			"falsa fame",
+			"immunodeficienza",
+			"acne",
+			"comparsa di rughe",
+			"doppio mento",
+			"macchie scure",
+			"lenta guarigione di tagli e ferite"
+		],
+		"risksTooLittle" : [
+			"palpitazioni",
+			"difficoltà di concentrazione",
+			"stanchezza",
+			"irritabilità",
+			"capogiro"
+		],
+		"RI" : 50
+	},
+	"carbohydrates": {
+		"benefits" : [
+			"migliorano l'approvvigionamento energetico",
+			"aiutano a dormire meglio",
+			"migliorano la tua capacità di pensiero",
+			"improve your mood",
+			"prevent thrombosis",
+			"prevent weight gain",
+			"reduce heart disease",
+			"improve digestion",
+			"decrease disease risk",
+			"give fullness",
+			"prevents diabetes",
+			"prevents hypertension"
+		],
+		"risksTooMuch": [
+			"diabetes",
+			"heart diseases",
+			"cholesterol level",
+			"obesity",
+			"mood swings",
+			"tiredness",
+			"false hunger",
+			"sugar craving",
+			"colon cancer",
+			"stroke",
+			"lactose intolerance",
+			"fructose malabsorption"
+		],
+		"risksTooLittle": [
+			"heart arrhythmia",
+			"osteoporosis",
+			"kidney damage",
+			"cancer"
+		],
+		"RI" : 275
+	},
+	"proteins": {
+		"benefits" : [
+			"improve muscle development",
+			"control sugar level",
+			"prevent hair damage",
+			"slow down aging process",
+			"help in hormone balance",
+			"prevent heart disease",
+			"prevent weight gain",
+			"improve immunity system",
+			"improve digestion",
+			"reduce hunger"
+		],
+		"risksTooMuch" : [
+			"mood swings",
+			"confusion",
+			"nervousness",
+			"obesity",
+			"constipation",
+			"dehydration",
+			"kidney damage",
+			"cancer",
+			"heart diseases",
+			"diarrhea",
+			"bad breath",
+			"osteoporosis"
+		],
+		"risksTooLittle" : [
+			"muscle mass loss",
+			"slow metabolism",
+			"anemia",
+			"tiredness"
+		],
+		"RI" : 50
+	},
+	"fat": {
+		"benefits" : [
+			"help to absorb fat soluble vitamins",
+			"improve energy supply",
+			"reduce hunger",
+			"extend fullness",
+			"add flavor and texture to food",
+			"help brain development and function",
+			"help liver functions",
+			"slow down brain cells aging",
+			"regulate cholesterol levels",
+			"help in hormone balance"
+		],
+		"risksTooMuch" : [
+			"obesity",
+			"heart diseases",
+			"diabetes",
+			"cancer",
+			"sleep apnea",
+			"raised blood pressure",
+			"kidney damage",
+			"cholesterol level",
+			"stroke",
+			"vision loss",
+			"lower immune response"
+		],
+		"risksTooLittle" : [
+			"dry rashes",
+			"hair loss",
+			"immune system weakness"
+		],
+		"RI" : 71
+	},
+	"saturatedFat": {
+		"benefits" : [
+			"help to absorb fat soluble vitamins",
+			"improve energy supply",
+			"reduce hunger",
+			"extend fullness",
+			"add flavor and texture to food",
+			"help brain development and function",
+			"help liver functions",
+			"slow down brain cells aging",
+			"regulate cholesterol levels",
+			"help in hormone balance"
+		],
+		"risksTooMuch" : [
+			"obesity",
+			"heart diseases",
+			"diabetes",
+			"cancer",
+			"sleep apnea",
+			"raised blood pressure",
+			"kidney damage",
+			"cholesterol level",
+			"stroke",
+			"vision loss",
+			"lower immune response"
+		],
+		"risksTooLittle" : [
+			"blood vessels constriction",
+			"increased severity of inflammatory responses"
+		],
+		"RI" : 18
+	},
+	"fibers": {
+		"benefits" : [
+			"improve digestion",
+			"reduce diabetes risk",
+			"prevent constipation",
+			"reduce heart disease",
+			"reduce cancer risks",
+			"stabilize blood sugar",
+			"reduce false hunger",
+			"reduce cholesterol",
+			"reduce blood pressure",
+			"reduce stroke risks"
+		],
+		"risksTooMuch" : [
+			"constipation",
+			"bloating",
+			"reduced sugar level",
+			"crohn's disease",
+			"weight gain",
+			"flatulence",
+			"diarrhea",
+			"nausea/vomiting",
+			"dehydration",
+			"nutrient deficiencies"
+		],
+		"risksTooLittle" : [
+			"constipation",
+			"diarrhea"
+		],
+		"RI" : 28
+	},
+	"cholesterol": {
+		"benefits" : [
+			"help to build cell membrane",
+			"help to make hormones",
+			"increase vitamin D production",
+			"increase metabolism",
+			"help to digest fat",
+			"help to absorb nutrients",
+			"improve your mood",
+			"prevent bowel risk",
+			"acts as an antioxidant",
+			"reduce infections risk"
+		],
+		"risksTooMuch" : [
+			"stroke",
+			"confusion",
+			"heart disease",
+			"reduced blood flow",
+			"pain",
+			"legs numbness",
+			"hemorrhage",
+			"obesity",
+			"diabetes",
+			"raised blood pressure"
+		],
+		"risksTooLittle" : [
+			"depression",
+			"cancer",
+			"anxiety"
+		],
+		"RI" : 3
+	},
+	"sodium": {
+		"benefits" : [
+			"help brain function",
+			"reduce nausea/vomiting",
+			"improve communications between cells",
+			"regulate ph",
+			"help osmotic pressure",
+			"balance body's fluids",
+			"help muscle contraction",
+			"control blood pressure",
+			"relieve muscle cramps",
+			"slow down skin aging process"
+		],
+		"risksTooMuch" : [
+			"raised blood pressure",
+			"stroke",
+			"heart disease",
+			"obesity",
+			"dehydration",
+			"bloating",
+			"false hunger",
+			"pain",
+			"kidney damage",
+			"cancer"
+		],
+		"risksTooLittle" : [
+			"nausea/vomiting",
+			"muscle cramps",
+			"dizziness"
+		],
+		"RI" : 5.25
+	}
+}

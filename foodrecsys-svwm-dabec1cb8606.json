@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "foodrecsys-svwm",
+  "private_key_id": "dabec1cb86069cd8cbe3a32d2187ea5c01367430",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDO3VxTYBbXFy5W\naOVxKhaX+UIphHcZseVx7jWrukJg2KqF1643yOIheUTeQwcO8bOFQPW8M/NIkRGs\nFHt7kqxa05bRsCwfw/NBHCOpLxuQh64ixFzLQSRqab94kFZLAYuvSTuE0D3uS/Ky\nNpXeTiupYcaYbF9DGD2CBk/1KZoqLnV3gCG/Yt72Qq5ni8Xzhe+i8eSeFGs1K3ri\nitp4GVK/P95cbelX5p+xtee2bWaTwUEQ0OAs2mToYP88UGK6qGWcM1C/jl3KM/fm\nJz/hstFZmxdEW0Z1QpHBj7/DIVS6U8OaXQjKEesl1xkpCFIWS5k2xe65JQ89wBCL\ndT57vIa9AgMBAAECggEACa1Jvx242816DbFBAHL1VR0kJvCLKMDNaK+5w4OGTOT9\nzx6IiBQF3gZ//fy5NQ4B9ZsVE72DZTLiFoBryVtSZDpPLRZ2bfL662IPWf/55GAw\neXBhneF5fF/fhNqNqtsS53t/xQX/y6iyXPtYNerGuJj6ExHIwAj/gZhdf6y3ST9H\nCQQqhTTse8kDHimUVYpt1tu+di7S9I4L9DOlah9pE7NkJocPmO0uwHLx4Lfx3l29\nqbV7YGDtWHtFkCaR2uHbA8u7e6VtSqp1jnYkI1dgalgcx7KON8ORGTVxNBtwhVVW\nFB+KADdCvhqZiLMz2IBsZmU3mbbIDj9miejqjVe8iQKBgQD32i5r0Ts80HkrX9I/\nFlL+Rz69AIySF6r9CfJd3edoXgBl9uMT1PrH8koyOlnwGPt926VHe5LN3ejarBLW\nS9RQT/CJ2plJQo0dhYUI2ioriyEC7E5yeMHTY0QPQPE4XTrL93OIdJLsqAIDod1w\nSlF/WgkOPM45y+n9RdvO0Cb9+QKBgQDVqj7QpBzt2MF7lXR4TbfuhBZp0ZIw4yIM\neD7WGGdh99Po4dxn/3wUZt66aykaju3s1pc+8CyJgAgz+exsugFpxQcR2UDoA9Is\nMkXaIjDinsX5OKVP4OGebR001g4Skiz+nL5x7eNzsxmGO3kUNzbg8vXzonKIyUnk\nJm9/+TfP5QKBgAbqwuLlavbOhqMsQGzcTaKlEF4r9sBZAr+fGHGAMOYbwX0W/81c\n40bTPzjZogruV45yo9Ez5Kv0Jnx70ubCJQG8yWS/ggmmXtPVFxphJE4kyt4PBD1z\nm00v9wVJ9bFyAKMSm9nSDwulwLCjQs/QcyfPtnL8RXEdfMFBwtmpu3zZAoGBALf1\nONnXwlSBf6wQdFOzzj2cGdQHrI9Mrx7/VFJudmwhvKBP/bzIeaLzIqZr5trH3k9A\nPr3geOf1hJqDfivqRZc0HK8gVsKrr4N/0SZKs74Zpye4vpO0cWw+U5wPA9S3Z+fb\nOhjLET6nH72zbL6b/zLT3DBkV6ova9/zu6H6BzSFAoGBALn9Yr1tZ9QPK27ky2E4\ny0R0fxmk4Wd6i2sEuzGw+29XvI12MkAkn1+rYZMyof/Jrs26BukU9Q5uXJRv0ETS\nlFEaKOjPFdzM6AUgQ61W53P95nAhTSEYuWIU1f5Hak84pU10JYxUUxtZyVTvm2Rn\nfaODe6Qlp5zievsE1neJ3cHz\n-----END PRIVATE KEY-----\n",
+  "client_email": "adminfoodrec@foodrecsys-svwm.iam.gserviceaccount.com",
+  "client_id": "108501523963291405576",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/adminfoodrec%40foodrecsys-svwm.iam.gserviceaccount.com"
+}

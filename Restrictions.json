@@ -1,0 +1,9 @@
+{
+	"explanation" : {
+		"vegetarian" : "it does not contain meat",
+		"lactose-free" :  "it does not contain lactose",
+		"gluten-free" : "it does not contain gluten",
+		"low-nickel" : "it contains a lower quantity of nickel",
+		"light" : "it contains a lower quantity of fats"
+	}
+}

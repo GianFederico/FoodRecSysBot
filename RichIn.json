@@ -1,0 +1,105 @@
+{
+	"richIn": {
+		"calcium" : [
+			"tofu",
+			"milk",
+			"yogurt",
+			"parmesan",
+			"spinach",
+			"black-eyed peas",
+			"okra",
+			"trout",
+			"squash",
+			"clams"
+		],
+		"iron" : [
+			"cereals",
+			"beef",
+			"shellfish",
+			"apricots",
+			"white beans",
+            "spinach",
+			"dark chocolate",
+			"quinoa",
+			"mushrooms",
+			"pumpkin seeds"
+		],
+		"magnesium" : [
+			"spinach",
+			"pumpkin seeds",
+			"beans",
+			"tuna",
+			"brown rice",
+            "almonds",
+			"dark chocolate",
+			"avocado",
+			"yogurt",
+			"banana"
+		],
+		"antioxidant" : [
+			"guavas",
+			"tomato",
+			"watermelon",
+			"grapefruit",
+			"papaya",
+            "red peppers",
+			"persimmon",
+			"asparagus",
+			"red cabbage",
+			"mangos",
+			"sweet potato",
+			"carrots",
+			"spinach",
+			"butternut squash",
+			"cantaloupe",
+            "romaine lettuce",
+			"apricots",
+			"broccoli",
+			"peas"
+		],
+		"vitaminC" : [
+			"guavas",
+			"kiwi",
+			"red peppers",
+			"strawberries",
+			"oranges",
+            "papaya",
+			"broccoli",
+			"tomato",
+			"peas",
+			"kale"
+		],
+		"vitaminE" : [
+			"sunflower seeds",
+			"almonds",
+			"avocado",
+			"spinach",
+			"butternut squash",
+            "kiwi",
+			"broccoli",
+			"trout",
+			"olive oil",
+			"shrimp"
+		],
+		"vitaminD" : [
+			"salmon",
+			"chestnut",
+			"milk",
+			"soy milk",
+			"tofu",
+            "yogurt",
+			"breakfast cereal",
+			"orange juice",
+			"pork chops",
+			"eggs"
+		]
+	},
+	"motivation": {
+		"U20" : "In your age group, calcium intake is important to help the bones reach their maximum development. In addition, it is important to take iron to support metabolism, improve concentration, improve oxygen transfer to the muscles and produce hormones.",
+		"U30" : "In your age group, calcium intake is important to help the bones reach their maximum development. In addition, it is important to take iron to support metabolism, improve concentration, improve oxygen transfer to the muscles and produce hormones.",
+		"U40" : "In your age group, the intake of magnesium is important, a mineral that helps generate energy for the body, regulate blood pressure and blood sugar, and keep bones strong.",
+		"U50" : "In your age group, taking antioxidants, vitamin C and E is important to fend off harmful free radicals. Harmful free radical damage contributes to aging and many chronic diseases.",
+		"U60" : "In your age group, calcium intake is important to counteract bone loss. It is also important to take vitamin D.",
+		"O60" : "In your age group, calcium intake is important to counteract bone loss. It is also important to take vitamin D."
+	}
+}
