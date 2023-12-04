@@ -1041,12 +1041,12 @@ def get_mood():
 
 
 # MARKER create API
-#api.add_resource(Mood, '/mood/')
+# api.add_resource(Mood, '/mood/')
 
-#if __name__ == 'main':
-   # app.run()
-#if __name__ == '__main__':
-  #  app.run(host='0.0.0.0', port=int(os.environ.get('PORT1', 5000)))
+# if __name__ == 'main':
+#    app.run()
+# if __name__ == '__main__':
+#    app.run(host='0.0.0.0', port=int(os.environ.get('PORT1', 5000)))
     
-#if __name__ == '__main__':
- #   app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
+if __name__ == '__main__':
+   app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))

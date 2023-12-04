@@ -1,3 +1,4 @@
+import telegram
 from telegram import Update
 import requests
 from urllib.parse import urlencode

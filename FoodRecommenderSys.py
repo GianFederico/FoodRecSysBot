@@ -2,13 +2,14 @@ import logging
 import os
 from telegram import Update
 from telegram import Update, ReplyKeyboardMarkup, ReplyKeyboardRemove
-import dialogflow_v2 as dialogflow
-import telegram
+import google.cloud.dialogflow_v2 as dialogflow
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, ConversationHandler
 import constants as keys
 from recommender_script import Recommendation, Recommendation_due
 from expl_script import Spiegazione
 from flask import Flask, request
+from queue import Queue
+import asyncio
 
 
 # Definizione degli stati di conversazione
@@ -553,13 +554,18 @@ def dialogflow_mode(update, context):
         return  update.message.reply_text(response.query_result.fulfillment_text)
 
 
-
-def main():
+async def main():
     # Inizializzazione del logger
     logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 
+
+    # Create a Queue instance
+    update_queue = Queue()
+
     # Inizializzazione dell'Updater
-    updater = Updater(keys.API_TOKEN, use_context=True) 
+    updater = Updater(keys.API_TOKEN)
+
+    
     dp = updater.dispatcher
   
     # Definizione dei comandi e dei gestori di messaggi
@@ -602,8 +608,12 @@ def main():
     dp.add_handler(MessageHandler(Filters.text, dialogflow_mode))
     # Aggiunta dell'ErrorHandler
     dp.add_error_handler(error)
-    updater.start_polling()
-    logging.info("Bot avviato")
-    updater.idle()
     
-main()
+    logging.info("Bot avviato")
+    updater.start_polling()
+    #updater.idle()
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
+
