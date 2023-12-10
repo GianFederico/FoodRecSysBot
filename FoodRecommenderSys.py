@@ -478,24 +478,40 @@ def unknown(update: Update, context):
 # Funzione per inviare il messaggio a Dialogflow e restituire la risposta
 def dialogflow_mode(update, context):
         # Id del progetto Dialogflow
+        print("@@@@@@@@@@@@@@@@@1@@@@@@@@@@@@@@@@@@@@")
         DIALOGFLOW_PROJECT_ID = 'foodrecsys-svwm'
+        print("@@@@@@@@@@@@@@@@@2@@@@@@@@@@@@@@@@@@@@")
         # Credenziali del progetto Dialogflow
         DIALOGFLOW_CREDENTIALS = 'foodrecsys-svwm-dabec1cb8606.json'
+        print("@@@@@@@@@@@@@@@@@3@@@@@@@@@@@@@@@@@@@@")
         # Recupera l'ID dell'utente e imposta la lingua del messaggio
         session_id = update.effective_user.id
+        print("@@@@@@@@@@@@@@@@@4@@@@@@@@@@@@@@@@@@@@")
         language_code = 'it'
+        print("@@@@@@@@@@@@@@@@@5@@@@@@@@@@@@@@@@@@@@")
         # Crea il client di sessione di Dialogflow
         session_client = dialogflow.SessionsClient.from_service_account_file(DIALOGFLOW_CREDENTIALS)
+        print("@@@@@@@@@@@@@@@@@6@@@@@@@@@@@@@@@@@@@@")
         session = session_client.session_path(DIALOGFLOW_PROJECT_ID, session_id)
+        print("@@@@@@@@@@@@@@@@@7@@@@@@@@@@@@@@@@@@@@")
         # Invia il messaggio a Dialogflow
         text = update.message.text.strip()
+        print("@@@@@@@@@@@@@@@@@8@@@@@@@@@@@@@@@@@@@@")
         if not text:
             return
+        print("@@@@@@@@@@@@@@@@@9@@@@@@@@@@@@@@@@@@@@")
         text_input = dialogflow.types.TextInput(text=text, language_code=language_code)
+        print("@@@@@@@@@@@@@@@@@10@@@@@@@@@@@@@@@@@@@@")
         query_input = dialogflow.types.QueryInput(text=text_input)
-        response = session_client.detect_intent(session=session, query_input=query_input)
+        print("@@@@@@@@@@@@@@@@@11@@@@@@@@@@@@@@@@@@@@")
+        print(session, query_input)
+        with session_client as client:
+            response = client.detect_intent(session=session, query_input=query_input)
+
+        print("@@@@@@@@@@@@@@@@@12@@@@@@@@@@@@@@@@@@@@")
         # Invia la risposta di Dialogflow all'utente
         intent = response.query_result.intent.display_name
+        print("@@@@@@@@@@@@@@@@@13@@@@@@@@@@@@@@@@@@@@")
         if intent == 'Suggerimento del cibo':
             Recommendation.suggerimento(update, context)
         if intent == 'Controllo del piatto':
@@ -548,7 +564,9 @@ def dialogflow_mode(update, context):
             Spiegazione.spiegazione_lifestyle_due_piatti(update, context)
         if intent == 'Spiegazione del cibo, Tempo due piatti':
             Spiegazione.spiegazione_tempo_due_piatti(update, context)
+        print("@@@@@@@@@@@@@@@@@14@@@@@@@@@@@@@@@@@@@@")
         confidence = response.query_result.intent_detection_confidence
+        print("@@@@@@@@@@@@@@@@@15@@@@@@@@@@@@@@@@@@@@")
         print(intent)
         print(confidence)
         return  update.message.reply_text(response.query_result.fulfillment_text)

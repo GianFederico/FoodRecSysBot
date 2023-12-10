@@ -1,3 +1,5 @@
 python food_rs_webservice.py
 python web_expl.py
+
+venv\Scripts\activate
 python FoodRecommenderSys.py
