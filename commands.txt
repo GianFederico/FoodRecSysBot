@@ -3,3 +3,9 @@ python web_expl.py
 
 venv\Scripts\activate
 python FoodRecommenderSys.py
+
+
+
+#installed also:
+#    pip install google-cloud-dialogflow
+#    pip install google-telegram-bot==13.4

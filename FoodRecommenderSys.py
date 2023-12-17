@@ -3,13 +3,21 @@ import os
 from telegram import Update
 from telegram import Update, ReplyKeyboardMarkup, ReplyKeyboardRemove
 import google.cloud.dialogflow_v2 as dialogflow
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, ConversationHandler
+from telegram.ext import Updater, CommandHandler, MessageHandler, filters, ConversationHandler
 import constants as keys
 from recommender_script import Recommendation, Recommendation_due
 from expl_script import Spiegazione
 from flask import Flask, request
 from queue import Queue
 import asyncio
+from telegram.ext import (
+    Application,
+    CommandHandler,
+    ContextTypes,
+    ConversationHandler,
+    MessageHandler,
+    filters,
+)
 
 
 # Definizione degli stati di conversazione
@@ -27,7 +35,7 @@ def start(update: Update, context):
 
 # Funzione di gestione della risposta sul sesso
 def gender(update: Update, context):
-    user_gender = update.message.text.lower()
+    user_gender = update.message.Text.lower()
     # Controllo sulla validità del sesso
     if user_gender not in ['uomo', 'donna', 'preferisco non specificarlo']:
         update.message.reply_text("Devi specificare 'uomo' o 'donna' come sesso, o scrivere che preferisci non specificarlo.")
@@ -45,7 +53,7 @@ def gender(update: Update, context):
 ##########################################################################################################################################
 # Funzione di gestione della risposta sull'età
 def age(update: Update, context):
-    user_age = update.message.text
+    user_age = update.message.Text
     # Controllo sulla validità dell'età
     if user_age not in ['U20','U30', 'U40','U50','U60','O60']:
         update.message.reply_text('Hai a disposizione 6 pulsanti per dirmi la tua età')
@@ -61,7 +69,7 @@ def age(update: Update, context):
     
 # Funzione di gestione della risposta sull'importanza di uno stile di vita healthy
 def ht_lifestyle_importance(update: Update, context):
-    user_lifestyle_importance = update.message.text.lower()
+    user_lifestyle_importance = update.message.Text.lower()
 
     # Controllo sulla validità dell'importanza di uno stile di vita healthy
     if user_lifestyle_importance not in ['molto importante', 'importante', 'non importante', 'poco importante', 'assolutamente non importante']:
@@ -88,7 +96,7 @@ def ht_lifestyle_importance(update: Update, context):
 # Funzione di gestione della risposta sull'healthy lifestyle
 
 def ht_lifestyle(update: Update, context):
-    user_lifestyle = update.message.text.lower()
+    user_lifestyle = update.message.Text.lower()
     # Controllo sulla validità dell'healthy lifestyle
     if user_lifestyle not in ['molto salutare', 'salutare', 'non salutare', 'poco salutare', 'assolutamente non salutare']:
         update.message.reply_text("Gentilmente rispondimi con uno dei miei suggerimenti.")
@@ -112,7 +120,7 @@ def ht_lifestyle(update: Update, context):
 
 # Funzione di gestione della risposta sull'altezza
 def height(update: Update, context):
-    user_height = update.message.text
+    user_height = update.message.Text
 
     # Controllo sulla validità dell'altezza
     if not user_height.isdigit() or int(user_height) < 90 or int(user_height) > 230:
@@ -127,7 +135,7 @@ def height(update: Update, context):
 
 # Funzione di gestione della risposta sul peso
 def weight(update: Update, context):
-    user_weight = update.message.text
+    user_weight = update.message.Text
     # Controllo sulla validità del peso
     if not user_weight.isdigit() or int(user_weight) < 30 or int(user_weight) > 150:
         update.message.reply_text('Devi inserire un numero veritiero intero per indicare il tuo peso.')
@@ -150,7 +158,7 @@ def weight(update: Update, context):
 
 # Funzione di gestione della risposta sull'esperienza di cucina
 def cook_exp(update: Update, context):
-    user_cook_exp = update.message.text.lower()
+    user_cook_exp = update.message.Text.lower()
     # Controllo sulla validità dell'esperienza di cucina
     if user_cook_exp not in ['molto facile','facile','media','difficile', 'molto difficile']:
         update.message.reply_text("Gentilmente rispondimi con uno dei miei suggerimenti.")
@@ -176,7 +184,7 @@ def cook_exp(update: Update, context):
 
 # Funzione di gestione della risposta sul costo massimo di una ricetta
 def max_cost_rec(update: Update, context):
-    user_max_cost_rec = update.message.text.lower()
+    user_max_cost_rec = update.message.Text.lower()
     # Controllo sulla validità del costo massimo di una ricetta
     if user_max_cost_rec not in ['molto basso','basso','medio','elevato', 'non importante']:
         update.message.reply_text("Devi inserire una tra le opzioni da me suggerite.")
@@ -201,7 +209,7 @@ def max_cost_rec(update: Update, context):
 
 # Funzione di gestione della risposta sul tempo di cucina
 def time_cook(update: Update, context):
-    user_time_cook = update.message.text.lower()
+    user_time_cook = update.message.Text.lower()
 
     # Controllo sulla validità del tempo di cucina
     if not user_time_cook.isdigit() or int(user_time_cook) < 0 or int(user_time_cook) > 200:
@@ -218,7 +226,7 @@ def time_cook(update: Update, context):
 
 # Funzione di gestione della risposta sull'obiettivo
 def goals(update: Update, context):
-    user_goals = update.message.text.lower()
+    user_goals = update.message.Text.lower()
     # Controllo sulla validità dell'obiettivo
     if user_goals not in ['perderne','acquisirne','nessuno']:
         update.message.reply_text("Devi inserire una tra le opzioni da me suggerite.")
@@ -239,7 +247,7 @@ def goals(update: Update, context):
 
 # Funzione di gestione della risposta sul mood
 def mood(update: Update, context):
-    user_mood = update.message.text.lower()
+    user_mood = update.message.Text.lower()
     # Controllo sulla validità del mood
     if user_mood not in ['bene','neutro','male']:
         update.message.reply_text("Gentilmente rispondimi con uno dei miei suggerimenti.")
@@ -260,7 +268,7 @@ def mood(update: Update, context):
 
 # Funzione di gestione della risposta sull'attività fisica
 def ph_activity(update: Update, context):
-    user_ph_activity = update.message.text.lower()
+    user_ph_activity = update.message.Text.lower()
     # Controllo sulla validità del mood
     if user_ph_activity not in ['tanta','media','poca']:
         update.message.reply_text("Devi inserire una tra le opzioni da me suggerite.")
@@ -281,7 +289,7 @@ def ph_activity(update: Update, context):
 
 # Funzione di gestione della risposta sul sonno
 def sleep(update: Update, context):
-    user_sleep = update.message.text.lower()
+    user_sleep = update.message.Text.lower()
     # Controllo sulla validità del sonno
     if user_sleep not in ['8-','8+']:
         update.message.reply_text("Gentilmente rispondimi con uno dei miei suggerimenti.")
@@ -300,7 +308,7 @@ def sleep(update: Update, context):
 
 # Funzione di gestione della risposta sullo stress
 def stress(update: Update, context):
-    user_stress = update.message.text.lower()
+    user_stress = update.message.Text.lower()
     # Controllo sulla validità dello stress
     if user_stress not in ['sì','no', 'si']:
         update.message.reply_text("Devi inserire una tra le opzioni da me suggerite.")
@@ -320,7 +328,7 @@ def stress(update: Update, context):
 
 # Funzione di gestione della risposta sulla depressione
 def depress(update: Update, context):
-    user_depress = update.message.text.lower()
+    user_depress = update.message.Text.lower()
     # Controllo sulla validità della depressione
     if user_depress not in ['sì','no', 'si']:
         update.message.reply_text("Gentilmente rispondimi con uno dei miei suggerimenti.")
@@ -339,7 +347,7 @@ def depress(update: Update, context):
 
 # Funzione di gestione della risposta sul nickel basso
 def nickel(update: Update, context):
-    user_nickel= update.message.text.lower()
+    user_nickel= update.message.Text.lower()
     # Controllo sulla validità dello stress
     if user_nickel not in ['sì','no', 'si']:
         update.message.reply_text("Devi inserire una tra le opzioni da me suggerite.")
@@ -355,7 +363,7 @@ def nickel(update: Update, context):
         return VEGETERIAN
 
 def vegetarian(update: Update, context):
-    user_vegetarian= update.message.text.lower()
+    user_vegetarian= update.message.Text.lower()
     # Controllo sulla validità della depressione
     if user_vegetarian not in ['si','no', 'si']:
         update.message.reply_text("Gentilmente rispondimi con uno dei miei suggerimenti.")
@@ -372,7 +380,7 @@ def vegetarian(update: Update, context):
         return LACTOSEFREE
     
 def lactosefree(update: Update, context):
-    user_lactosefree= update.message.text.lower()
+    user_lactosefree= update.message.Text.lower()
     # Controllo sulla validità della depressione
     if user_lactosefree not in ['sì','no', 'si']:
         update.message.reply_text("Gentilmente rispondimi con uno dei miei suggerimenti.")
@@ -388,7 +396,7 @@ def lactosefree(update: Update, context):
         return GLUTENFREE
 
 def glutenfree(update: Update, context):
-    user_glutenfree= update.message.text.lower()
+    user_glutenfree= update.message.Text.lower()
     # Controllo sulla validità della depressione
     if user_glutenfree not in ['sì','no', 'si']:
         update.message.reply_text("Gentilmente rispondimi con uno dei miei suggerimenti.")
@@ -404,7 +412,7 @@ def glutenfree(update: Update, context):
         return LIGHT
 
 def light(update: Update, context):
-    user_light= update.message.text.lower()
+    user_light= update.message.Text.lower()
     # Controllo sulla validità della depressione
     if user_light not in ['sì','no', 'si']:
         update.message.reply_text("Gentilmente rispondimi con uno dei miei suggerimenti.")
@@ -420,7 +428,7 @@ def light(update: Update, context):
         return DIABETES
 
 def diabetes(update: Update, context):
-    user_diabetes= update.message.text.lower()
+    user_diabetes= update.message.Text.lower()
     # Controllo sulla validità della depressione
     if user_diabetes not in ['sì','no', 'si']:
         update.message.reply_text("Gentilmente rispondimi con uno dei miei suggerimenti.")
@@ -436,7 +444,7 @@ def diabetes(update: Update, context):
         return PREGNANT
     
 def pregnant(update: Update, context):
-    user_pregnant= update.message.text.lower()
+    user_pregnant= update.message.Text.lower()
     # Controllo sulla validità della depressione
     if user_pregnant not in ['sì','no', 'si']:
         update.message.reply_text("Gentilmente rispondimi con uno dei miei suggerimenti.")
@@ -452,7 +460,7 @@ def pregnant(update: Update, context):
         return CATEGORY
     
 def category(update: Update, context):
-    user_category= update.message.text
+    user_category= update.message.Text
     # Controllo sulla validità della depressione
     if user_category not in ['Primi piatti','Secondi piatti', 'Dolci']:
         update.message.reply_text("Gentilmente rispondimi con uno dei miei suggerimenti.")
@@ -479,10 +487,10 @@ def unknown(update: Update, context):
 def dialogflow_mode(update, context):
         # Id del progetto Dialogflow
         print("@@@@@@@@@@@@@@@@@1@@@@@@@@@@@@@@@@@@@@")
-        DIALOGFLOW_PROJECT_ID = 'foodrecsys-svwm'
+        DIALOGFLOW_PROJECT_ID = 'foodrecsys-kbji'
         print("@@@@@@@@@@@@@@@@@2@@@@@@@@@@@@@@@@@@@@")
         # Credenziali del progetto Dialogflow
-        DIALOGFLOW_CREDENTIALS = 'foodrecsys-svwm-dabec1cb8606.json'
+        DIALOGFLOW_CREDENTIALS = 'foodrecsys-kbji-b7a61301de6a.json'
         print("@@@@@@@@@@@@@@@@@3@@@@@@@@@@@@@@@@@@@@")
         # Recupera l'ID dell'utente e imposta la lingua del messaggio
         session_id = update.effective_user.id
@@ -495,14 +503,14 @@ def dialogflow_mode(update, context):
         session = session_client.session_path(DIALOGFLOW_PROJECT_ID, session_id)
         print("@@@@@@@@@@@@@@@@@7@@@@@@@@@@@@@@@@@@@@")
         # Invia il messaggio a Dialogflow
-        text = update.message.text.strip()
+        Text = update.message.Text.strip()
         print("@@@@@@@@@@@@@@@@@8@@@@@@@@@@@@@@@@@@@@")
-        if not text:
+        if not Text:
             return
         print("@@@@@@@@@@@@@@@@@9@@@@@@@@@@@@@@@@@@@@")
-        text_input = dialogflow.types.TextInput(text=text, language_code=language_code)
+        text_input = dialogflow.types.TextInput(Text=Text, language_code=language_code)
         print("@@@@@@@@@@@@@@@@@10@@@@@@@@@@@@@@@@@@@@")
-        query_input = dialogflow.types.QueryInput(text=text_input)
+        query_input = dialogflow.types.QueryInput(Text=text_input)
         print("@@@@@@@@@@@@@@@@@11@@@@@@@@@@@@@@@@@@@@")
         print(session, query_input)
         with session_client as client:
@@ -574,62 +582,62 @@ def dialogflow_mode(update, context):
 
 async def main():
     # Inizializzazione del logger
+    print("@@@@@@@@@@@@@@@@@1@@@@@@@@@@@@@@@@@@@@")
     logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
-
-
-    # Create a Queue instance
-    update_queue = Queue()
-
-    # Inizializzazione dell'Updater
-    updater = Updater(keys.API_TOKEN)
-
-    
-    dp = updater.dispatcher
-  
+    print("@@@@@@@@@@@@@@@@@2@@@@@@@@@@@@@@@@@@@@")
     # Definizione dei comandi e dei gestori di messaggi
+    application = Application.builder().token(keys.API_TOKEN).build()
+    print("@@@@@@@@@@@@@@@@@3@@@@@@@@@@@@@@@@@@@@")
     conv_handler = ConversationHandler(
         entry_points=[CommandHandler('start', start), CommandHandler ('inizio', start)],
         states={
-            GENDER: [MessageHandler(Filters.text, gender)],
-            AGE: [MessageHandler(Filters.text, age)],
-            HT_LIFESTYLE_IMPORTANCE:[MessageHandler(Filters.text, ht_lifestyle_importance)],
-            HT_LIFESTYLE:[MessageHandler(Filters.text,ht_lifestyle )],
-            CM:[MessageHandler(Filters.text, height)],
-            KG:[MessageHandler(Filters.text, weight)],
-            COOK_EXP:[MessageHandler(Filters.text, cook_exp)],
-            MAX_COST_REC:[MessageHandler(Filters.text, max_cost_rec)],
-            TIME_COOK:[MessageHandler(Filters.text, time_cook)],
-            GOALS:[MessageHandler(Filters.text, goals)],
-            MOOD:[MessageHandler(Filters.text, mood)],
-            PH_ACTIVITY:[MessageHandler(Filters.text, ph_activity)],
-            SLEEP:[MessageHandler(Filters.text, sleep)],
-            STRESS:[MessageHandler(Filters.text, stress)],
-            DEPRESS:[MessageHandler(Filters.text, depress)],
-            LOWNICKEL:[MessageHandler(Filters.text, nickel)],
-            VEGETERIAN:[MessageHandler(Filters.text, vegetarian)],
-            LACTOSEFREE:[MessageHandler(Filters.text, lactosefree)],
-            GLUTENFREE:[MessageHandler(Filters.text, glutenfree)],
-            LIGHT:[MessageHandler(Filters.text, light)],
-            DIABETES:[MessageHandler(Filters.text, diabetes)],
-            PREGNANT:[MessageHandler(Filters.text, pregnant)],
-            CATEGORY:[MessageHandler(Filters.text, category)]
+            GENDER: [MessageHandler(filters.Text, gender)],
+            AGE: [MessageHandler(filters.Text, age)],
+            HT_LIFESTYLE_IMPORTANCE:[MessageHandler(filters.Text, ht_lifestyle_importance)],
+            HT_LIFESTYLE:[MessageHandler(filters.Text,ht_lifestyle )],
+            CM:[MessageHandler(filters.Text, height)],
+            KG:[MessageHandler(filters.Text, weight)],
+            COOK_EXP:[MessageHandler(filters.Text, cook_exp)],
+            MAX_COST_REC:[MessageHandler(filters.Text, max_cost_rec)],
+            TIME_COOK:[MessageHandler(filters.Text, time_cook)],
+            GOALS:[MessageHandler(filters.Text, goals)],
+            MOOD:[MessageHandler(filters.Text, mood)],
+            PH_ACTIVITY:[MessageHandler(filters.Text, ph_activity)],
+            SLEEP:[MessageHandler(filters.Text, sleep)],
+            STRESS:[MessageHandler(filters.Text, stress)],
+            DEPRESS:[MessageHandler(filters.Text, depress)],
+            LOWNICKEL:[MessageHandler(filters.Text, nickel)],
+            VEGETERIAN:[MessageHandler(filters.Text, vegetarian)],
+            LACTOSEFREE:[MessageHandler(filters.Text, lactosefree)],
+            GLUTENFREE:[MessageHandler(filters.Text, glutenfree)],
+            LIGHT:[MessageHandler(filters.Text, light)],
+            DIABETES:[MessageHandler(filters.Text, diabetes)],
+            PREGNANT:[MessageHandler(filters.Text, pregnant)],
+            CATEGORY:[MessageHandler(filters.Text, category)]
         },
-            fallbacks=[MessageHandler(Filters.text, unknown)]
+            fallbacks=[MessageHandler(filters.Text, unknown)]
         
     )
 
-    dp.add_handler(conv_handler)
-    dp.add_handler(CommandHandler('help',aiuto))
-    dp.add_handler(CommandHandler('aiuto',aiuto))
-    dp.add_handler(CommandHandler('info',aiuto))
+    application.add_handler(conv_handler)
+    print("@@@@@@@@@@@@@@@@@4@@@@@@@@@@@@@@@@@@@@")
+    application.add_handler(CommandHandler('help',aiuto))
+    print("@@@@@@@@@@@@@@@@@5@@@@@@@@@@@@@@@@@@@@")
+    application.add_handler(CommandHandler('aiuto',aiuto))
+    print("@@@@@@@@@@@@@@@@@6@@@@@@@@@@@@@@@@@@@@")
+    application.add_handler(CommandHandler('info',aiuto))
+    print("@@@@@@@@@@@@@@@@@7@@@@@@@@@@@@@@@@@@@@")
     # Aggiunta del CommandHandler per il cambio modalità
-    dp.add_handler(MessageHandler(Filters.text, dialogflow_mode))
+    application.add_handler(MessageHandler(filters.Text, dialogflow_mode))
+    print("@@@@@@@@@@@@@@@@@8@@@@@@@@@@@@@@@@@@@@")
     # Aggiunta dell'ErrorHandler
-    dp.add_error_handler(error)
+    application.add_error_handler(error)
+    print("@@@@@@@@@@@@@@@@@9@@@@@@@@@@@@@@@@@@@@")
     
     logging.info("Bot avviato")
-    updater.start_polling()
-    #updater.idle()
+    print("@@@@@@@@@@@@@@@@@10@@@@@@@@@@@@@@@@@@@@")
+    application.run_polling(allowed_updates=Update.ALL_TYPES)
+    print("@@@@@@@@@@@@@@@@@11@@@@@@@@@@@@@@@@@@@@")
 
 
 if __name__ == "__main__":
