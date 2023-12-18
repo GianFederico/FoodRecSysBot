@@ -1,19 +1,15 @@
 import logging
-import os
-from telegram import Update
 from telegram import Update, ReplyKeyboardMarkup, ReplyKeyboardRemove
 import google.cloud.dialogflow_v2 as dialogflow
-from telegram.ext import Updater, CommandHandler, MessageHandler, filters, ConversationHandler
+from telegram.ext import CommandHandler, MessageHandler, filters, ConversationHandler
 import constants as keys
 from recommender_script import Recommendation, Recommendation_due
 from expl_script import Spiegazione
-from flask import Flask, request
-from queue import Queue
+import nest_asyncio
 import asyncio
 from telegram.ext import (
     Application,
     CommandHandler,
-    ContextTypes,
     ConversationHandler,
     MessageHandler,
     filters,
@@ -486,40 +482,27 @@ def unknown(update: Update, context):
 # Funzione per inviare il messaggio a Dialogflow e restituire la risposta
 def dialogflow_mode(update, context):
         # Id del progetto Dialogflow
-        print("@@@@@@@@@@@@@@@@@1@@@@@@@@@@@@@@@@@@@@")
         DIALOGFLOW_PROJECT_ID = 'foodrecsys-kbji'
-        print("@@@@@@@@@@@@@@@@@2@@@@@@@@@@@@@@@@@@@@")
         # Credenziali del progetto Dialogflow
         DIALOGFLOW_CREDENTIALS = 'foodrecsys-kbji-b7a61301de6a.json'
-        print("@@@@@@@@@@@@@@@@@3@@@@@@@@@@@@@@@@@@@@")
         # Recupera l'ID dell'utente e imposta la lingua del messaggio
         session_id = update.effective_user.id
-        print("@@@@@@@@@@@@@@@@@4@@@@@@@@@@@@@@@@@@@@")
         language_code = 'it'
-        print("@@@@@@@@@@@@@@@@@5@@@@@@@@@@@@@@@@@@@@")
         # Crea il client di sessione di Dialogflow
         session_client = dialogflow.SessionsClient.from_service_account_file(DIALOGFLOW_CREDENTIALS)
-        print("@@@@@@@@@@@@@@@@@6@@@@@@@@@@@@@@@@@@@@")
         session = session_client.session_path(DIALOGFLOW_PROJECT_ID, session_id)
-        print("@@@@@@@@@@@@@@@@@7@@@@@@@@@@@@@@@@@@@@")
         # Invia il messaggio a Dialogflow
-        Text = update.message.Text.strip()
-        print("@@@@@@@@@@@@@@@@@8@@@@@@@@@@@@@@@@@@@@")
+        Text = update.message.text.strip()
         if not Text:
             return
-        print("@@@@@@@@@@@@@@@@@9@@@@@@@@@@@@@@@@@@@@")
-        text_input = dialogflow.types.TextInput(Text=Text, language_code=language_code)
-        print("@@@@@@@@@@@@@@@@@10@@@@@@@@@@@@@@@@@@@@")
-        query_input = dialogflow.types.QueryInput(Text=text_input)
-        print("@@@@@@@@@@@@@@@@@11@@@@@@@@@@@@@@@@@@@@")
+        text_input = dialogflow.types.TextInput(text=Text, language_code=language_code)
+        query_input = dialogflow.types.QueryInput(text=text_input)
         print(session, query_input)
         with session_client as client:
             response = client.detect_intent(session=session, query_input=query_input)
 
-        print("@@@@@@@@@@@@@@@@@12@@@@@@@@@@@@@@@@@@@@")
         # Invia la risposta di Dialogflow all'utente
         intent = response.query_result.intent.display_name
-        print("@@@@@@@@@@@@@@@@@13@@@@@@@@@@@@@@@@@@@@")
         if intent == 'Suggerimento del cibo':
             Recommendation.suggerimento(update, context)
         if intent == 'Controllo del piatto':
@@ -572,74 +555,64 @@ def dialogflow_mode(update, context):
             Spiegazione.spiegazione_lifestyle_due_piatti(update, context)
         if intent == 'Spiegazione del cibo, Tempo due piatti':
             Spiegazione.spiegazione_tempo_due_piatti(update, context)
-        print("@@@@@@@@@@@@@@@@@14@@@@@@@@@@@@@@@@@@@@")
         confidence = response.query_result.intent_detection_confidence
-        print("@@@@@@@@@@@@@@@@@15@@@@@@@@@@@@@@@@@@@@")
         print(intent)
         print(confidence)
         return  update.message.reply_text(response.query_result.fulfillment_text)
 
 
 async def main():
+    nest_asyncio.apply()
     # Inizializzazione del logger
-    print("@@@@@@@@@@@@@@@@@1@@@@@@@@@@@@@@@@@@@@")
     logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
-    print("@@@@@@@@@@@@@@@@@2@@@@@@@@@@@@@@@@@@@@")
     # Definizione dei comandi e dei gestori di messaggi
     application = Application.builder().token(keys.API_TOKEN).build()
-    print("@@@@@@@@@@@@@@@@@3@@@@@@@@@@@@@@@@@@@@")
+
     conv_handler = ConversationHandler(
         entry_points=[CommandHandler('start', start), CommandHandler ('inizio', start)],
         states={
-            GENDER: [MessageHandler(filters.Text, gender)],
-            AGE: [MessageHandler(filters.Text, age)],
-            HT_LIFESTYLE_IMPORTANCE:[MessageHandler(filters.Text, ht_lifestyle_importance)],
-            HT_LIFESTYLE:[MessageHandler(filters.Text,ht_lifestyle )],
-            CM:[MessageHandler(filters.Text, height)],
-            KG:[MessageHandler(filters.Text, weight)],
-            COOK_EXP:[MessageHandler(filters.Text, cook_exp)],
-            MAX_COST_REC:[MessageHandler(filters.Text, max_cost_rec)],
-            TIME_COOK:[MessageHandler(filters.Text, time_cook)],
-            GOALS:[MessageHandler(filters.Text, goals)],
-            MOOD:[MessageHandler(filters.Text, mood)],
-            PH_ACTIVITY:[MessageHandler(filters.Text, ph_activity)],
-            SLEEP:[MessageHandler(filters.Text, sleep)],
-            STRESS:[MessageHandler(filters.Text, stress)],
-            DEPRESS:[MessageHandler(filters.Text, depress)],
-            LOWNICKEL:[MessageHandler(filters.Text, nickel)],
-            VEGETERIAN:[MessageHandler(filters.Text, vegetarian)],
-            LACTOSEFREE:[MessageHandler(filters.Text, lactosefree)],
-            GLUTENFREE:[MessageHandler(filters.Text, glutenfree)],
-            LIGHT:[MessageHandler(filters.Text, light)],
-            DIABETES:[MessageHandler(filters.Text, diabetes)],
-            PREGNANT:[MessageHandler(filters.Text, pregnant)],
-            CATEGORY:[MessageHandler(filters.Text, category)]
+            GENDER: [MessageHandler(filters.TEXT, gender)],
+            AGE: [MessageHandler(filters.TEXT, age)],
+            HT_LIFESTYLE_IMPORTANCE:[MessageHandler(filters.TEXT, ht_lifestyle_importance)],
+            HT_LIFESTYLE:[MessageHandler(filters.TEXT,ht_lifestyle )],
+            CM:[MessageHandler(filters.TEXT, height)],
+            KG:[MessageHandler(filters.TEXT, weight)],
+            COOK_EXP:[MessageHandler(filters.TEXT, cook_exp)],
+            MAX_COST_REC:[MessageHandler(filters.TEXT, max_cost_rec)],
+            TIME_COOK:[MessageHandler(filters.TEXT, time_cook)],
+            GOALS:[MessageHandler(filters.TEXT, goals)],
+            MOOD:[MessageHandler(filters.TEXT, mood)],
+            PH_ACTIVITY:[MessageHandler(filters.TEXT, ph_activity)],
+            SLEEP:[MessageHandler(filters.TEXT, sleep)],
+            STRESS:[MessageHandler(filters.TEXT, stress)],
+            DEPRESS:[MessageHandler(filters.TEXT, depress)],
+            LOWNICKEL:[MessageHandler(filters.TEXT, nickel)],
+            VEGETERIAN:[MessageHandler(filters.TEXT, vegetarian)],
+            LACTOSEFREE:[MessageHandler(filters.TEXT, lactosefree)],
+            GLUTENFREE:[MessageHandler(filters.TEXT, glutenfree)],
+            LIGHT:[MessageHandler(filters.TEXT, light)],
+            DIABETES:[MessageHandler(filters.TEXT, diabetes)],
+            PREGNANT:[MessageHandler(filters.TEXT, pregnant)],
+            CATEGORY:[MessageHandler(filters.TEXT, category)]
         },
-            fallbacks=[MessageHandler(filters.Text, unknown)]
+            fallbacks=[MessageHandler(filters.TEXT, unknown)]
         
     )
 
     application.add_handler(conv_handler)
-    print("@@@@@@@@@@@@@@@@@4@@@@@@@@@@@@@@@@@@@@")
     application.add_handler(CommandHandler('help',aiuto))
-    print("@@@@@@@@@@@@@@@@@5@@@@@@@@@@@@@@@@@@@@")
     application.add_handler(CommandHandler('aiuto',aiuto))
-    print("@@@@@@@@@@@@@@@@@6@@@@@@@@@@@@@@@@@@@@")
     application.add_handler(CommandHandler('info',aiuto))
-    print("@@@@@@@@@@@@@@@@@7@@@@@@@@@@@@@@@@@@@@")
     # Aggiunta del CommandHandler per il cambio modalità
-    application.add_handler(MessageHandler(filters.Text, dialogflow_mode))
-    print("@@@@@@@@@@@@@@@@@8@@@@@@@@@@@@@@@@@@@@")
+    application.add_handler(MessageHandler(filters.TEXT, dialogflow_mode))
     # Aggiunta dell'ErrorHandler
     application.add_error_handler(error)
-    print("@@@@@@@@@@@@@@@@@9@@@@@@@@@@@@@@@@@@@@")
-    
     logging.info("Bot avviato")
-    print("@@@@@@@@@@@@@@@@@10@@@@@@@@@@@@@@@@@@@@")
     application.run_polling(allowed_updates=Update.ALL_TYPES)
-    print("@@@@@@@@@@@@@@@@@11@@@@@@@@@@@@@@@@@@@@")
+
+
 
 
 if __name__ == "__main__":
-    asyncio.run(main())
+     asyncio.run(main())
 
