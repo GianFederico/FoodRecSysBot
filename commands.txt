@@ -8,4 +8,4 @@ python FoodRecommenderSys.py
 
 #installed also:
 #    pip install google-cloud-dialogflow
-#    pip install google-telegram-bot==13.4
+#    pip install google-telegram-bot==20.7

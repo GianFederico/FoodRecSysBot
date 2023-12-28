@@ -20,18 +20,17 @@ from telegram.ext import (
 GENDER, AGE, HT_LIFESTYLE_IMPORTANCE, HT_LIFESTYLE, CM, KG, COOK_EXP, MAX_COST_REC, TIME_COOK, GOALS, MOOD, PH_ACTIVITY, SLEEP,STRESS, DEPRESS, LOWNICKEL, VEGETERIAN, LACTOSEFREE,GLUTENFREE,LIGHT, DIABETES, PREGNANT, CATEGORY= range(23)
  
 # Funzione di gestione del comando /start
-def start(update: Update, context):
+async def start(update: Update, context):
     # Creazione dei pulsanti per la scelta del genere
     keyboard = [['Uomo', 'Donna']]
-    reply_markup = ReplyKeyboardMarkup(keyboard, one_time_keyboard=True, resize_keyboard=True, button_color='black', font_size=10, font_family='Arial')
-    update.message.reply_text('Ciao! Benvenuto/a! Ti farò alcune domande per capire quale cibo/ricetta consigliarti.\nQual è il tuo sesso?',
-                              reply_markup=reply_markup)
+    #reply_markup = ReplyKeyboardMarkup(keyboard, one_time_keyboard=True, resize_keyboard=True, button_color='black', font_size=10, font_family='Arial')
+    await update.message.reply_text('Great! I\'ll ask you some questions to get to know you better.\nWhat is you gender?')#, reply_markup=reply_markup)
     return GENDER
 ##########################################################################################################################################
 
 # Funzione di gestione della risposta sul sesso
-def gender(update: Update, context):
-    user_gender = update.message.Text.lower()
+async def gender(update: Update, context):
+    user_gender = update.message.text.lower()
     # Controllo sulla validità del sesso
     if user_gender not in ['uomo', 'donna', 'preferisco non specificarlo']:
         update.message.reply_text("Devi specificare 'uomo' o 'donna' come sesso, o scrivere che preferisci non specificarlo.")
@@ -42,8 +41,8 @@ def gender(update: Update, context):
         elif user_gender == "donna":
                 context.user_data['gender'] = "f"
         keyboard = [['U20','U30','U40'], ['U50','U60','O60']]
-        reply_markup = ReplyKeyboardMarkup(keyboard, one_time_keyboard=True, resize_keyboard=True, button_color='black', font_size=10, font_family='Arial')
-        update.message.reply_text('Quanti anni hai?\n(usa uno dei pulsanti per indicarmi la tua età)',reply_markup=reply_markup)
+        #reply_markup = ReplyKeyboardMarkup(keyboard, one_time_keyboard=True, resize_keyboard=True, button_color='black', font_size=10, font_family='Arial')
+        await update.message.reply_text('Quanti anni hai?\n(usa uno dei pulsanti per indicarmi la tua età)')#,reply_markup=reply_markup)
         return AGE
    
 ##########################################################################################################################################
@@ -503,6 +502,8 @@ def dialogflow_mode(update, context):
 
         # Invia la risposta di Dialogflow all'utente
         intent = response.query_result.intent.display_name
+        if intent == 'Introduction':
+            print("here we gooooo")
         if intent == 'Suggerimento del cibo':
             Recommendation.suggerimento(update, context)
         if intent == 'Controllo del piatto':
@@ -556,8 +557,8 @@ def dialogflow_mode(update, context):
         if intent == 'Spiegazione del cibo, Tempo due piatti':
             Spiegazione.spiegazione_tempo_due_piatti(update, context)
         confidence = response.query_result.intent_detection_confidence
-        print(intent)
-        print(confidence)
+        print("Intent:", intent)
+        print("Confidence:", confidence)
         return  update.message.reply_text(response.query_result.fulfillment_text)
 
 
@@ -569,7 +570,7 @@ async def main():
     application = Application.builder().token(keys.API_TOKEN).build()
 
     conv_handler = ConversationHandler(
-        entry_points=[CommandHandler('start', start), CommandHandler ('inizio', start)],
+        entry_points=[CommandHandler('create', start)],
         states={
             GENDER: [MessageHandler(filters.TEXT, gender)],
             AGE: [MessageHandler(filters.TEXT, age)],
