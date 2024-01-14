@@ -1,5 +1,5 @@
 import logging
-from telegram import Update, ReplyKeyboardMarkup, ReplyKeyboardRemove
+from telegram import Update, ReplyKeyboardMarkup, ReplyKeyboardRemove, InlineKeyboardButton, InlineKeyboardMarkup
 import google.cloud.dialogflow_v2 as dialogflow
 from telegram.ext import CommandHandler, MessageHandler, filters, ConversationHandler
 import constants as keys
@@ -17,14 +17,11 @@ from telegram.ext import (
 
 
 # Definizione degli stati di conversazione
-GENDER, AGE, HT_LIFESTYLE_IMPORTANCE, HT_LIFESTYLE, CM, KG, COOK_EXP, MAX_COST_REC, TIME_COOK, GOALS, MOOD, PH_ACTIVITY, SLEEP,STRESS, DEPRESS, LOWNICKEL, VEGETERIAN, LACTOSEFREE,GLUTENFREE,LIGHT, DIABETES, PREGNANT, CATEGORY= range(23)
+GENDER, AGE, HT_LIFESTYLE_IMPORTANCE, HT_LIFESTYLE, CM, KG, COOK_EXP, MAX_COST_REC, TIME_COOK, GOALS, MOOD, PH_ACTIVITY, SLEEP,STRESS, DEPRESS, LOWNICKEL, VEGETERIAN, LACTOSEFREE,GLUTENFREE,LIGHT, DIABETES, PREGNANT, CATEGORY, RESTRICTIONS= range(24)
  
 # Funzione di gestione del comando /start
 async def start(update: Update, context):
-    # Creazione dei pulsanti per la scelta del genere
-    keyboard = [['Uomo', 'Donna']]
-    #reply_markup = ReplyKeyboardMarkup(keyboard, one_time_keyboard=True, resize_keyboard=True)
-    await update.message.reply_text('Great! I\'ll ask you some questions to get to know you better.\nWhat is you gender?')#, reply_markup=reply_markup)
+    await update.message.reply_text('Great! I\'ll ask you some questions to get to know you better.\nWhat is you gender?')
     return GENDER
 ##########################################################################################################################################
 
@@ -32,33 +29,52 @@ async def start(update: Update, context):
 async def gender(update: Update, context):
     user_gender = update.message.text.lower()
     # Controllo sulla validità del sesso
-    if user_gender not in ['uomo', 'donna', 'preferisco non specificarlo']:
-        await update.message.reply_text("Devi specificare 'uomo' o 'donna' come sesso, o scrivere che preferisci non specificarlo.")
+    if user_gender not in ['man', 'woman', 'unspecified']:
+        await update.message.reply_text("You need to type 'man', 'woman' or 'unspecified' if you don't want to specify it.")
         return GENDER
     else:
-        if user_gender == "uomo":
+        if user_gender == "man":
                 context.user_data['gender'] = "m"
-        elif user_gender == "donna":
+        elif user_gender == "woman":
                 context.user_data['gender'] = "f"
-        keyboard = [['U20','U30','U40'], ['U50','U60','O60']]
-        reply_markup = ReplyKeyboardMarkup(keyboard, one_time_keyboard=True, resize_keyboard=True)
-        await update.message.reply_text('Quanti anni hai?\n(usa uno dei pulsanti per indicarmi la tua età)',reply_markup=reply_markup)
+        await update.message.reply_text('How old are you?')
         return AGE
    
 ##########################################################################################################################################
 # Funzione di gestione della risposta sull'età
 async def age(update: Update, context):
     user_age = update.message.text
+    print(user_age)
+    if 0 < int(user_age) < 19:
+        user_age='U20'
+    elif 20 <= int(user_age) < 29:
+        user_age='U30'
+    elif 30 <= int(user_age) < 39:
+        user_age='U40'
+    elif 40 <= int(user_age) < 49:
+        user_age='U50'
+    elif 50 <= int(user_age) < 59:
+        user_age='U60'
+    elif int(user_age) > 60:
+        user_age='O60'
     # Controllo sulla validità dell'età
     if user_age not in ['U20','U30', 'U40','U50','U60','O60']:
-        await update.message.reply_text('Hai a disposizione 6 pulsanti per dirmi la tua età')
+        print(user_age)
+        await update.message.reply_text('Sorry I did not get your age, can you insert it again? (only the number is good)')
         return AGE
     else:
-        context.user_data['age'] = user_age
-        keyboard = [['Molto importante', 'Importante','Poco importante'], ['Non importante','Assolutamente non importante']]
-        reply_markup = ReplyKeyboardMarkup(keyboard, one_time_keyboard=True, resize_keyboard=True)
-        await update.message.reply_text('Quanto è importante per te avere uno stile di vita salutare?\n(Hai a disposizione dei pulsanti per rispondere alla mia domanda)',reply_markup=reply_markup)
-        return HT_LIFESTYLE_IMPORTANCE 
+        if context.user_data['gender']=="f":
+            print(user_age)
+            keyboard = [['Yes','No']]
+            reply_markup = ReplyKeyboardMarkup(keyboard, one_time_keyboard=True, resize_keyboard=True)
+            await update.message.reply_text('Are you pregnant?',reply_markup=reply_markup)
+        else:
+            await update.message.reply_text('How tall are you? (cm)')
+            return CM
+        # keyboard = [['Molto importante', 'Importante','Poco importante'], ['Non importante','Assolutamente non importante']]
+        # reply_markup = ReplyKeyboardMarkup(keyboard, one_time_keyboard=True, resize_keyboard=True)
+        # await update.message.reply_text('Quanto è importante per te avere uno stile di vita salutare?\n(Hai a disposizione dei pulsanti per rispondere alla mia domanda)',reply_markup=reply_markup)
+        return PREGNANT
 
 ##########################################################################################################################################
     
@@ -119,11 +135,11 @@ async def height(update: Update, context):
 
     # Controllo sulla validità dell'altezza
     if not user_height.isdigit() or int(user_height) < 90 or int(user_height) > 230:
-        await update.message.reply_text('Devi inserire un numero compreso tra 90 e 230 come altezza.')
+        await update.message.reply_text('Insert an height between 100cm and 230cm')
         return CM
     else:
         context.user_data['height'] = int(user_height)
-        await update.message.reply_text('Grazie! Potresti dirmi gentilmente il tuo peso in kg?')
+        await update.message.reply_text('what is your weight? (kg)')
         return KG
     
 ##########################################################################################################################################
@@ -133,7 +149,7 @@ async def weight(update: Update, context):
     user_weight = update.message.text
     # Controllo sulla validità del peso
     if not user_weight.isdigit() or int(user_weight) < 30 or int(user_weight) > 150:
-        await update.message.reply_text('Devi inserire un numero veritiero intero per indicare il tuo peso.')
+        await update.message.reply_text('You must insert a number, round it up to the nearest integer. ')
         return KG
     else:
         user_bmi = float(int(user_weight)*10000/(context.user_data['height']*context.user_data['height']))
@@ -144,10 +160,14 @@ async def weight(update: Update, context):
         elif user_bmi >= 25:
             context.user_data['weight'] = "over"
         #print(user_bmi)
-        keyboard = [['Molto facile', 'Facile','Media'],['Difficile','Molto difficile']]
+        # keyboard = [['Molto facile', 'Facile','Media'],['Difficile','Molto difficile']]
+        # reply_markup = ReplyKeyboardMarkup(keyboard, one_time_keyboard=True, resize_keyboard=True)
+        # await update.message.reply_text('Come dovrebbe essere la preparazione di un piatto fatto da te?\n(Hai a disposizione dei pulsanti per rispondere alla mia domanda)',reply_markup=reply_markup)
+        # return COOK_EXP
+        keyboard = [['Lose','Maintain', 'Gain']]
         reply_markup = ReplyKeyboardMarkup(keyboard, one_time_keyboard=True, resize_keyboard=True)
-        await update.message.reply_text('Come dovrebbe essere la preparazione di un piatto fatto da te?\n(Hai a disposizione dei pulsanti per rispondere alla mia domanda)',reply_markup=reply_markup)
-        return COOK_EXP
+        await update.message.reply_text('What are your goals regarding your weight?',reply_markup=reply_markup)
+        return GOALS
 
 ##########################################################################################################################################
 
@@ -223,22 +243,53 @@ async def time_cook(update: Update, context):
 async def goals(update: Update, context):
     user_goals = update.message.text.lower()
     # Controllo sulla validità dell'obiettivo
-    if user_goals not in ['perderne','acquisirne','nessuno']:
-        await update.message.reply_text("Devi inserire una tra le opzioni da me suggerite.")
+    if user_goals not in ['lose','gain','maintain']:
+        await update.message.reply_text("Please select or type one of the options.")
         return GOALS
     else:
-        if user_goals == "perderne":
+        if user_goals == "lose":
             context.user_data['goals'] = -1
-        if user_goals == "acquisirne":
+        if user_goals == "gain":
             context.user_data['goals'] = 1
-        if user_goals == "nessuno":
+        if user_goals == "maintain":
             context.user_data['goals'] = 0
-        keyboard = [['Bene', 'Neutro'],['Male']]
+        # keyboard = [['Bene', 'Neutro'],['Male']]
+        # reply_markup = ReplyKeyboardMarkup(keyboard, one_time_keyboard=True, resize_keyboard=True)
+        # await update.message.reply_text('Come ti senti attualmente?\n(Hai a disposizione dei pulsanti per rispondere alla mia domanda)',reply_markup=reply_markup)
+        # return MOOD
+        keyboard = [['A lot (>2)', 'Just enough (1-2)', 'Not so much (<1)']]
         reply_markup = ReplyKeyboardMarkup(keyboard, one_time_keyboard=True, resize_keyboard=True)
-        await update.message.reply_text('Come ti senti attualmente?\n(Hai a disposizione dei pulsanti per rispondere alla mia domanda)',reply_markup=reply_markup)
-        return MOOD
+        await update.message.reply_text('How much physical activity do you practice weekly?',reply_markup=reply_markup)
+        return ph_activity
     
 ##########################################################################################################################################
+
+
+
+
+
+
+# Funzione di gestione della risposta sull'altezza
+async def restictions(update: Update, context):
+    user_height = update.message.text
+
+    # Controllo sulla validità dell'altezza
+    if not user_height.isdigit() or int(user_height) < 90 or int(user_height) > 230:
+        await update.message.reply_text('Insert an height between 100cm and 230cm')
+        return CM
+    else:
+        context.user_data['height'] = int(user_height)
+        await update.message.reply_text('what is your weight? (kg)')
+        return KG
+
+
+
+
+
+
+
+
+
 
 # Funzione di gestione della risposta sul mood
 async def mood(update: Update, context):
@@ -265,20 +316,24 @@ async def mood(update: Update, context):
 async def ph_activity(update: Update, context):
     user_ph_activity = update.message.text.lower()
     # Controllo sulla validità del mood
-    if user_ph_activity not in ['tanta','media','poca']:
+    if user_ph_activity not in ['a lot','just enough','not so much']:
         await update.message.reply_text("Devi inserire una tra le opzioni da me suggerite.")
         return PH_ACTIVITY
     else:
-        if user_ph_activity == "tanta":
+        if user_ph_activity == "a lot":
             context.user_data['ph_activity'] = "high"
-        if user_ph_activity == "media":
+        if user_ph_activity == "just enough":
             context.user_data['ph_activity'] = "normal"
-        if user_ph_activity == "poca":
+        if user_ph_activity == "not so much":
             context.user_data['ph_activity'] = "low"       
-        keyboard = [['8-', '8+']]
+        keyboard = [
+        [InlineKeyboardButton("Opzione 1", callback_data='option1')],
+        [InlineKeyboardButton("Opzione 2", callback_data='option2')],
+        [InlineKeyboardButton("Opzione 3", callback_data='option3')],
+    ]
         reply_markup = ReplyKeyboardMarkup(keyboard, one_time_keyboard=True, resize_keyboard=True)
         await update.message.reply_text('Quante ore dormi al giorno?\n(Hai a disposizione dei pulsanti per rispondere alla mia domanda)',reply_markup=reply_markup)
-        return SLEEP
+        return RESTRICTIONS
 
 ##########################################################################################################################################
 
@@ -440,19 +495,22 @@ async def diabetes(update: Update, context):
     
 async def pregnant(update: Update, context):
     user_pregnant= update.message.text.lower()
-    # Controllo sulla validità della depressione
-    if user_pregnant not in ['sì','no', 'si']:
-        await update.message.reply_text("Gentilmente rispondimi con uno dei miei suggerimenti.")
-        return PREGNANT
-    else:
-        if user_pregnant == "si" or "Si" or "Sì" or "sì":
-            context.user_data['pregnant'] = 1
-        if user_pregnant == "no" :
-            context.user_data['pregnant'] = 0
-        keyboard = [['Primi piatti','Secondi piatti', 'Dolci']]
-        reply_markup = ReplyKeyboardMarkup(keyboard, one_time_keyboard=True, resize_keyboard=True)
-        await update.message.reply_text('Che tipo di piatto vorresti che ti consigliassi? \n(Hai a disposizione dei pulsanti per rispondere alla mia domanda)',reply_markup=reply_markup)
-        return CATEGORY
+    print("here")
+    if context.user_data['gender']=='f':
+        if user_pregnant not in ['yes','no']:
+            await update.message.reply_text("Gentilmente rispondimi con uno dei miei suggerimenti.")
+            return PREGNANT
+        else:
+            if user_pregnant == "yes":
+                context.user_data['pregnant'] = 1
+            if user_pregnant == "no" :
+                context.user_data['pregnant'] = 0
+    else: context.user_data['pregnant'] = 0
+
+    # keyboard = [['Primi piatti','Secondi piatti', 'Dolci']]
+    # reply_markup = ReplyKeyboardMarkup(keyboard, one_time_keyboard=True, resize_keyboard=True)
+    await update.message.reply_text('How tall are you? (cm)')
+    return CM
     
 async def category(update: Update, context):
     user_category= update.message.text
@@ -574,26 +632,27 @@ async def main():
         states={
             GENDER: [MessageHandler(filters.TEXT, gender)],
             AGE: [MessageHandler(filters.TEXT, age)],
-            HT_LIFESTYLE_IMPORTANCE:[MessageHandler(filters.TEXT, ht_lifestyle_importance)],
-            HT_LIFESTYLE:[MessageHandler(filters.TEXT,ht_lifestyle )],
+            PREGNANT:[MessageHandler(filters.TEXT, pregnant)],
+            #HT_LIFESTYLE_IMPORTANCE:[MessageHandler(filters.TEXT, ht_lifestyle_importance)],
+            #HT_LIFESTYLE:[MessageHandler(filters.TEXT,ht_lifestyle )],
             CM:[MessageHandler(filters.TEXT, height)],
             KG:[MessageHandler(filters.TEXT, weight)],
-            COOK_EXP:[MessageHandler(filters.TEXT, cook_exp)],
-            MAX_COST_REC:[MessageHandler(filters.TEXT, max_cost_rec)],
-            TIME_COOK:[MessageHandler(filters.TEXT, time_cook)],
+            #COOK_EXP:[MessageHandler(filters.TEXT, cook_exp)],
+            #MAX_COST_REC:[MessageHandler(filters.TEXT, max_cost_rec)],
+            #TIME_COOK:[MessageHandler(filters.TEXT, time_cook)],
             GOALS:[MessageHandler(filters.TEXT, goals)],
-            MOOD:[MessageHandler(filters.TEXT, mood)],
+            #MOOD:[MessageHandler(filters.TEXT, mood)],
             PH_ACTIVITY:[MessageHandler(filters.TEXT, ph_activity)],
-            SLEEP:[MessageHandler(filters.TEXT, sleep)],
-            STRESS:[MessageHandler(filters.TEXT, stress)],
-            DEPRESS:[MessageHandler(filters.TEXT, depress)],
+            #SLEEP:[MessageHandler(filters.TEXT, sleep)],
+            #STRESS:[MessageHandler(filters.TEXT, stress)],
+            #DEPRESS:[MessageHandler(filters.TEXT, depress)],
             LOWNICKEL:[MessageHandler(filters.TEXT, nickel)],
             VEGETERIAN:[MessageHandler(filters.TEXT, vegetarian)],
             LACTOSEFREE:[MessageHandler(filters.TEXT, lactosefree)],
             GLUTENFREE:[MessageHandler(filters.TEXT, glutenfree)],
-            LIGHT:[MessageHandler(filters.TEXT, light)],
+            #LIGHT:[MessageHandler(filters.TEXT, light)],
             DIABETES:[MessageHandler(filters.TEXT, diabetes)],
-            PREGNANT:[MessageHandler(filters.TEXT, pregnant)],
+
             CATEGORY:[MessageHandler(filters.TEXT, category)]
         },
             fallbacks=[MessageHandler(filters.TEXT, unknown)]

@@ -9,3 +9,41 @@ python FoodRecommenderSys.py
 #installed also:
 #    pip install google-cloud-dialogflow
 #    pip install google-telegram-bot==20.7
+
+
+- What is your gender?
+- Quanti anni hai?
+    Quanto è importante per te avere uno stile di vita salutare?
+    Tu invece come consideri il tuo stile di vita?
+- Sapresti dirmi la tua altezza in cm?
+- Potresti dirmi gentilmente il tuo peso in kg?
+    Come dovrebbe essere la preparazione di un piatto fatto da te?
+    Quanto potrebbe essere il tuo budget per preparare una ricetta?
+    Quanto è in media il tuo tempo disponibile per cucinare espresso in minuti? (0 a 200)
+- Qual è il tuo obiettivo in termini di peso?
+    Come ti senti attualmente?
+- Quanta attività fisica fai in una settimana?
+    Quante ore dormi al giorno?
+    Ti senti stressato in questo periodo?
+    Ti senti depresso in questo periodo?
+    Hai bisogno di ricette con basso Nickel?
+- Sei vegetariano?
+- Sei intollerante al lattosio?
+- Sei intollerante al glutine?
+    Vuoi che ti proponga ricette light?
+- Sei diabetico/a?
+- Se sei una donna, sei incinta?
+
+OBBLIGATORIE:
+- What is your gender?
+- Quanti anni hai?
+    - Se sei una donna, sei incinta?
+- Sapresti dirmi la tua altezza in cm?
+- Potresti dirmi gentilmente il tuo peso in kg?
+- Qual è il tuo obiettivo in termini di peso?
+- Quanta attività fisica fai in una settimana?
+- Sei vegetariano? - Sei intollerante al lattosio? - Sei intollerante al glutine? - Sei diabetico/a?
+- Se sei una donna, sei incinta?
+
+
+OPZIONALI:
