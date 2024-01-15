@@ -255,7 +255,7 @@ async def diabetes(update: Update, context):
 # Funzione di gestione della risposta sulla scelta dei piatti da suggerire
 async def category(update: Update, context):
     user_category= update.message.text.lower()
-    if user_category not in ['first courses','second course', 'desserts']:
+    if user_category not in ['first courses','second courses', 'desserts']:
         await update.message.reply_text("Please type one between 'First courses','Second courses' or 'Desserts'")
         return CATEGORY
     else:
@@ -545,7 +545,10 @@ def dialogflow_mode(update, context):
 
     # Invia la risposta di Dialogflow all'utente
     intent = response.query_result.intent.display_name
+    confidence = response.query_result.intent_detection_confidence
     if intent == 'Suggestion':
+        print("Intent:", intent)
+        print("Confidence:", confidence)
         Recommendation.suggerimento(update, context)
     if intent == 'Controllo del piatto':
         Spiegazione.controllo_piatto(update, context)

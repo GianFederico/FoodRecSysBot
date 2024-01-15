@@ -34,13 +34,16 @@ class Recommendation:
             'stress': context.user_data['stress'],
             'sleep': context.user_data['sleep'],
             'depression': context.user_data['depress']
-  
         }
 
         full_url = url + urlencode(params)
+        print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@1@@@1@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
         print(full_url)
         response = requests.get(full_url)
+        print("@@@",response,"@@@")
+        print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@1@@@@2@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
         risposta = response.json()
+        print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@1@@@@@3@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
         print("Response content:", risposta)
 
         data = risposta.get('data', [])  # Recuperare la lista dei dati delle ricette o una lista vuota se la chiave 'data' non è presente
@@ -86,6 +89,7 @@ class Recommendation_due:
         }
 
         full_url = url + urlencode(params)
+        print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@2@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
         print(full_url)
 
         response = requests.get(full_url)
