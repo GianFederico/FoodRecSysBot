@@ -413,25 +413,24 @@ async def nickel(update: Update, context):
 async def vegetarian(update: Update, context):
     user_vegetarian= update.message.text.lower()
     # Controllo sulla validità della depressione
-    if user_vegetarian not in ['si','no', 'si']:
-        await update.message.reply_text("Gentilmente rispondimi con uno dei miei suggerimenti.")
+    if user_vegetarian not in ['yes','no']:
+        await update.message.reply_text("Sorry I did not get that, can you repeat it?")
         return VEGETERIAN
     else:
-        if user_vegetarian == "si" or "Si" or "Sì" or "sì":
+        if user_vegetarian == "yes" :
             context.user_data['vegetarian'] = 1
         if user_vegetarian == "no" :
             context.user_data['vegetarian'] = 0
-        keyboard = [['Si','No']]
+        keyboard = [['First courses','Second courses', 'Desserts']]
         reply_markup = ReplyKeyboardMarkup(keyboard, one_time_keyboard=True, resize_keyboard=True)
-        await update.message.reply_text('Sei intollerante al lattosio?\n(Hai a disposizione dei pulsanti per rispondere alla mia domanda)',reply_markup=reply_markup)
-        
-        return LACTOSEFREE
+        await update.message.reply_text('Ok, we are done! Which type of recipes do you want me to suggest?', reply_markup=reply_markup)
+        return CATEGORY
     
 async def lactosefree(update: Update, context):
     user_lactosefree= update.message.text.lower()
     # Controllo sulla validità della depressione
     if user_lactosefree not in ['yes','no']:
-        await update.message.reply_text("Sorry I did not get it, can you repeat?")
+        await update.message.reply_text("Sorry I did not get that, can you repeat it?")
         return LACTOSEFREE
     else:
         if user_lactosefree == "yes":
@@ -447,7 +446,7 @@ async def glutenfree(update: Update, context):
     user_glutenfree= update.message.text.lower()
     # Controllo sulla validità della depressione
     if user_glutenfree not in ['yes','no']:
-        await update.message.reply_text("Sorry I did not get it, can you repeat?")
+        await update.message.reply_text("Sorry I did not get that, can you repeat it?")
         return GLUTENFREE
     else:
         if user_glutenfree == "yes" :
@@ -479,17 +478,17 @@ async def diabetes(update: Update, context):
     user_diabetes= update.message.text.lower()
     # Controllo sulla validità della depressione
     if user_diabetes not in ['yes','no']:
-        await update.message.reply_text("Sorry I did not get it, can you repeat?")
+        await update.message.reply_text("Sorry I did not get that, can you repeat it?")
         return DIABETES
     else:
         if user_diabetes == "yes":
             context.user_data['diabetes'] = 1
         if user_diabetes == "no" :
             context.user_data['diabetes'] = 0
-        keyboard = [['First courses','Second courses', 'Desserts']]
+        keyboard = [['Yes','No']]
         reply_markup = ReplyKeyboardMarkup(keyboard, one_time_keyboard=True, resize_keyboard=True)
-        await update.message.reply_text('Ok, we are done! Which type of recipes do you want me to suggest?', reply_markup=reply_markup)
-        return CATEGORY
+        await update.message.reply_text('Are you vegetarian?', reply_markup=reply_markup)
+        return VEGETERIAN
     
 async def pregnant(update: Update, context):
     user_pregnant= update.message.text.lower()
@@ -644,13 +643,12 @@ async def main():
             #SLEEP:[MessageHandler(filters.TEXT, sleep)],
             #STRESS:[MessageHandler(filters.TEXT, stress)],
             #DEPRESS:[MessageHandler(filters.TEXT, depress)],
-            LOWNICKEL:[MessageHandler(filters.TEXT, nickel)],
+            #LOWNICKEL:[MessageHandler(filters.TEXT, nickel)],
             VEGETERIAN:[MessageHandler(filters.TEXT, vegetarian)],
             LACTOSEFREE:[MessageHandler(filters.TEXT, lactosefree)],
             GLUTENFREE:[MessageHandler(filters.TEXT, glutenfree)],
             #LIGHT:[MessageHandler(filters.TEXT, light)],
             DIABETES:[MessageHandler(filters.TEXT, diabetes)],
-
             CATEGORY:[MessageHandler(filters.TEXT, category)]
         },
             fallbacks=[MessageHandler(filters.TEXT, unknown)]
@@ -667,8 +665,6 @@ async def main():
     application.add_error_handler(error)
     logging.info("Bot avviato")
     application.run_polling(allowed_updates=Update.ALL_TYPES)
-
-
 
 
 if __name__ == "__main__":
