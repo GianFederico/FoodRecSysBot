@@ -44,15 +44,15 @@ async def gender(update: Update, context):
 # Funzione di gestione della risposta sull'età
 async def age(update: Update, context):
     user_age = update.message.text
-    if 0 < int(user_age) < 19:
+    if 0 < int(user_age) or int(user_age) <= 19:
         user_age='U20'
-    elif 20 <= int(user_age) < 29:
+    elif 20 <= int(user_age) or int(user_age) <= 29:
         user_age='U30'
-    elif 30 <= int(user_age) < 39:
+    elif 30 <= int(user_age) or int(user_age) <= 39:
         user_age='U40'
-    elif 40 <= int(user_age) < 49:
+    elif 40 <= int(user_age) or int(user_age) <= 49:
         user_age='U50'
-    elif 50 <= int(user_age) < 59:
+    elif 50 <= int(user_age) or int(user_age) <= 59:
         user_age='U60'
     elif int(user_age) >= 60:
         user_age='O60'
@@ -79,14 +79,16 @@ async def pregnant(update: Update, context):
     user_pregnant= update.message.text.lower()
     if context.user_data['gender']=='f':
         if user_pregnant not in ['yes','no']:
-            await update.message.reply_text("Gentilmente rispondimi con uno dei miei suggerimenti.")
+            await update.message.reply_text("Sorry i did not get that, can you repeat it?")
             return PREGNANT
         else:
             if user_pregnant == "yes":
                 context.user_data['pregnant'] = 1
             if user_pregnant == "no" :
                 context.user_data['pregnant'] = 0
-    else: context.user_data['pregnant'] = 0
+    else: 
+        user_pregnant="no"
+        context.user_data['pregnant'] = 0
     await update.message.reply_text('How tall are you? (cm)')
     return CM
 
@@ -252,6 +254,20 @@ async def category(update: Update, context):
         return CATEGORY
     else:
         context.user_data['category'] = user_category
+
+        #default values for parameters that are not mandatory
+        context.user_data['ht_lifestyle_importance'] = 3
+        context.user_data['ht_lifestyle'] = 3
+        context.user_data['cook_exp'] = 3
+        context.user_data['max_cost_rec'] = 3
+        context.user_data['time_cook'] = 60
+        context.user_data['mood'] = "neutral"
+        context.user_data['sleep'] = "low"
+        context.user_data['stress'] = 0
+        context.user_data['depress'] = 0
+        context.user_data['nickel'] = 0
+        context.user_data['light'] = 0
+
         reply_markup = ReplyKeyboardRemove()
         await update.message.reply_text('Thank you for your time, now you can ask me something to eat!',reply_markup=reply_markup)
         return ConversationHandler.END 
@@ -525,7 +541,7 @@ def dialogflow_mode(update, context):
     intent = response.query_result.intent.display_name
     if intent == 'Introduction':
         print("intent introduction")
-    if intent == 'Suggerimento del cibo':
+    if intent == 'Suggestion':
         Recommendation.suggerimento(update, context)
     if intent == 'Controllo del piatto':
         Spiegazione.controllo_piatto(update, context)
