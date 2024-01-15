@@ -46,16 +46,22 @@ async def age(update: Update, context):
     user_age = update.message.text
     if 0 < int(user_age) or int(user_age) <= 19:
         user_age='U20'
+        context.user_data['age']='U20'
     elif 20 <= int(user_age) or int(user_age) <= 29:
         user_age='U30'
+        context.user_data['age']='U30'
     elif 30 <= int(user_age) or int(user_age) <= 39:
         user_age='U40'
+        context.user_data['age']='U40'
     elif 40 <= int(user_age) or int(user_age) <= 49:
         user_age='U50'
+        context.user_data['age']='U50'
     elif 50 <= int(user_age) or int(user_age) <= 59:
         user_age='U60'
+        context.user_data['age']='U60'
     elif int(user_age) >= 60:
         user_age='O60'
+        context.user_data['age']='O60'
     # Controllo sulla validità dell'età
     if user_age not in ['U20','U30', 'U40','U50','U60','O60']:
         await update.message.reply_text('Sorry I did not get your age, can you insert it again? (only the number is good)')
