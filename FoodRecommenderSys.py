@@ -55,7 +55,7 @@ async def age(update: Update, context):
         user_age='U50'
     elif 50 <= int(user_age) < 59:
         user_age='U60'
-    elif int(user_age) > 60:
+    elif int(user_age) >= 60:
         user_age='O60'
     # Controllo sulla validità dell'età
     if user_age not in ['U20','U30', 'U40','U50','U60','O60']:
@@ -139,7 +139,7 @@ async def height(update: Update, context):
         return CM
     else:
         context.user_data['height'] = int(user_height)
-        await update.message.reply_text('what is your weight? (kg)')
+        await update.message.reply_text('What is your weight? (kg)')
         return KG
     
 ##########################################################################################################################################
@@ -260,7 +260,7 @@ async def goals(update: Update, context):
         keyboard = [['A lot (>2)', 'Just enough (1-2)', 'Not so much (<1)']]
         reply_markup = ReplyKeyboardMarkup(keyboard, one_time_keyboard=True, resize_keyboard=True)
         await update.message.reply_text('How much physical activity do you practice weekly?',reply_markup=reply_markup)
-        return ph_activity
+        return PH_ACTIVITY
     
 ##########################################################################################################################################
 
@@ -315,25 +315,23 @@ async def mood(update: Update, context):
 # Funzione di gestione della risposta sull'attività fisica
 async def ph_activity(update: Update, context):
     user_ph_activity = update.message.text.lower()
+    print(user_ph_activity)
     # Controllo sulla validità del mood
-    if user_ph_activity not in ['a lot','just enough','not so much']:
+    if user_ph_activity not in ['a lot (>2)', 'just enough (1-2)', 'not so much (<1)']:
         await update.message.reply_text("Devi inserire una tra le opzioni da me suggerite.")
         return PH_ACTIVITY
     else:
-        if user_ph_activity == "a lot":
+        if user_ph_activity == "a lot (>2)":
             context.user_data['ph_activity'] = "high"
-        if user_ph_activity == "just enough":
+        if user_ph_activity == "just enough (1-2)":
             context.user_data['ph_activity'] = "normal"
-        if user_ph_activity == "not so much":
+        if user_ph_activity == "not so much (<1)":
             context.user_data['ph_activity'] = "low"       
-        keyboard = [
-        [InlineKeyboardButton("Opzione 1", callback_data='option1')],
-        [InlineKeyboardButton("Opzione 2", callback_data='option2')],
-        [InlineKeyboardButton("Opzione 3", callback_data='option3')],
-    ]
+        
+        keyboard = [['Yes','No']]
         reply_markup = ReplyKeyboardMarkup(keyboard, one_time_keyboard=True, resize_keyboard=True)
-        await update.message.reply_text('Quante ore dormi al giorno?\n(Hai a disposizione dei pulsanti per rispondere alla mia domanda)',reply_markup=reply_markup)
-        return RESTRICTIONS
+        await update.message.reply_text('Are you LACTOSE intolerant?',reply_markup=reply_markup)
+        return LACTOSEFREE
 
 ##########################################################################################################################################
 
@@ -432,34 +430,34 @@ async def vegetarian(update: Update, context):
 async def lactosefree(update: Update, context):
     user_lactosefree= update.message.text.lower()
     # Controllo sulla validità della depressione
-    if user_lactosefree not in ['sì','no', 'si']:
-        await update.message.reply_text("Gentilmente rispondimi con uno dei miei suggerimenti.")
+    if user_lactosefree not in ['yes','no']:
+        await update.message.reply_text("Sorry I did not get it, can you repeat?")
         return LACTOSEFREE
     else:
-        if user_lactosefree == "si" or "sì":
+        if user_lactosefree == "yes":
             context.user_data['lactosefree'] = 1
         if user_lactosefree == "no" :
             context.user_data['lactosefree'] = 0
-        keyboard = [['Si','No']]
+        keyboard = [['Yes','No']]
         reply_markup = ReplyKeyboardMarkup(keyboard, one_time_keyboard=True, resize_keyboard=True)
-        await update.message.reply_text('Sei intollerante al glutine?\n(Hai a disposizione dei pulsanti per rispondere alla mia domanda)',reply_markup=reply_markup)
+        await update.message.reply_text('Are you GLUTEN intolerant?',reply_markup=reply_markup)
         return GLUTENFREE
 
 async def glutenfree(update: Update, context):
     user_glutenfree= update.message.text.lower()
     # Controllo sulla validità della depressione
-    if user_glutenfree not in ['sì','no', 'si']:
-        await update.message.reply_text("Gentilmente rispondimi con uno dei miei suggerimenti.")
+    if user_glutenfree not in ['yes','no']:
+        await update.message.reply_text("Sorry I did not get it, can you repeat?")
         return GLUTENFREE
     else:
-        if user_glutenfree == "si" or "sì":
+        if user_glutenfree == "yes" :
             context.user_data['glutenfree'] = 1
         if user_glutenfree == "no" :
             context.user_data['glutenfree'] = 0
-        keyboard = [['Si','No']]
+        keyboard = [['Yes','No']]
         reply_markup = ReplyKeyboardMarkup(keyboard, one_time_keyboard=True, resize_keyboard=True)
-        await update.message.reply_text('Vuoi che ti proponga ricette light?\n(Hai a disposizione dei pulsanti per rispondere alla mia domanda)',reply_markup=reply_markup)
-        return LIGHT
+        await update.message.reply_text('Are you DIABETIC?',reply_markup=reply_markup)
+        return DIABETES
 
 async def light(update: Update, context):
     user_light= update.message.text.lower()
@@ -480,18 +478,18 @@ async def light(update: Update, context):
 async def diabetes(update: Update, context):
     user_diabetes= update.message.text.lower()
     # Controllo sulla validità della depressione
-    if user_diabetes not in ['sì','no', 'si']:
-        await update.message.reply_text("Gentilmente rispondimi con uno dei miei suggerimenti.")
+    if user_diabetes not in ['yes','no']:
+        await update.message.reply_text("Sorry I did not get it, can you repeat?")
         return DIABETES
     else:
-        if user_diabetes == "si" or "Si" or "Sì" or "sì":
+        if user_diabetes == "yes":
             context.user_data['diabetes'] = 1
         if user_diabetes == "no" :
             context.user_data['diabetes'] = 0
-        keyboard = [['Si','No']]
+        keyboard = [['First courses','Second courses', 'Desserts']]
         reply_markup = ReplyKeyboardMarkup(keyboard, one_time_keyboard=True, resize_keyboard=True)
-        await update.message.reply_text('Se sei una donna, sei incinta? \n(Hai a disposizione dei pulsanti per rispondere alla mia domanda)',reply_markup=reply_markup)
-        return PREGNANT
+        await update.message.reply_text('Ok, we are done! Which type of recipes do you want me to suggest?', reply_markup=reply_markup)
+        return CATEGORY
     
 async def pregnant(update: Update, context):
     user_pregnant= update.message.text.lower()
@@ -513,15 +511,15 @@ async def pregnant(update: Update, context):
     return CM
     
 async def category(update: Update, context):
-    user_category= update.message.text
+    user_category= update.message.text.lower()
     # Controllo sulla validità della depressione
-    if user_category not in ['Primi piatti','Secondi piatti', 'Dolci']:
-        await update.message.reply_text("Gentilmente rispondimi con uno dei miei suggerimenti.")
+    if user_category not in ['first courses','second course', 'desserts']:
+        await update.message.reply_text("Please type one between 'First courses','Second courses' or 'Desserts'")
         return CATEGORY
     else:
         context.user_data['category'] = user_category
         reply_markup = ReplyKeyboardRemove()
-        await update.message.reply_text('Grazie mille per le tue risposte! Ora, chiedendomi aiuto ti dirò cosa posso fare per te!',reply_markup=reply_markup)
+        await update.message.reply_text('Thank you for your time, now you can ask me something to eat!',reply_markup=reply_markup)
         return ConversationHandler.END 
 
 #Funzione per gestire eventuali errori
