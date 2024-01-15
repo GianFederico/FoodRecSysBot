@@ -35,8 +35,11 @@ async def gender(update: Update, context):
     else:
         if user_gender == "man":
                 context.user_data['gender'] = "m"
+                context.user_data['pregnant'] = 0
         elif user_gender == "woman":
                 context.user_data['gender'] = "f"
+        elif user_gender == "unspecified":
+                context.user_data['gender'] = "u" #TODO CHECK WHAT LETTER CORRESPONDS TO UNSPECIFIED
         await update.message.reply_text('How old are you?')
         return AGE
    
@@ -67,7 +70,7 @@ async def age(update: Update, context):
         await update.message.reply_text('Sorry I did not get your age, can you insert it again? (only the number is good)')
         return AGE
     else:
-        if context.user_data['gender']=="f":
+        if context.user_data['gender']=="f" or context.user_data['gender']=="u":
             keyboard = [['Yes','No']]
             reply_markup = ReplyKeyboardMarkup(keyboard, one_time_keyboard=True, resize_keyboard=True)
             await update.message.reply_text('Are you pregnant?',reply_markup=reply_markup)
@@ -83,7 +86,7 @@ async def age(update: Update, context):
 # Funzione di gestione della risposta sull'essere incinta
 async def pregnant(update: Update, context):
     user_pregnant= update.message.text.lower()
-    if context.user_data['gender']=='f':
+    if context.user_data['gender']=='f' or context.user_data['gender']=='u':
         if user_pregnant not in ['yes','no']:
             await update.message.reply_text("Sorry i did not get that, can you repeat it?")
             return PREGNANT
@@ -92,9 +95,6 @@ async def pregnant(update: Update, context):
                 context.user_data['pregnant'] = 1
             if user_pregnant == "no" :
                 context.user_data['pregnant'] = 0
-    else: 
-        user_pregnant="no"
-        context.user_data['pregnant'] = 0
     await update.message.reply_text('How tall are you? (cm)')
     return CM
 
@@ -545,8 +545,6 @@ def dialogflow_mode(update, context):
 
     # Invia la risposta di Dialogflow all'utente
     intent = response.query_result.intent.display_name
-    if intent == 'Introduction':
-        print("intent introduction")
     if intent == 'Suggestion':
         Recommendation.suggerimento(update, context)
     if intent == 'Controllo del piatto':
