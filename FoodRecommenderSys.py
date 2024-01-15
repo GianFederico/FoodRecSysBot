@@ -1,5 +1,5 @@
 import logging
-from telegram import Update, ReplyKeyboardMarkup, ReplyKeyboardRemove, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram import Update, ReplyKeyboardMarkup, ReplyKeyboardRemove
 import google.cloud.dialogflow_v2 as dialogflow
 from telegram.ext import CommandHandler, MessageHandler, filters, ConversationHandler
 import constants as keys
@@ -634,4 +634,3 @@ async def main():
 
 if __name__ == "__main__":
      asyncio.run(main())
-

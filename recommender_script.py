@@ -11,7 +11,7 @@ class Recommendation:
     @staticmethod
     def suggerimento(update: Update, context):
         # Costruire l'URL di richiesta con i parametri
-        url = 'https://foodrecsys-673ed7929678.herokuapp.com/mood?'
+        url = 'http://127.0.0.1:3000/mood?'
         params = {
             'n':1,
             'category': context.user_data['category'],
@@ -34,7 +34,7 @@ class Recommendation:
             'stress': context.user_data['stress'],
             'sleep': context.user_data['sleep'],
             'depression': context.user_data['depress']
-            
+  
         }
 
         full_url = url + urlencode(params)
@@ -59,7 +59,7 @@ class Recommendation_due:
     @staticmethod    
     def altro_suggerimento(update: Update, context):
         # Costruire l'URL di richiesta con i parametri
-        url = 'https://foodrecsys-673ed7929678.herokuapp.com/mood?'
+        url = 'http://127.0.0.1:3000/mood?'
         params = {
             'n':4,
             'category': context.user_data['category'],

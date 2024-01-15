@@ -8,6 +8,11 @@ import numpy as np
 app = Flask(__name__)
 #api = Api(app)
 
+@app.route("/")
+def main_page():
+    print("main_page() was called")
+    return "I'm working correctly"
+
 @app.route('/mood')
 #class Mood(Resource):
 def get_mood():
@@ -1049,4 +1054,4 @@ def get_mood():
 #    app.run(host='0.0.0.0', port=int(os.environ.get('PORT1', 5000)))
     
 if __name__ == '__main__':
-   app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
+   app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 3000)))

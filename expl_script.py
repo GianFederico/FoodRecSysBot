@@ -28,7 +28,7 @@ class Spiegazione:
             if context.user_data['glutenfree'] == 1:
                 restr_list.append("gluten-free")
             restr = ','.join(restr_list) if restr_list else None
-            url = 'https://foodrecsysexpl-3e81d753188a.herokuapp.com/expl?'
+            url = 'http://127.0.0.1:5000/expl?'
             params = {
                 'type': 2,  
                 'style':0, 
@@ -92,7 +92,7 @@ class Spiegazione:
             if context.user_data['glutenfree'] == 1:
                 restr_list.append("gluten-free")
             restr = ','.join(restr_list) if restr_list else None
-            url = 'https://foodrecsysexpl-3e81d753188a.herokuapp.com/expl?'
+            url = 'http://127.0.0.1:5000/expl?'
             params = {
                 'type': 2,  
                 'style':1, 
@@ -157,7 +157,7 @@ class Spiegazione:
             if context.user_data['glutenfree'] == 1:
                 restr_list.append("gluten-free")
             restr = ','.join(restr_list) if restr_list else None
-            url = 'https://foodrecsysexpl-3e81d753188a.herokuapp.com/expl?'
+            url = 'http://127.0.0.1:5000/expl?'
             params = {
                 'type': 3,  
                 'style':0, 
@@ -221,7 +221,7 @@ class Spiegazione:
             if context.user_data['glutenfree'] == 1:
                 restr_list.append("gluten-free")
             restr = ','.join(restr_list) if restr_list else None
-            url = 'https://foodrecsysexpl-3e81d753188a.herokuapp.com/expl?'
+            url = 'http://127.0.0.1:5000/expl?'
             params = {
                 'type': 3,  
                 'style':1, 
@@ -286,7 +286,7 @@ class Spiegazione:
             if context.user_data['glutenfree'] == 1:
                 restr_list.append("gluten-free")
             restr = ','.join(restr_list) if restr_list else None
-            url = 'https://foodrecsysexpl-3e81d753188a.herokuapp.com/expl?'
+            url = 'http://127.0.0.1:5000/expl?'
             params = {
                 'type': 1,  
                 'style':0, 
@@ -350,7 +350,7 @@ class Spiegazione:
             if context.user_data['glutenfree'] == 1:
                 restr_list.append("gluten-free")
             restr = ','.join(restr_list) if restr_list else None
-            url = 'https://foodrecsysexpl-3e81d753188a.herokuapp.com/expl?'
+            url = 'http://127.0.0.1:5000/expl?'
             params = {
                 'type': 8,  
                 'style':0, 
@@ -413,7 +413,7 @@ class Spiegazione:
             if context.user_data['glutenfree'] == 1:
                 restr_list.append("gluten-free")
             restr = ','.join(restr_list) if restr_list else None
-            url = 'https://foodrecsysexpl-3e81d753188a.herokuapp.com/expl?'
+            url = 'http://127.0.0.1:5000/expl?'
             params = {
                 'type': 7,  
                 'style':0, 
@@ -477,7 +477,7 @@ class Spiegazione:
             if context.user_data['glutenfree'] == 1:
                 restr_list.append("gluten-free")
             restr = ','.join(restr_list) if restr_list else None
-            url = 'https://foodrecsysexpl-3e81d753188a.herokuapp.com/expl?'
+            url = 'http://127.0.0.1:5000/expl?'
             params = {
                 'type': 8,  
                 'style':1, 
@@ -542,7 +542,7 @@ class Spiegazione:
             if context.user_data['glutenfree'] == 1:
                 restr_list.append("gluten-free")
             restr = ','.join(restr_list) if restr_list else None
-            url = 'https://foodrecsysexpl-3e81d753188a.herokuapp.com/expl?'
+            url = 'http://127.0.0.1:5000/expl?'
             params = {
                 'type': 7,  
                 'style':1, 
@@ -607,7 +607,7 @@ class Spiegazione:
             if context.user_data['glutenfree'] == 1:
                 restr_list.append("gluten-free")
             restr = ','.join(restr_list) if restr_list else None
-            url = 'https://foodrecsysexpl-3e81d753188a.herokuapp.com/expl?'
+            url = 'http://127.0.0.1:5000/expl?'
             params = {
                 'type': 10,  
                 'style':0, 
@@ -671,7 +671,7 @@ class Spiegazione:
             if context.user_data['glutenfree'] == 1:
                 restr_list.append("gluten-free")
             restr = ','.join(restr_list) if restr_list else None
-            url = 'https://foodrecsysexpl-3e81d753188a.herokuapp.com/expl?'
+            url = 'http://127.0.0.1:5000/expl?'
             params = {
                 'type': 10,  
                 'style':1, 
@@ -736,7 +736,7 @@ class Spiegazione:
             if context.user_data['glutenfree'] == 1:
                 restr_list.append("gluten-free")
             restr = ','.join(restr_list) if restr_list else None
-            url = 'https://foodrecsysexpl-3e81d753188a.herokuapp.com/expl?'
+            url = 'http://127.0.0.1:5000/expl?'
             params = {
                 'type': 0,  
                 'style':0, 
@@ -801,7 +801,7 @@ class Spiegazione:
             if context.user_data['glutenfree'] == 1:
                 restr_list.append("gluten-free")
             restr = ','.join(restr_list) if restr_list else None
-            url = 'https://foodrecsysexpl-3e81d753188a.herokuapp.com/expl?'
+            url = 'http://127.0.0.1:5000/expl?'
             params = {
                 'type': 0,  
                 'style':1, 
@@ -867,7 +867,7 @@ class Spiegazione:
             if context.user_data['glutenfree'] == 1:
                 restr_list.append("gluten-free")
             restr = ','.join(restr_list) if restr_list else None
-            url = 'https://foodrecsysexpl-3e81d753188a.herokuapp.com/expl?'
+            url = 'http://127.0.0.1:5000/expl?'
             params = {
                 'type': 1,  
                 'style':1, 
@@ -932,7 +932,7 @@ class Spiegazione:
             if context.user_data['glutenfree'] == 1:
                 restr_list.append("gluten-free")
             restr = ','.join(restr_list) if restr_list else None
-            url = 'https://foodrecsysexpl-3e81d753188a.herokuapp.com/expl?'
+            url = 'http://127.0.0.1:5000/expl?'
             params = {
                 'type': 9,  
                 'style':0, 
@@ -996,7 +996,7 @@ class Spiegazione:
             if context.user_data['glutenfree'] == 1:
                 restr_list.append("gluten-free")
             restr = ','.join(restr_list) if restr_list else None
-            url = 'https://foodrecsysexpl-3e81d753188a.herokuapp.com/expl?'
+            url = 'http://127.0.0.1:5000/expl?'
             params = {
                 'type': 9,  
                 'style':1, 
@@ -1061,7 +1061,7 @@ class Spiegazione:
             if context.user_data['glutenfree'] == 1:
                 restr_list.append("gluten-free")
             restr = ','.join(restr_list) if restr_list else None
-            url = 'https://foodrecsysexpl-3e81d753188a.herokuapp.com/expl?'
+            url = 'http://127.0.0.1:5000/expl?'
             params = {
                 'type': 11,  
                 'style':0, 
@@ -1126,7 +1126,7 @@ class Spiegazione:
             if context.user_data['glutenfree'] == 1:
                 restr_list.append("gluten-free")
             restr = ','.join(restr_list) if restr_list else None
-            url = 'https://foodrecsysexpl-3e81d753188a.herokuapp.com/expl?'
+            url = 'http://127.0.0.1:5000/expl?'
             params = {
                 'type': 11,  
                 'style':1, 
@@ -1192,7 +1192,7 @@ class Spiegazione:
             if context.user_data['glutenfree'] == 1:
                 restr_list.append("gluten-free")
             restr = ','.join(restr_list) if restr_list else None
-            url = 'https://foodrecsysexpl-3e81d753188a.herokuapp.com/expl?'
+            url = 'http://127.0.0.1:5000/expl?'
             params = {
                 'type': 13,  
                 'style':0, 
@@ -1256,7 +1256,7 @@ class Spiegazione:
             if context.user_data['glutenfree'] == 1:
                 restr_list.append("gluten-free")
             restr = ','.join(restr_list) if restr_list else None
-            url = 'https://foodrecsysexpl-3e81d753188a.herokuapp.com/expl?'
+            url = 'http://127.0.0.1:5000/expl?'
             params = {
                 'type': 13,  
                 'style':1, 
@@ -1323,7 +1323,7 @@ class Spiegazione:
             if context.user_data['glutenfree'] == 1:
                 restr_list.append("gluten-free")
             restr = ','.join(restr_list) if restr_list else None
-            url = 'https://foodrecsysexpl-3e81d753188a.herokuapp.com/expl?'
+            url = 'http://127.0.0.1:5000/expl?'
             params = {
                 'type': 18,  
                 'style':0, 
@@ -1388,7 +1388,7 @@ class Spiegazione:
             if context.user_data['glutenfree'] == 1:
                 restr_list.append("gluten-free")
             restr = ','.join(restr_list) if restr_list else None
-            url = 'https://foodrecsysexpl-3e81d753188a.herokuapp.com/expl?'
+            url = 'http://127.0.0.1:5000/expl?'
             params = {
                 'type': 18,  
                 'style':1, 
@@ -1454,7 +1454,7 @@ class Spiegazione:
             if context.user_data['glutenfree'] == 1:
                 restr_list.append("gluten-free")
             restr = ','.join(restr_list) if restr_list else None
-            url = 'https://foodrecsysexpl-3e81d753188a.herokuapp.com/expl?'
+            url = 'http://127.0.0.1:5000/expl?'
             params = {
                 'type': 4,  
                 'style':0, 
@@ -1519,7 +1519,7 @@ class Spiegazione:
             if context.user_data['glutenfree'] == 1:
                 restr_list.append("gluten-free")
             restr = ','.join(restr_list) if restr_list else None
-            url = 'https://foodrecsysexpl-3e81d753188a.herokuapp.com/expl?'
+            url = 'http://127.0.0.1:5000/expl?'
             params = {
                 'type': 4,  
                 'style':1, 
