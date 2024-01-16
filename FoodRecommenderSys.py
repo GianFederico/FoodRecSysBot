@@ -266,9 +266,9 @@ async def category(update: Update, context):
         context.user_data['ht_lifestyle'] = 3
         context.user_data['cook_exp'] = 3
         context.user_data['max_cost_rec'] = 3
-        context.user_data['time_cook'] = 60
+        context.user_data['time_cook'] = 0
         context.user_data['mood'] = "neutral"
-        context.user_data['sleep'] = "low"
+        context.user_data['sleep'] = "good"
         context.user_data['stress'] = 0
         context.user_data['depress'] = 0
         context.user_data['nickel'] = 0
@@ -522,7 +522,7 @@ async def unknown(update: Update, context):
    return GENDER
 
 # Funzione per inviare il messaggio a Dialogflow e restituire la risposta
-def dialogflow_mode(update, context):
+async def dialogflow_mode(update, context):
     # Id del progetto Dialogflow
     DIALOGFLOW_PROJECT_ID = 'foodrecsys-kbji'
     # Credenziali del progetto Dialogflow
@@ -549,7 +549,7 @@ def dialogflow_mode(update, context):
     if intent == 'Suggestion':
         print("Intent:", intent)
         print("Confidence:", confidence)
-        Recommendation.suggerimento(update, context)
+        await Recommendation.suggerimento(update, context)
     if intent == 'Controllo del piatto':
         Spiegazione.controllo_piatto(update, context)
     if intent == 'Popolarità_un_piatto':
@@ -575,7 +575,7 @@ def dialogflow_mode(update, context):
     if intent == 'Spiegazione del cibo, Tempo':
         Spiegazione.spiegazione_tempo(update, context)
     if intent == 'Altro suggerimento del piatto':
-        Recommendation_due.altro_suggerimento(update, context)
+        await Recommendation_due.altro_suggerimento(update, context)
     if intent == 'Controllo del piatto due piatti':
         Spiegazione.controllo_piatto_due_piatti(update, context)
     if intent == 'Popolarità_due_piatti':

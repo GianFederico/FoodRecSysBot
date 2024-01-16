@@ -47,3 +47,14 @@ OBBLIGATORIE:
 
 
 OPZIONALI:
+    Quanto è importante per te avere uno stile di vita salutare?
+    Tu invece come consideri il tuo stile di vita?
+    Come dovrebbe essere la preparazione di un piatto fatto da te?
+    Quanto potrebbe essere il tuo budget per preparare una ricetta?
+    Quanto è in media il tuo tempo disponibile per cucinare espresso in minuti? (0 a 200)
+    Come ti senti attualmente?
+    Quante ore dormi al giorno?
+    Ti senti stressato in questo periodo?
+    Ti senti depresso in questo periodo?
+    Hai bisogno di ricette con basso Nickel?
+    Vuoi che ti proponga ricette light?

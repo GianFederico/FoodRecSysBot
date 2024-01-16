@@ -9,7 +9,7 @@ class Recommendation:
     def __init__(self,img_url=None):
         self.img_url = img_url
     @staticmethod
-    def suggerimento(update: Update, context):
+    async def suggerimento(update: Update, context):
         # Costruire l'URL di richiesta con i parametri
         url = 'http://127.0.0.1:3000/mood?'
         params = {
@@ -53,14 +53,14 @@ class Recommendation:
                 url_ricetta = recipe_data[0]
                 title = recipe_data[1]
                 Recommendation.img_url = recipe_data[4]
-        return update.message.reply_text(f"Ricetta: {title}\nURL: {url_ricetta}")
+        return await update.message.reply_text(f"Recipe: {title}\nURL: {url_ricetta}")
 
 class Recommendation_due:
     
     def __init__(self,img_url=None):
         self.img_url = img_url
     @staticmethod    
-    def altro_suggerimento(update: Update, context):
+    async def altro_suggerimento(update: Update, context):
         # Costruire l'URL di richiesta con i parametri
         url = 'http://127.0.0.1:3000/mood?'
         params = {
@@ -103,7 +103,7 @@ class Recommendation_due:
                     url_ricetta = recipe_data[0]
                     title = recipe_data[1]
                     Recommendation_due.img_url = recipe_data[4]
-                return update.message.reply_text(f"Ricetta: {title}\nURL: {url_ricetta}")
+                return await update.message.reply_text(f"Ricetta: {title}\nURL: {url_ricetta}")
  
         update.message.reply_text("Mi scuso,ma è probabile che in riferimento a ciascuna delle tue informazioni, l'unica ricetta presente nel database è la prima che ti ho consigliato.\nCi adoperemo sicuramente ad inserire ulteriori ricette tenendo presente la combinazione delle tue caratteristiche!\nSe vuoi, puoi ricominciare e cambiare qualche parametro e quasi sicuramente potrò aiutarti con più di una ricetta!")
 

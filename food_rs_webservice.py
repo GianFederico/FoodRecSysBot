@@ -10,7 +10,6 @@ app = Flask(__name__)
 
 @app.route("/")
 def main_page():
-    print("main_page() was called")
     return "I'm working correctly"
 
 @app.route('/mood')
@@ -788,257 +787,257 @@ def get_mood():
 
         bmi = request.args.get('fatclass') if (request.args.get('fatclass') is not None) else ''
 
-        # MARKER filtro il DataFrame su nome della ricetta cercata
-        if recipeName:
-            df = df[df.title.str.contains(recipeName, case=False)]
+        # # MARKER filtro il DataFrame su nome della ricetta cercata
+        # if recipeName:
+        #     df = df[df.title.str.contains(recipeName, case=False)]
 
-        # MARKER filtro il DataFrame su ingrediente della ricetta cercato
-        if ingredient:
-            df = dfFromIngredient(df, ingredient)
+        # # MARKER filtro il DataFrame su ingrediente della ricetta cercato
+        # if ingredient:
+        #     df = dfFromIngredient(df, ingredient)
 
         # MARKER change score for category - 'Primi piatti', 'Secondi piatti', 'Dolci'
         if category:
             df = df[df.category == category]
 
-        # MARKER change score for restrictions
-        if isLowNickel:
-            df = df[df.isLowNickel == isLowNickel]
+        # # MARKER change score for restrictions
+        # if isLowNickel:
+        #     df = df[df.isLowNickel == isLowNickel]
 
-        if isVegetarian:
-            df = df[df.isVegetarian == isVegetarian]
+        # if isVegetarian:
+        #     df = df[df.isVegetarian == isVegetarian]
 
-        if isLactoseFree:
-            df = df[df.isLactoseFree == isLactoseFree]
+        # if isLactoseFree:
+        #     df = df[df.isLactoseFree == isLactoseFree]
 
-        if isGlutenFree:
-            df = df[df.isGlutenFree == isGlutenFree]
+        # if isGlutenFree:
+        #     df = df[df.isGlutenFree == isGlutenFree]
 
-        if isLight:
-            df = df[df.isLight == isLight]
+        # if isLight:
+        #     df = df[df.isLight == isLight]
 
-        if isDiabetes:
-            if lang == 'it':
-                df.score = df.apply(rescore_good_food, axis=1, food='salmone')
-                df.score = df.apply(rescore_good_food, axis=1, food='tonno')
-                df.score = df.apply(rescore_good_food, axis=1, food='trota')
-                df.score = df.apply(rescore_good_food, axis=1, food='sgombro')
-                df.score = df.apply(rescore_good_food, axis=1, food='uova')
-                df.score = df.apply(rescore_good_food, axis=1, food='yogurt')
-                df.score = df.apply(rescore_good_food, axis=1, food='fagioli')
-                df.score = df.apply(rescore_good_food, axis=1, food='noci')
-                df.score = df.apply(rescore_good_food, axis=1, food='mandorle')
-                df.score = df.apply(rescore_good_food, axis=1, food='nocciole')
-            else:
-                df.score = df.apply(rescore_good_food, axis=1, food='salmon')
-                df.score = df.apply(rescore_good_food, axis=1, food='tuna')
-                df.score = df.apply(rescore_good_food, axis=1, food='trout')
-                df.score = df.apply(rescore_good_food, axis=1, food='mackerel')
-                df.score = df.apply(rescore_good_food, axis=1, food='eggs')
-                df.score = df.apply(rescore_good_food, axis=1, food='yogurt')
-                df.score = df.apply(rescore_good_food, axis=1, food='beans')
-                df.score = df.apply(rescore_good_food, axis=1, food='walnuts')
-                df.score = df.apply(rescore_good_food, axis=1, food='almond')
-                df.score = df.apply(rescore_good_food, axis=1, food='nuts')
-            df.score = df.apply(rescore_less_sugar, axis=1)
+        # if isDiabetes:
+        #     if lang == 'it':
+        #         df.score = df.apply(rescore_good_food, axis=1, food='salmone')
+        #         df.score = df.apply(rescore_good_food, axis=1, food='tonno')
+        #         df.score = df.apply(rescore_good_food, axis=1, food='trota')
+        #         df.score = df.apply(rescore_good_food, axis=1, food='sgombro')
+        #         df.score = df.apply(rescore_good_food, axis=1, food='uova')
+        #         df.score = df.apply(rescore_good_food, axis=1, food='yogurt')
+        #         df.score = df.apply(rescore_good_food, axis=1, food='fagioli')
+        #         df.score = df.apply(rescore_good_food, axis=1, food='noci')
+        #         df.score = df.apply(rescore_good_food, axis=1, food='mandorle')
+        #         df.score = df.apply(rescore_good_food, axis=1, food='nocciole')
+        #     else:
+        #         df.score = df.apply(rescore_good_food, axis=1, food='salmon')
+        #         df.score = df.apply(rescore_good_food, axis=1, food='tuna')
+        #         df.score = df.apply(rescore_good_food, axis=1, food='trout')
+        #         df.score = df.apply(rescore_good_food, axis=1, food='mackerel')
+        #         df.score = df.apply(rescore_good_food, axis=1, food='eggs')
+        #         df.score = df.apply(rescore_good_food, axis=1, food='yogurt')
+        #         df.score = df.apply(rescore_good_food, axis=1, food='beans')
+        #         df.score = df.apply(rescore_good_food, axis=1, food='walnuts')
+        #         df.score = df.apply(rescore_good_food, axis=1, food='almond')
+        #         df.score = df.apply(rescore_good_food, axis=1, food='nuts')
+        #     df.score = df.apply(rescore_less_sugar, axis=1)
 
-        if isPregnant and sex != "M":
-            if lang == 'it':
-                df.score = df.apply(rescore_good_food, axis=1, food='formaggio')
-                df.score = df.apply(rescore_good_food, axis=1, food='yogurt')
-                df.score = df.apply(rescore_good_food, axis=1, food='fagioli')
-                df.score = df.apply(rescore_good_food, axis=1, food='lenticchie')
-                df.score = df.apply(rescore_good_food, axis=1, food='salmone')
-                df.score = df.apply(rescore_good_food, axis=1, food='tonno')
-                df.score = df.apply(rescore_good_food, axis=1, food='trota')
-                df.score = df.apply(rescore_good_food, axis=1, food='sgombro')
-                df.score = df.apply(rescore_good_food, axis=1, food='uova')
-                df.score = df.apply(rescore_bad_food, axis=1, food='caffè')
-            else:
-                df.score = df.apply(rescore_good_food, axis=1, food='cheese')
-                df.score = df.apply(rescore_good_food, axis=1, food='yogurt')
-                df.score = df.apply(rescore_good_food, axis=1, food='beans')
-                df.score = df.apply(rescore_good_food, axis=1, food='lentils')
-                df.score = df.apply(rescore_good_food, axis=1, food='salmon')
-                df.score = df.apply(rescore_good_food, axis=1, food='tuna')
-                df.score = df.apply(rescore_good_food, axis=1, food='trout')
-                df.score = df.apply(rescore_good_food, axis=1, food='mackerel')
-                df.score = df.apply(rescore_good_food, axis=1, food='eggs')
-                df.score = df.apply(rescore_bad_food, axis=1, food='coffee')
+        # if isPregnant and sex != "M":
+        #     if lang == 'it':
+        #         df.score = df.apply(rescore_good_food, axis=1, food='formaggio')
+        #         df.score = df.apply(rescore_good_food, axis=1, food='yogurt')
+        #         df.score = df.apply(rescore_good_food, axis=1, food='fagioli')
+        #         df.score = df.apply(rescore_good_food, axis=1, food='lenticchie')
+        #         df.score = df.apply(rescore_good_food, axis=1, food='salmone')
+        #         df.score = df.apply(rescore_good_food, axis=1, food='tonno')
+        #         df.score = df.apply(rescore_good_food, axis=1, food='trota')
+        #         df.score = df.apply(rescore_good_food, axis=1, food='sgombro')
+        #         df.score = df.apply(rescore_good_food, axis=1, food='uova')
+        #         df.score = df.apply(rescore_bad_food, axis=1, food='caffè')
+        #     else:
+        #         df.score = df.apply(rescore_good_food, axis=1, food='cheese')
+        #         df.score = df.apply(rescore_good_food, axis=1, food='yogurt')
+        #         df.score = df.apply(rescore_good_food, axis=1, food='beans')
+        #         df.score = df.apply(rescore_good_food, axis=1, food='lentils')
+        #         df.score = df.apply(rescore_good_food, axis=1, food='salmon')
+        #         df.score = df.apply(rescore_good_food, axis=1, food='tuna')
+        #         df.score = df.apply(rescore_good_food, axis=1, food='trout')
+        #         df.score = df.apply(rescore_good_food, axis=1, food='mackerel')
+        #         df.score = df.apply(rescore_good_food, axis=1, food='eggs')
+        #         df.score = df.apply(rescore_bad_food, axis=1, food='coffee')
 
-        # MARKER change score for bmi value
-        if bmi == "under":
-            # SOTTOPESO
-            df.score = df.apply(rescoreUnderweight, axis=1)
-        elif bmi == "normal":
-            # SOVRAPPESO
-            df.score = df.apply(rescoreOverweight, axis=1)
-        elif bmi == "over":
-            # OBESITÀ CLASSE I
-            df.score = df.apply(rescoreObesity, axis=1)
-        elif bmi == "over":
-            # OBESITÀ CLASSE II
-            df.score = df.apply(rescoreObesityPlus, axis=1)
+        # # MARKER change score for bmi value
+        # if bmi == "under":
+        #     # SOTTOPESO
+        #     df.score = df.apply(rescoreUnderweight, axis=1)
+        # elif bmi == "normal":
+        #     # SOVRAPPESO
+        #     df.score = df.apply(rescoreOverweight, axis=1)
+        # elif bmi == "over":
+        #     # OBESITÀ CLASSE I
+        #     df.score = df.apply(rescoreObesity, axis=1)
+        # elif bmi == "over":
+        #     # OBESITÀ CLASSE II
+        #     df.score = df.apply(rescoreObesityPlus, axis=1)
 
-        # MARKER change score if mood == 'bad'
-        if mood == 'bad':
-            df.score = df.apply(rescoreMoodBad, axis=1)
-            if lang == 'it':
-                df.score = df.apply(rescore_good_food, axis=1, food='salmone')
-                df.score = df.apply(rescore_good_food, axis=1, food='tonno')
-                df.score = df.apply(rescore_good_food, axis=1, food='trota')
-                df.score = df.apply(rescore_good_food, axis=1, food='sgombro')
-                df.score = df.apply(rescore_good_food, axis=1, food='cioccolato')
-                df.score = df.apply(rescore_good_food, axis=1, food='yogurt')
-                df.score = df.apply(rescore_good_food, axis=1, food='banana')
-                df.score = df.apply(rescore_good_food, axis=1, food='avena')
-                df.score = df.apply(rescore_good_food, axis=1, food='caffè')
-                df.score = df.apply(rescore_good_food, axis=1, food='nocciole')
-                df.score = df.apply(rescore_good_food, axis=1, food='fagioli')
-                df.score = df.apply(rescore_good_food, axis=1, food='lenticchie')
-            else:
-                df.score = df.apply(rescore_good_food, axis=1, food='salmon')
-                df.score = df.apply(rescore_good_food, axis=1, food='tuna')
-                df.score = df.apply(rescore_good_food, axis=1, food='trout')
-                df.score = df.apply(rescore_good_food, axis=1, food='mackerel')
-                df.score = df.apply(rescore_good_food, axis=1, food='chocolate')
-                df.score = df.apply(rescore_good_food, axis=1, food='yogurt')
-                df.score = df.apply(rescore_good_food, axis=1, food='banana')
-                df.score = df.apply(rescore_good_food, axis=1, food='oat')
-                df.score = df.apply(rescore_good_food, axis=1, food='coffee')
-                df.score = df.apply(rescore_good_food, axis=1, food='nuts')
-                df.score = df.apply(rescore_good_food, axis=1, food='beans')
-                df.score = df.apply(rescore_good_food, axis=1, food='lentils')
+        # # MARKER change score if mood == 'bad'
+        # if mood == 'bad':
+        #     df.score = df.apply(rescoreMoodBad, axis=1)
+        #     if lang == 'it':
+        #         df.score = df.apply(rescore_good_food, axis=1, food='salmone')
+        #         df.score = df.apply(rescore_good_food, axis=1, food='tonno')
+        #         df.score = df.apply(rescore_good_food, axis=1, food='trota')
+        #         df.score = df.apply(rescore_good_food, axis=1, food='sgombro')
+        #         df.score = df.apply(rescore_good_food, axis=1, food='cioccolato')
+        #         df.score = df.apply(rescore_good_food, axis=1, food='yogurt')
+        #         df.score = df.apply(rescore_good_food, axis=1, food='banana')
+        #         df.score = df.apply(rescore_good_food, axis=1, food='avena')
+        #         df.score = df.apply(rescore_good_food, axis=1, food='caffè')
+        #         df.score = df.apply(rescore_good_food, axis=1, food='nocciole')
+        #         df.score = df.apply(rescore_good_food, axis=1, food='fagioli')
+        #         df.score = df.apply(rescore_good_food, axis=1, food='lenticchie')
+        #     else:
+        #         df.score = df.apply(rescore_good_food, axis=1, food='salmon')
+        #         df.score = df.apply(rescore_good_food, axis=1, food='tuna')
+        #         df.score = df.apply(rescore_good_food, axis=1, food='trout')
+        #         df.score = df.apply(rescore_good_food, axis=1, food='mackerel')
+        #         df.score = df.apply(rescore_good_food, axis=1, food='chocolate')
+        #         df.score = df.apply(rescore_good_food, axis=1, food='yogurt')
+        #         df.score = df.apply(rescore_good_food, axis=1, food='banana')
+        #         df.score = df.apply(rescore_good_food, axis=1, food='oat')
+        #         df.score = df.apply(rescore_good_food, axis=1, food='coffee')
+        #         df.score = df.apply(rescore_good_food, axis=1, food='nuts')
+        #         df.score = df.apply(rescore_good_food, axis=1, food='beans')
+        #         df.score = df.apply(rescore_good_food, axis=1, food='lentils')
 
-        # MARKER change score for activity
-        if activity == 'medium':
-            df.score = df.apply(rescoreActivityMedium, axis=1)
-        elif activity == 'high':
-            df.score = df.apply(rescoreActivityHigh, axis=1)
+        # # MARKER change score for activity
+        # if activity == 'medium':
+        #     df.score = df.apply(rescoreActivityMedium, axis=1)
+        # elif activity == 'high':
+        #     df.score = df.apply(rescoreActivityHigh, axis=1)
 
-        # MARKER change score if stress == 'yes'
-        if stress == 'yes':
-            df['antistress'] = df.ingredients.apply(isAntistress)
-            df.score = df.apply(rescoreStress, axis=1)
-            if lang == 'it':
-                df.score = df.apply(rescore_bad_food, axis=1, food='caffè')
-            else:
-                df.score = df.apply(rescore_bad_food, axis=1, food='coffee')
+        # # MARKER change score if stress == 'yes'
+        # if stress == 'yes':
+        #     df['antistress'] = df.ingredients.apply(isAntistress)
+        #     df.score = df.apply(rescoreStress, axis=1)
+        #     if lang == 'it':
+        #         df.score = df.apply(rescore_bad_food, axis=1, food='caffè')
+        #     else:
+        #         df.score = df.apply(rescore_bad_food, axis=1, food='coffee')
 
-        # MARKER change score if sleep == 'low'
-        if sleep == 'low':
-            df['magnesium'] = df.ingredients.apply(isRichMagnesium)
-            df.score = df.apply(rescoreMagnesium, axis=1)
-            df.score = df.apply(rescoreSleep, axis=1)
-            if lang == 'it':
-                df.score = df.apply(rescore_good_food, axis=1, food='tacchino')
-                df.score = df.apply(rescore_good_food, axis=1, food='cammomilla')
-                df.score = df.apply(rescore_good_food, axis=1, food='kiwi')
-                df.score = df.apply(rescore_good_food, axis=1, food='ciliegie')
-                df.score = df.apply(rescore_good_food, axis=1, food='salmone')
-                df.score = df.apply(rescore_good_food, axis=1, food='tonno')
-                df.score = df.apply(rescore_good_food, axis=1, food='trota')
-                df.score = df.apply(rescore_good_food, axis=1, food='sgombro')
-                df.score = df.apply(rescore_good_food, axis=1, food='noci')
-                df.score = df.apply(rescore_good_food, axis=1, food='riso')
-                df.score = df.apply(rescore_good_food, axis=1, food='formaggio')
-                df.score = df.apply(rescore_good_food, axis=1, food='yogurt')
-                df.score = df.apply(rescore_good_food, axis=1, food='avena')
-                df.score = df.apply(rescore_bad_food, axis=1, food='caffè')
-            else:
-                df.score = df.apply(rescore_good_food, axis=1, food='turkey')
-                df.score = df.apply(rescore_good_food, axis=1, food='chamomile')
-                df.score = df.apply(rescore_good_food, axis=1, food='kiwi')
-                df.score = df.apply(rescore_good_food, axis=1, food='cherry')
-                df.score = df.apply(rescore_good_food, axis=1, food='salmon')
-                df.score = df.apply(rescore_good_food, axis=1, food='tuna')
-                df.score = df.apply(rescore_good_food, axis=1, food='trout')
-                df.score = df.apply(rescore_good_food, axis=1, food='mackerel')
-                df.score = df.apply(rescore_good_food, axis=1, food='walnuts')
-                df.score = df.apply(rescore_good_food, axis=1, food='rice')
-                df.score = df.apply(rescore_good_food, axis=1, food='cheese')
-                df.score = df.apply(rescore_good_food, axis=1, food='yogurt')
-                df.score = df.apply(rescore_good_food, axis=1, food='oat')
-                df.score = df.apply(rescore_bad_food, axis=1, food='coffee')
+        # # MARKER change score if sleep == 'low'
+        # if sleep == 'low':
+        #     df['magnesium'] = df.ingredients.apply(isRichMagnesium)
+        #     df.score = df.apply(rescoreMagnesium, axis=1)
+        #     df.score = df.apply(rescoreSleep, axis=1)
+        #     if lang == 'it':
+        #         df.score = df.apply(rescore_good_food, axis=1, food='tacchino')
+        #         df.score = df.apply(rescore_good_food, axis=1, food='cammomilla')
+        #         df.score = df.apply(rescore_good_food, axis=1, food='kiwi')
+        #         df.score = df.apply(rescore_good_food, axis=1, food='ciliegie')
+        #         df.score = df.apply(rescore_good_food, axis=1, food='salmone')
+        #         df.score = df.apply(rescore_good_food, axis=1, food='tonno')
+        #         df.score = df.apply(rescore_good_food, axis=1, food='trota')
+        #         df.score = df.apply(rescore_good_food, axis=1, food='sgombro')
+        #         df.score = df.apply(rescore_good_food, axis=1, food='noci')
+        #         df.score = df.apply(rescore_good_food, axis=1, food='riso')
+        #         df.score = df.apply(rescore_good_food, axis=1, food='formaggio')
+        #         df.score = df.apply(rescore_good_food, axis=1, food='yogurt')
+        #         df.score = df.apply(rescore_good_food, axis=1, food='avena')
+        #         df.score = df.apply(rescore_bad_food, axis=1, food='caffè')
+        #     else:
+        #         df.score = df.apply(rescore_good_food, axis=1, food='turkey')
+        #         df.score = df.apply(rescore_good_food, axis=1, food='chamomile')
+        #         df.score = df.apply(rescore_good_food, axis=1, food='kiwi')
+        #         df.score = df.apply(rescore_good_food, axis=1, food='cherry')
+        #         df.score = df.apply(rescore_good_food, axis=1, food='salmon')
+        #         df.score = df.apply(rescore_good_food, axis=1, food='tuna')
+        #         df.score = df.apply(rescore_good_food, axis=1, food='trout')
+        #         df.score = df.apply(rescore_good_food, axis=1, food='mackerel')
+        #         df.score = df.apply(rescore_good_food, axis=1, food='walnuts')
+        #         df.score = df.apply(rescore_good_food, axis=1, food='rice')
+        #         df.score = df.apply(rescore_good_food, axis=1, food='cheese')
+        #         df.score = df.apply(rescore_good_food, axis=1, food='yogurt')
+        #         df.score = df.apply(rescore_good_food, axis=1, food='oat')
+        #         df.score = df.apply(rescore_bad_food, axis=1, food='coffee')
 
-        # MARKER change score if hour == 'evening'
-        if hour == 'evening':
-            if lang == 'it':
-                df.score = df.apply(rescore_bad_food, axis=1, food='caffè')
-                df.score = df.apply(rescore_bad_food, axis=1, food='cioccolato')
-            else:
-                df.score = df.apply(rescore_bad_food, axis=1, food='coffee')
-                df.score = df.apply(rescore_bad_food, axis=1, food='chocolate')
+        # # MARKER change score if hour == 'evening'
+        # if hour == 'evening':
+        #     if lang == 'it':
+        #         df.score = df.apply(rescore_bad_food, axis=1, food='caffè')
+        #         df.score = df.apply(rescore_bad_food, axis=1, food='cioccolato')
+        #     else:
+        #         df.score = df.apply(rescore_bad_food, axis=1, food='coffee')
+        #         df.score = df.apply(rescore_bad_food, axis=1, food='chocolate')
 
-        # MARKER change score if depression == 'yes'
-        if depression == 'yes':
-            df.score = df.apply(rescoreDepression, axis=1)
+        # # MARKER change score if depression == 'yes'
+        # if depression == 'yes':
+        #     df.score = df.apply(rescoreDepression, axis=1)
 
-            df['magnesium'] = df.ingredients.apply(isRichMagnesium)
-            df.score = df.apply(rescoreMagnesium, axis=1)
+        #     df['magnesium'] = df.ingredients.apply(isRichMagnesium)
+        #     df.score = df.apply(rescoreMagnesium, axis=1)
 
-            if lang == 'it':
-                df.score = df.apply(rescore_bad_food, axis=1, food='caffè')
-            else:
-                df.score = df.apply(rescore_bad_food, axis=1, food='coffee')
+        #     if lang == 'it':
+        #         df.score = df.apply(rescore_bad_food, axis=1, food='caffè')
+        #     else:
+        #         df.score = df.apply(rescore_bad_food, axis=1, food='coffee')
 
-        # MARKER change score for user_difficulty
-        if user_difficulty != '':
-            df.score = df.apply(rescoreDifficulty, difficulty=user_difficulty, axis=1)
+        # # MARKER change score for user_difficulty
+        # if user_difficulty != '':
+        #     df.score = df.apply(rescoreDifficulty, difficulty=user_difficulty, axis=1)
 
-        # MARKER change score for goal
-        if goal != '':
-            # se vuole aumentare di peso e non è sovrappeso
-            if goal == 1 and bmi == "under":
-                df.score = df.apply(rescoreGoalPlus, axis=1)
+        # # MARKER change score for goal
+        # if goal != '':
+        #     # se vuole aumentare di peso e non è sovrappeso
+        #     if goal == 1 and bmi == "under":
+        #         df.score = df.apply(rescoreGoalPlus, axis=1)
 
-            # se vuole perdere peso e non è sottopeso
-            if goal == -1 and bmi == "over":
-                df.score = df.apply(rescoreGoalMinus, axis=1)
+        #     # se vuole perdere peso e non è sottopeso
+        #     if goal == -1 and bmi == "over":
+        #         df.score = df.apply(rescoreGoalMinus, axis=1)
 
-        # MARKER change score for user_cost - value '5' stands for 'not important', so we don't sway the recommender
-        if user_cost != '':
-            df.score = df.apply(rescoreCost, cost=user_cost, axis=1)
+        # # MARKER change score for user_cost - value '5' stands for 'not important', so we don't sway the recommender
+        # if user_cost != '':
+        #     df.score = df.apply(rescoreCost, cost=user_cost, axis=1)
 
-        # MARKER change score for user_time - value '0' stands for 'no costraints', so we don't sway the recommender
-        if user_time != '' and user_time != 0:
-            df.score = df.apply(rescoreTime, time=user_time, axis=1)
+        # # MARKER change score for user_time - value '0' stands for 'no costraints', so we don't sway the recommender
+        # if user_time != '' and user_time != 0:
+        #     df.score = df.apply(rescoreTime, time=user_time, axis=1)
 
-        # MARKER change score for sex
-        if sex == "m":
-            df.score = df.apply(rescore_sex_M, axis=1)
+        # # MARKER change score for sex
+        # if sex == "m":
+        #     df.score = df.apply(rescore_sex_M, axis=1)
 
-        # MARKER change score for age
-        if age == 'U20':
-            df.score = df.apply(rescoreU20, axis=1)
-        elif age == 'U30':
-            df.score = df.apply(rescoreU30, axis=1)
-            df['iron'] = df.ingredients.apply(isRichIron)
-            df.score = df.apply(rescoreIron, axis=1)
-            df['calcium'] = df.ingredients.apply(isRichCalcium)
-            df.score = df.apply(rescoreCalcium, axis=1)
-        elif age == 'U40':
-            df.score = df.apply(rescoreU40, axis=1)
-            df['magnesium'] = df.ingredients.apply(isRichMagnesium)
-            df.score = df.apply(rescoreMagnesium, axis=1)
-        elif age == 'U50':
-            df.score = df.apply(rescoreU50, axis=1)
-            df['magnesium'] = df.ingredients.apply(isRichMagnesium)
-            df.score = df.apply(rescoreMagnesium, axis=1)
-        elif age == 'U60':
-            df.score = df.apply(rescoreU60, axis=1)
-            df['calcium'] = df.ingredients.apply(isRichCalcium)
-            df.score = df.apply(rescoreCalcium, axis=1)
-            df['vitaminD'] = df.ingredients.apply(isRichVitaminD)
-            df.score = df.apply(rescoreVitaminD, axis=1)
-        elif age == 'O60':
-            df.score = df.apply(rescoreO60, axis=1)
-            df['calcium'] = df.ingredients.apply(isRichCalcium)
-            df.score = df.apply(rescoreCalcium, axis=1)
-            df['vitaminD'] = df.ingredients.apply(isRichVitaminD)
-            df.score = df.apply(rescoreVitaminD, axis=1)
+        # # MARKER change score for age
+        # if age == 'U20':
+        #     df.score = df.apply(rescoreU20, axis=1)
+        # elif age == 'U30':
+        #     df.score = df.apply(rescoreU30, axis=1)
+        #     df['iron'] = df.ingredients.apply(isRichIron)
+        #     df.score = df.apply(rescoreIron, axis=1)
+        #     df['calcium'] = df.ingredients.apply(isRichCalcium)
+        #     df.score = df.apply(rescoreCalcium, axis=1)
+        # elif age == 'U40':
+        #     df.score = df.apply(rescoreU40, axis=1)
+        #     df['magnesium'] = df.ingredients.apply(isRichMagnesium)
+        #     df.score = df.apply(rescoreMagnesium, axis=1)
+        # elif age == 'U50':
+        #     df.score = df.apply(rescoreU50, axis=1)
+        #     df['magnesium'] = df.ingredients.apply(isRichMagnesium)
+        #     df.score = df.apply(rescoreMagnesium, axis=1)
+        # elif age == 'U60':
+        #     df.score = df.apply(rescoreU60, axis=1)
+        #     df['calcium'] = df.ingredients.apply(isRichCalcium)
+        #     df.score = df.apply(rescoreCalcium, axis=1)
+        #     df['vitaminD'] = df.ingredients.apply(isRichVitaminD)
+        #     df.score = df.apply(rescoreVitaminD, axis=1)
+        # elif age == 'O60':
+        #     df.score = df.apply(rescoreO60, axis=1)
+        #     df['calcium'] = df.ingredients.apply(isRichCalcium)
+        #     df.score = df.apply(rescoreCalcium, axis=1)
+        #     df['vitaminD'] = df.ingredients.apply(isRichVitaminD)
+        #     df.score = df.apply(rescoreVitaminD, axis=1)
 
-        # MARKER sort dataframe by score value
-        df = df.sort_values('score', ascending=False)
+        # # MARKER sort dataframe by score value
+        # df = df.sort_values('score', ascending=False)
 
         # print(df[['title', 'score']].head(n))
 
