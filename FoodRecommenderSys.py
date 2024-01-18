@@ -1,7 +1,7 @@
 import logging
-from telegram import Update, ReplyKeyboardMarkup, ReplyKeyboardRemove
+from telegram import Update, ReplyKeyboardMarkup, ReplyKeyboardRemove, InlineKeyboardButton, InlineKeyboardMarkup
 import google.cloud.dialogflow_v2 as dialogflow
-from telegram.ext import CommandHandler, MessageHandler, filters, ConversationHandler
+from telegram.ext import CommandHandler, MessageHandler, filters, ConversationHandler, CallbackQueryHandler, CallbackContext
 import constants as keys
 from recommender_script import Recommendation, Recommendation_due, Recommendation_tre
 from expl_script import Spiegazione
@@ -38,7 +38,8 @@ from telegram.ext import (
     LIGHT,
     DIABETES,
     PREGNANT,
-    CATEGORY,) = range(23)
+    CATEGORY,
+    ATTRIBUTE,) = range(24)
 
 
 # Funzione di gestione del comando /start
@@ -705,39 +706,74 @@ async def unknown(update: Update, context):
     )
     return 
 
+
 async def modify_profile(update: Update, context):
     if 'gender' not in context.user_data:
         await update.message.reply_text("You have not created your profile yet. \nTry /create first.")
+        return
     else:
         profile_message = (
             f"Ok! This is your profile:\n\n"
-            f"Category: {context.user_data['category']}\n"
-            f"Low Nickel: {context.user_data['nickel']}\n"
-            f"Vegetarian: {context.user_data['vegetarian']}\n"
-            f"Lactose Free: {context.user_data['lactosefree']}\n"
-            f"Gluten Free: {context.user_data['glutenfree']}\n"
-            #f" Light: {context.user_data['light']}\n"
-            f"Diabetes: {context.user_data['diabetes']}\n"
-            f"Pregnant: {context.user_data['pregnant']}\n"
-            f"User Skill: {context.user_data['cook_exp']}/5\n"
-            f"Goal: {context.user_data['goals']}\n"
-            f"User Cost: {context.user_data['max_cost_rec']}/5\n"
-            f"User Time: {context.user_data['time_cook']}\n"
-            #f"Fat Class: {context.user_data['weight']}\n"
-            f"Age: {context.user_data['age']}\n"
-            f"Sex: {context.user_data['gender']}\n"
-            f"Activity: {context.user_data['ph_activity']}\n"
-            f"Stress: {context.user_data['stress']}\n"
-            f"Sleep: {context.user_data['sleep']}\n\n"
-            "What would you like to modify? Please type only the exact attribute."
+            f"• Category: {context.user_data['category']}\n"
+            f"• Low Nickel: {context.user_data['nickel']}\n"
+            f"• Vegetarian: {context.user_data['vegetarian']}\n"
+            f"• Lactose Free: {context.user_data['lactosefree']}\n"
+            f"• Gluten Free: {context.user_data['glutenfree']}\n"
+            #f"• Light: {context.user_data['light']}\n"
+            f"• Diabetes: {context.user_data['diabetes']}\n"
+            f"• Pregnant: {context.user_data['pregnant']}\n"
+            f"• User Skill: {context.user_data['cook_exp']}/5\n"
+            f"• Goal: {context.user_data['goals']}\n"
+            f"• User Cost: {context.user_data['max_cost_rec']}/5\n"
+            f"• User Time: {context.user_data['time_cook']}\n"
+            #f"• Fat Class: {context.user_data['weight']}\n"
+            f"• Age: {context.user_data['age']}\n"
+            f"• Sex: {context.user_data['gender']}\n"
+            f"• Activity: {context.user_data['ph_activity']}\n"
+            f"• Stress: {context.user_data['stress']}\n"
+            f"• Sleep: {context.user_data['sleep']}\n\n"
             # f"Depression: {context.user_data['depress']}\n"
             # f"Mood: {context.user_data['mood']}"
         )
         await update.message.reply_text(profile_message)
 
+        keyboard = [
+            [InlineKeyboardButton('category', callback_data='category'),
+            InlineKeyboardButton('isLowNickel', callback_data='isLowNickel'),
+            InlineKeyboardButton('isVegetarian', callback_data='isVegetarian'),
+            InlineKeyboardButton('isLactoseFree', callback_data='isLactoseFree')],
+            
+            [InlineKeyboardButton('isGlutenFree', callback_data='isGlutenFree'),
+            InlineKeyboardButton('isDiabetes', callback_data='isDiabetes'),
+            InlineKeyboardButton('isPregnant', callback_data='isPregnant'),
+            InlineKeyboardButton('difficulty', callback_data='difficulty')],
+            
+            [InlineKeyboardButton('goal', callback_data='goal'),
+            InlineKeyboardButton('user_cost', callback_data='user_cost'),
+            InlineKeyboardButton('user_time', callback_data='user_time'),
+            InlineKeyboardButton('age', callback_data='age')],
+            
+            [InlineKeyboardButton('sex', callback_data='sex'),
+            InlineKeyboardButton('activity', callback_data='activity'),
+            InlineKeyboardButton('stress', callback_data='stress'),
+            InlineKeyboardButton('sleep', callback_data='sleep')]]
+        
+        reply_markup = InlineKeyboardMarkup(keyboard)
+        await update.message.reply_text(
+            "What would you like to modify? Please select the attribute:", reply_markup=reply_markup
+        )
+        
+    query = update.callback_query.data
+    await update.callback_query.answer()
+    print(query)
     
 
-    return
+async def query_handler(update= Update, context = CallbackContext):
+    query = update.callback_query.data
+    await update.callback_query.answer()
+
+    #print(query)
+
 
 # Funzione per inviare il messaggio a Dialogflow e restituire la risposta
 async def dialogflow_mode(update, context):
@@ -823,7 +859,7 @@ async def dialogflow_mode(update, context):
     if intent == "Spiegazione del cibo, Tempo due piatti":
         Spiegazione.spiegazione_tempo_due_piatti(update, context)
     confidence = response.query_result.intent_detection_confidence
-    print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@Intent:", intent)
+    print("Intent:", intent)
     print("Confidence:", confidence)
     return await update.message.reply_text(response.query_result.fulfillment_text)
 
@@ -868,7 +904,8 @@ async def main():
         fallbacks=[MessageHandler(filters.TEXT, unknown)],
     )
     application.add_handler(conv_handler)
-    application.add_handler(CommandHandler('modify', modify_profile))
+    application.add_handlers(handlers={-1: [CommandHandler('modify', modify_profile)], 1:[MessageHandler(filters.TEXT, new_func)]})
+    application.add_handler(CallbackQueryHandler(query_handler))
     # application.add_handler(CommandHandler('aiuto',aiuto))
     # application.add_handler(CommandHandler('info',aiuto))
 
@@ -880,6 +917,10 @@ async def main():
 
     logging.info("Bot avviato")
     application.run_polling(allowed_updates=Update.ALL_TYPES)
+
+async def new_func():
+    print("hi")
+
 
 
 if __name__ == "__main__":
