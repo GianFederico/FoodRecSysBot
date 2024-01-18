@@ -3,7 +3,7 @@ from telegram import Update, ReplyKeyboardMarkup, ReplyKeyboardRemove
 import google.cloud.dialogflow_v2 as dialogflow
 from telegram.ext import CommandHandler, MessageHandler, filters, ConversationHandler
 import constants as keys
-from recommender_script import Recommendation, Recommendation_due
+from recommender_script import Recommendation, Recommendation_due, Recommendation_tre
 from expl_script import Spiegazione
 import nest_asyncio
 import asyncio
@@ -703,8 +703,41 @@ async def unknown(update: Update, context):
     await update.message.reply_text(
         "Mi dispiace, non ho capito. Puoi ripetere la tua risposta?"
     )
-    return GENDER
+    return 
 
+async def modify_profile(update: Update, context):
+    if 'gender' not in context.user_data:
+        await update.message.reply_text("You have not created your profile yet. \nTry /create first.")
+    else:
+        profile_message = (
+            f"Ok! This is your profile:\n\n"
+            f"Category: {context.user_data['category']}\n"
+            f"Low Nickel: {context.user_data['nickel']}\n"
+            f"Vegetarian: {context.user_data['vegetarian']}\n"
+            f"Lactose Free: {context.user_data['lactosefree']}\n"
+            f"Gluten Free: {context.user_data['glutenfree']}\n"
+            #f" Light: {context.user_data['light']}\n"
+            f"Diabetes: {context.user_data['diabetes']}\n"
+            f"Pregnant: {context.user_data['pregnant']}\n"
+            f"User Skill: {context.user_data['cook_exp']}/5\n"
+            f"Goal: {context.user_data['goals']}\n"
+            f"User Cost: {context.user_data['max_cost_rec']}/5\n"
+            f"User Time: {context.user_data['time_cook']}\n"
+            #f"Fat Class: {context.user_data['weight']}\n"
+            f"Age: {context.user_data['age']}\n"
+            f"Sex: {context.user_data['gender']}\n"
+            f"Activity: {context.user_data['ph_activity']}\n"
+            f"Stress: {context.user_data['stress']}\n"
+            f"Sleep: {context.user_data['sleep']}\n\n"
+            "What would you like to modify? Please type only the exact attribute."
+            # f"Depression: {context.user_data['depress']}\n"
+            # f"Mood: {context.user_data['mood']}"
+        )
+        await update.message.reply_text(profile_message)
+
+    
+
+    return
 
 # Funzione per inviare il messaggio a Dialogflow e restituire la risposta
 async def dialogflow_mode(update, context):
@@ -734,9 +767,13 @@ async def dialogflow_mode(update, context):
     intent = response.query_result.intent.display_name
     confidence = response.query_result.intent_detection_confidence
     if intent == "Suggestion":
-        print("Intent:", intent)
-        print("Confidence:", confidence)
         await Recommendation.suggerimento(update, context)
+    if intent == "Change suggestion 1":
+        await Recommendation_due.altro_suggerimento2(update, context)
+        flag=1
+    if intent == "Change suggestion 2":
+        await Recommendation_tre.altro_suggerimento3(update, context)
+        flag=2
     if intent == "Controllo del piatto":
         Spiegazione.controllo_piatto(update, context)
     if intent == "Popolarità_un_piatto":
@@ -761,8 +798,6 @@ async def dialogflow_mode(update, context):
         Spiegazione.spiegazione_lifestyle(update, context)
     if intent == "Spiegazione del cibo, Tempo":
         Spiegazione.spiegazione_tempo(update, context)
-    if intent == "Altro suggerimento del piatto":
-        await Recommendation_due.altro_suggerimento(update, context)
     if intent == "Controllo del piatto due piatti":
         Spiegazione.controllo_piatto_due_piatti(update, context)
     if intent == "Popolarità_due_piatti":
@@ -788,9 +823,9 @@ async def dialogflow_mode(update, context):
     if intent == "Spiegazione del cibo, Tempo due piatti":
         Spiegazione.spiegazione_tempo_due_piatti(update, context)
     confidence = response.query_result.intent_detection_confidence
-    print("Intent:", intent)
+    print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@Intent:", intent)
     print("Confidence:", confidence)
-    return update.message.reply_text(response.query_result.fulfillment_text)
+    return await update.message.reply_text(response.query_result.fulfillment_text)
 
 
 async def main():
@@ -833,7 +868,7 @@ async def main():
         fallbacks=[MessageHandler(filters.TEXT, unknown)],
     )
     application.add_handler(conv_handler)
-    # application.add_handler(CommandHandler('help',aiuto))
+    application.add_handler(CommandHandler('modify', modify_profile))
     # application.add_handler(CommandHandler('aiuto',aiuto))
     # application.add_handler(CommandHandler('info',aiuto))
 
