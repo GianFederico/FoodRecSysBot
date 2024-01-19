@@ -39,7 +39,8 @@ from telegram.ext import (
     DIABETES,
     PREGNANT,
     CATEGORY,
-    ATTRIBUTE,) = range(24)
+    ATTRIBUTE,
+    TO_CHOICES) = range(25)
 
 
 # Funzione di gestione del comando /start
@@ -359,8 +360,280 @@ async def category(update: Update, context):
 
 
 
-###########_domande non obbligatorie_#######################################################################
-############################################################################################################
+# UTILS
+def error(update, context):
+    logging.error(f"Update {update}   caused error {context.error}")
+
+async def aiuto(update: Update, context):
+    await update.message.reply_text(
+        "Sono FoodRecSysBot, il bot che ti aiuta a scegliere cosa mangiare!\nPuoi chiedere di suggerirti un piatto che in base alle tue caratteristiche andrà benissimo per te!\nPuoi avere dei consigli su questo piatto, se va bene per te, se è attinente a ciascuna delle informazioni che mi hai dato! Infatti, puoi domandarmi:\nuna spiegazione/descrizione generale del piatto;\nse è adatto ai tuoi obiettivi;\nse è adatto alle tue restrizioni;\nse è attinente al tuo stile di vita;\nse è adatto alla tua età;\nse il suo costo è attinente con la tua disponibilità;\nse il suo tempo di cottura è attinente con il tuo tempo a disposizione;\nquali sono i suoi benefici e quali sono i suoi rischi;\ne perfino se è coerente con la tua esperienza di cucina!\nDopo di che potrai chiedermi di suggerirti anche un altro piatto, e posso confrontarti le caratteristiche dei due piatti rispetto a tutte le caratteristiche di essi.\nInoltre se hai bisogno di cambiare i tuoi dati, premi questo tasto /start per iniziare di nuovo."
+    )
+
+async def unknown(update: Update, context):
+    await update.message.reply_text(
+        "Mi dispiace, non ho capito. Puoi ripetere la tua risposta?"
+    )
+    return 
+
+
+async def modify_profile(update: Update, context):
+    if 'gender' not in context.user_data:
+        await update.message.reply_text("You have not created your profile yet. \nTry /create first.")
+        return
+    else:
+        profile_message = (
+            f"Ok! This is your current profile:\n\n"
+            f" •  Category:  {context.user_data['category']}\n"
+            f" •  Low Nickel:  {context.user_data['nickel']}\n"
+            f" •  Vegetarian:  {context.user_data['vegetarian']}\n"
+            f" •  Lactose Free:  {context.user_data['lactosefree']}\n"
+            f" •  Gluten Free:  {context.user_data['glutenfree']}\n"
+            #f" • Light: {context.user_data['light']}\n"
+            f" •  Diabetic:  {context.user_data['diabetes']}\n"
+            f" •  Pregnant:  {context.user_data['pregnant']}\n"
+            f" •  User Skill:  {context.user_data['cook_exp']}/5\n"
+            f" •  Goal:  {context.user_data['goals']}\n"
+            f" •  User Cost:  {context.user_data['max_cost_rec']}/5\n"
+            f" •  User Time:  {context.user_data['time_cook']}\n"
+            #f" •  Fat Class: {context.user_data['weight']}\n"
+            f" •  Age:  {context.user_data['age']}\n"
+            f" •  Sex:  {context.user_data['gender']}\n"
+            f" •  Activity:  {context.user_data['ph_activity']}\n"
+            f" •  Stress:  {context.user_data['stress']}\n"
+            f" •  Sleep:  {context.user_data['sleep']}\n\n"
+            "What would you like to modify? Please select the attribute:"
+            # f"Depression: {context.user_data['depress']}\n"
+            # f"Mood: {context.user_data['mood']}"
+        )
+        await update.message.reply_text(profile_message)
+    return ATTRIBUTE
+    
+
+async def choose_attribute(update: Update, context):
+    attribute=update.message.text.lower()
+
+    await update.message.reply_text(f"ok you want to modify the {attribute} attribute.")
+
+
+    if attribute == 'category':
+        keyboard = [["8+", "-8"]]
+        reply_markup = ReplyKeyboardMarkup(
+        keyboard, one_time_keyboard=True, resize_keyboard=True
+        )
+        await update.message.reply_text(
+        "your choices are:", reply_markup=reply_markup
+        )
+        return TO_CHOICES
+
+    if attribute == 'lownickel':
+        print("hello")
+    elif attribute == 'vegetarian':
+        print("hi")
+    elif attribute == 'lactosefree':
+        print("hi")
+    elif attribute == 'glutenfree':
+        print("hi")
+    elif attribute == 'diabetes':
+        print("hi")
+    elif attribute == 'pregnant':
+        print("hi")
+    elif attribute == 'userskill':
+        print("hi")
+    elif attribute == 'goal':
+        print("hi")
+    elif attribute == 'userbudget':
+        print("hi")
+    elif attribute == 'usertime':
+        print("hi")
+    elif attribute == 'age':
+        print("hi")
+    elif attribute == 'sex':
+        print("hi")
+    elif attribute == 'activity':
+        print("hi")
+    elif attribute == 'stress':
+        print("hi")
+    elif attribute == 'sleep':
+        print("hi")
+    elif attribute == 'i changed my mind':
+        print("changed mind")
+
+
+async def change_attribute_value(update: Update, context):
+    value=update.message.text.lower()
+
+
+    if value == '8+':
+        print(f"you can change value here ({value})")
+
+    if value == 'lownickel':
+        print("hello")
+    elif value == 'vegetarian':
+        print("hi")
+    elif value == 'lactosefree':
+        print("hi")
+
+
+# Funzione per inviare il messaggio a Dialogflow e restituire la risposta
+async def dialogflow_mode(update, context):
+    # Id del progetto Dialogflow
+    DIALOGFLOW_PROJECT_ID = "foodrecsys-kbji"
+    # Credenziali del progetto Dialogflow
+    DIALOGFLOW_CREDENTIALS = "foodrecsys-kbji-b7a61301de6a.json"
+    # Recupera l'ID dell'utente e imposta la lingua del messaggio
+    session_id = update.effective_user.id
+    language_code = "it"
+    # Crea il client di sessione di Dialogflow
+    session_client = dialogflow.SessionsClient.from_service_account_file(
+        DIALOGFLOW_CREDENTIALS
+    )
+    session = session_client.session_path(DIALOGFLOW_PROJECT_ID, session_id)
+    # Invia il messaggio a Dialogflow
+    Text = update.message.text.strip()
+    if not Text:
+        return
+    text_input = dialogflow.types.TextInput(text=Text, language_code=language_code)
+    query_input = dialogflow.types.QueryInput(text=text_input)
+    print(session, query_input)
+    with session_client as client:
+        response = client.detect_intent(session=session, query_input=query_input)
+
+    # Invia la risposta di Dialogflow all'utente
+    intent = response.query_result.intent.display_name
+    confidence = response.query_result.intent_detection_confidence
+    if intent == "Suggestion":
+        await Recommendation.suggerimento(update, context)
+    if intent == "Change suggestion 1":
+        await Recommendation_due.altro_suggerimento2(update, context)
+        flag=1
+    if intent == "Change suggestion 2":
+        await Recommendation_tre.altro_suggerimento3(update, context)
+        flag=2
+    if intent == "Controllo del piatto":
+        Spiegazione.controllo_piatto(update, context)
+    if intent == "Popolarità_un_piatto":
+        Spiegazione.spiegazione_popolarita(update, context)
+    if intent == "Spiegazione del cibo":
+        Spiegazione.spiegazione_piatto(update, context)
+    if intent == "Spiegazione del cibo, Abilità di cucina":
+        Spiegazione.spiegazione_skill_cucina(update, context)
+    if intent == "Spiegazione del cibo, Obiettivi":
+        Spiegazione.spiegazione_obiettivo(update, context)
+    if intent == "Spiegazione del cibo, Benefici di salute":
+        Spiegazione.spiegazione_benefici_salute(update, context)
+    if intent == "Spiegazione del cibo, Rischi di Salute":
+        Spiegazione.spiegazione_rischi_salute(update, context)
+    if intent == "Spiegazione del cibo, Costo":
+        Spiegazione.spiegazione_costo(update, context)
+    if intent == "Spiegazione del cibo, Età":
+        Spiegazione.spiegazione_eta(update, context)
+    if intent == "Spiegazione del cibo, Restrizioni":
+        Spiegazione.spiegazione_restrizioni(update, context)
+    if intent == "Spiegazione del cibo, Stile di vita":
+        Spiegazione.spiegazione_lifestyle(update, context)
+    if intent == "Spiegazione del cibo, Tempo":
+        Spiegazione.spiegazione_tempo(update, context)
+    if intent == "Controllo del piatto due piatti":
+        Spiegazione.controllo_piatto_due_piatti(update, context)
+    if intent == "Popolarità_due_piatti":
+        Spiegazione.spiegazione_popolarita_due_piatti(update, context)
+    if intent == "Spiegazione del cibo due piatti":
+        Spiegazione.spiegazione_piatto_due_piatti(update, context)
+    if intent == "Spiegazione del cibo - Abilità di cucina due ricette":
+        Spiegazione.spiegazione_skill_cucina_due_piatti(update, context)
+    if intent == "Spiegazione del cibo, Obiettivi_due_ricette":
+        Spiegazione.spiegazione_obiettivi_due_piatti(update, context)
+    if intent == "Spiegazione del cibo, Benefici di salute due piatti":
+        Spiegazione.spiegazione_benefici_salute_due_piatti(update, context)
+    if intent == "Spiegazione del cibo, Rischi di Salute due piatti":
+        Spiegazione.spiegazione_rischi_salute_due_piatti(update, context)
+    if intent == "Spiegazione del cibo, Costo due piatti":
+        Spiegazione.spiegazione_costo_due_piatti(update, context)
+    if intent == "Spiegazione del cibo, Età due piatti":
+        Spiegazione.spiegazione_eta_due_piatti(update, context)
+    if intent == "Spiegazione del cibo, Restrizioni due ricette":
+        Spiegazione.spiegazione_restrizioni_due_piatti(update, context)
+    if intent == "Spiegazione del cibo, Stile di vita due piatti":
+        Spiegazione.spiegazione_lifestyle_due_piatti(update, context)
+    if intent == "Spiegazione del cibo, Tempo due piatti":
+        Spiegazione.spiegazione_tempo_due_piatti(update, context)
+    confidence = response.query_result.intent_detection_confidence
+    print("Intent:", intent)
+    print("Confidence:", confidence)
+    return await update.message.reply_text(response.query_result.fulfillment_text)
+
+
+async def main():
+    nest_asyncio.apply()
+    # Inizializzazione del logger
+    logging.basicConfig(
+        format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+        level=logging.INFO,
+    )
+    # Definizione dei comandi e dei gestori di messaggi
+    application = Application.builder().token(keys.API_TOKEN).build()
+
+    conv_handler = ConversationHandler(
+        entry_points=[CommandHandler("create", start)],
+        states={
+            GENDER: [MessageHandler(filters.TEXT, gender)],
+            AGE: [MessageHandler(filters.TEXT, age)],
+            PREGNANT: [MessageHandler(filters.TEXT, pregnant)],
+            CM: [MessageHandler(filters.TEXT, height)],
+            KG: [MessageHandler(filters.TEXT, weight)],
+            GOALS: [MessageHandler(filters.TEXT, goals)],
+            PH_ACTIVITY: [MessageHandler(filters.TEXT, ph_activity)],
+            LACTOSEFREE: [MessageHandler(filters.TEXT, lactosefree)],
+            GLUTENFREE: [MessageHandler(filters.TEXT, glutenfree)],
+            DIABETES: [MessageHandler(filters.TEXT, diabetes)],
+            VEGETERIAN: [MessageHandler(filters.TEXT, vegetarian)],
+            CATEGORY: [MessageHandler(filters.TEXT, category)]
+        },
+        fallbacks=[MessageHandler(filters.TEXT, unknown)],
+    )
+
+    modification_handler = ConversationHandler(
+        entry_points=[CommandHandler("modify", modify_profile)],
+        states={
+            ATTRIBUTE: [MessageHandler(filters.TEXT, choose_attribute)],
+            TO_CHOICES: [MessageHandler(filters.TEXT, change_attribute_value)],
+
+        },
+        fallbacks=[MessageHandler(filters.TEXT, unknown)],
+    )
+    application.add_handler(conv_handler)
+    application.add_handler(modification_handler)
+    #application.add_handlers(handlers={-1: [CommandHandler('modify', modify_profile)], 1:[MessageHandler(filters.TEXT, new_func)]})
+    #application.add_handler(CommandHandler('modify', modify_profile))
+    #application.add_handler(CallbackQueryHandler(query_handler))
+    # application.add_handler(CommandHandler('aiuto',aiuto))
+    # application.add_handler(CommandHandler('info',aiuto))
+
+    # Aggiunta del CommandHandler per il cambio modalità
+    application.add_handler(MessageHandler(filters.TEXT, dialogflow_mode))
+
+    # Aggiunta dell'ErrorHandler
+    application.add_error_handler(error)
+
+    logging.info("Bot avviato")
+    application.run_polling(allowed_updates=Update.ALL_TYPES)
+
+# async def new_func():
+#     print("hi")
+
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
+
+
+
+
+
+###########################################################################################################################################################################
+###########################################################################################################################################################################
+###########_domande non obbligatorie_################################################################################################################################
+#####################################################################################################################################################################
 # Funzione di gestione della risposta sull'importanza di uno stile di vita healthy
 async def ht_lifestyle_importance(update: Update, context):
     user_lifestyle_importance = update.message.text.lower()
@@ -689,239 +962,3 @@ async def light(update: Update, context):
 ############################################################################################################
 
 
-
-
-# UTILS
-def error(update, context):
-    logging.error(f"Update {update}   caused error {context.error}")
-
-async def aiuto(update: Update, context):
-    await update.message.reply_text(
-        "Sono FoodRecSysBot, il bot che ti aiuta a scegliere cosa mangiare!\nPuoi chiedere di suggerirti un piatto che in base alle tue caratteristiche andrà benissimo per te!\nPuoi avere dei consigli su questo piatto, se va bene per te, se è attinente a ciascuna delle informazioni che mi hai dato! Infatti, puoi domandarmi:\nuna spiegazione/descrizione generale del piatto;\nse è adatto ai tuoi obiettivi;\nse è adatto alle tue restrizioni;\nse è attinente al tuo stile di vita;\nse è adatto alla tua età;\nse il suo costo è attinente con la tua disponibilità;\nse il suo tempo di cottura è attinente con il tuo tempo a disposizione;\nquali sono i suoi benefici e quali sono i suoi rischi;\ne perfino se è coerente con la tua esperienza di cucina!\nDopo di che potrai chiedermi di suggerirti anche un altro piatto, e posso confrontarti le caratteristiche dei due piatti rispetto a tutte le caratteristiche di essi.\nInoltre se hai bisogno di cambiare i tuoi dati, premi questo tasto /start per iniziare di nuovo."
-    )
-
-async def unknown(update: Update, context):
-    await update.message.reply_text(
-        "Mi dispiace, non ho capito. Puoi ripetere la tua risposta?"
-    )
-    return 
-
-
-async def modify_profile(update: Update, context):
-    if 'gender' not in context.user_data:
-        await update.message.reply_text("You have not created your profile yet. \nTry /create first.")
-        return
-    else:
-        profile_message = (
-            f"Ok! This is your profile:\n\n"
-            f"• Category: {context.user_data['category']}\n"
-            f"• Low Nickel: {context.user_data['nickel']}\n"
-            f"• Vegetarian: {context.user_data['vegetarian']}\n"
-            f"• Lactose Free: {context.user_data['lactosefree']}\n"
-            f"• Gluten Free: {context.user_data['glutenfree']}\n"
-            #f"• Light: {context.user_data['light']}\n"
-            f"• Diabetes: {context.user_data['diabetes']}\n"
-            f"• Pregnant: {context.user_data['pregnant']}\n"
-            f"• User Skill: {context.user_data['cook_exp']}/5\n"
-            f"• Goal: {context.user_data['goals']}\n"
-            f"• User Cost: {context.user_data['max_cost_rec']}/5\n"
-            f"• User Time: {context.user_data['time_cook']}\n"
-            #f"• Fat Class: {context.user_data['weight']}\n"
-            f"• Age: {context.user_data['age']}\n"
-            f"• Sex: {context.user_data['gender']}\n"
-            f"• Activity: {context.user_data['ph_activity']}\n"
-            f"• Stress: {context.user_data['stress']}\n"
-            f"• Sleep: {context.user_data['sleep']}\n\n"
-            # f"Depression: {context.user_data['depress']}\n"
-            # f"Mood: {context.user_data['mood']}"
-        )
-        await update.message.reply_text(profile_message)
-
-        keyboard = [
-            [InlineKeyboardButton('category', callback_data='category'),
-            InlineKeyboardButton('isLowNickel', callback_data='isLowNickel'),
-            InlineKeyboardButton('isVegetarian', callback_data='isVegetarian'),
-            InlineKeyboardButton('isLactoseFree', callback_data='isLactoseFree')],
-            
-            [InlineKeyboardButton('isGlutenFree', callback_data='isGlutenFree'),
-            InlineKeyboardButton('isDiabetes', callback_data='isDiabetes'),
-            InlineKeyboardButton('isPregnant', callback_data='isPregnant'),
-            InlineKeyboardButton('difficulty', callback_data='difficulty')],
-            
-            [InlineKeyboardButton('goal', callback_data='goal'),
-            InlineKeyboardButton('user_cost', callback_data='user_cost'),
-            InlineKeyboardButton('user_time', callback_data='user_time'),
-            InlineKeyboardButton('age', callback_data='age')],
-            
-            [InlineKeyboardButton('sex', callback_data='sex'),
-            InlineKeyboardButton('activity', callback_data='activity'),
-            InlineKeyboardButton('stress', callback_data='stress'),
-            InlineKeyboardButton('sleep', callback_data='sleep')]]
-        
-        reply_markup = InlineKeyboardMarkup(keyboard)
-        await update.message.reply_text(
-            "What would you like to modify? Please select the attribute:", reply_markup=reply_markup
-        )
-        
-    query = update.callback_query.data
-    await update.callback_query.answer()
-    print(query)
-    
-
-async def query_handler(update= Update, context = CallbackContext):
-    query = update.callback_query.data
-    await update.callback_query.answer()
-
-    #print(query)
-
-
-# Funzione per inviare il messaggio a Dialogflow e restituire la risposta
-async def dialogflow_mode(update, context):
-    # Id del progetto Dialogflow
-    DIALOGFLOW_PROJECT_ID = "foodrecsys-kbji"
-    # Credenziali del progetto Dialogflow
-    DIALOGFLOW_CREDENTIALS = "foodrecsys-kbji-b7a61301de6a.json"
-    # Recupera l'ID dell'utente e imposta la lingua del messaggio
-    session_id = update.effective_user.id
-    language_code = "it"
-    # Crea il client di sessione di Dialogflow
-    session_client = dialogflow.SessionsClient.from_service_account_file(
-        DIALOGFLOW_CREDENTIALS
-    )
-    session = session_client.session_path(DIALOGFLOW_PROJECT_ID, session_id)
-    # Invia il messaggio a Dialogflow
-    Text = update.message.text.strip()
-    if not Text:
-        return
-    text_input = dialogflow.types.TextInput(text=Text, language_code=language_code)
-    query_input = dialogflow.types.QueryInput(text=text_input)
-    print(session, query_input)
-    with session_client as client:
-        response = client.detect_intent(session=session, query_input=query_input)
-
-    # Invia la risposta di Dialogflow all'utente
-    intent = response.query_result.intent.display_name
-    confidence = response.query_result.intent_detection_confidence
-    if intent == "Suggestion":
-        await Recommendation.suggerimento(update, context)
-    if intent == "Change suggestion 1":
-        await Recommendation_due.altro_suggerimento2(update, context)
-        flag=1
-    if intent == "Change suggestion 2":
-        await Recommendation_tre.altro_suggerimento3(update, context)
-        flag=2
-    if intent == "Controllo del piatto":
-        Spiegazione.controllo_piatto(update, context)
-    if intent == "Popolarità_un_piatto":
-        Spiegazione.spiegazione_popolarita(update, context)
-    if intent == "Spiegazione del cibo":
-        Spiegazione.spiegazione_piatto(update, context)
-    if intent == "Spiegazione del cibo, Abilità di cucina":
-        Spiegazione.spiegazione_skill_cucina(update, context)
-    if intent == "Spiegazione del cibo, Obiettivi":
-        Spiegazione.spiegazione_obiettivo(update, context)
-    if intent == "Spiegazione del cibo, Benefici di salute":
-        Spiegazione.spiegazione_benefici_salute(update, context)
-    if intent == "Spiegazione del cibo, Rischi di Salute":
-        Spiegazione.spiegazione_rischi_salute(update, context)
-    if intent == "Spiegazione del cibo, Costo":
-        Spiegazione.spiegazione_costo(update, context)
-    if intent == "Spiegazione del cibo, Età":
-        Spiegazione.spiegazione_eta(update, context)
-    if intent == "Spiegazione del cibo, Restrizioni":
-        Spiegazione.spiegazione_restrizioni(update, context)
-    if intent == "Spiegazione del cibo, Stile di vita":
-        Spiegazione.spiegazione_lifestyle(update, context)
-    if intent == "Spiegazione del cibo, Tempo":
-        Spiegazione.spiegazione_tempo(update, context)
-    if intent == "Controllo del piatto due piatti":
-        Spiegazione.controllo_piatto_due_piatti(update, context)
-    if intent == "Popolarità_due_piatti":
-        Spiegazione.spiegazione_popolarita_due_piatti(update, context)
-    if intent == "Spiegazione del cibo due piatti":
-        Spiegazione.spiegazione_piatto_due_piatti(update, context)
-    if intent == "Spiegazione del cibo - Abilità di cucina due ricette":
-        Spiegazione.spiegazione_skill_cucina_due_piatti(update, context)
-    if intent == "Spiegazione del cibo, Obiettivi_due_ricette":
-        Spiegazione.spiegazione_obiettivi_due_piatti(update, context)
-    if intent == "Spiegazione del cibo, Benefici di salute due piatti":
-        Spiegazione.spiegazione_benefici_salute_due_piatti(update, context)
-    if intent == "Spiegazione del cibo, Rischi di Salute due piatti":
-        Spiegazione.spiegazione_rischi_salute_due_piatti(update, context)
-    if intent == "Spiegazione del cibo, Costo due piatti":
-        Spiegazione.spiegazione_costo_due_piatti(update, context)
-    if intent == "Spiegazione del cibo, Età due piatti":
-        Spiegazione.spiegazione_eta_due_piatti(update, context)
-    if intent == "Spiegazione del cibo, Restrizioni due ricette":
-        Spiegazione.spiegazione_restrizioni_due_piatti(update, context)
-    if intent == "Spiegazione del cibo, Stile di vita due piatti":
-        Spiegazione.spiegazione_lifestyle_due_piatti(update, context)
-    if intent == "Spiegazione del cibo, Tempo due piatti":
-        Spiegazione.spiegazione_tempo_due_piatti(update, context)
-    confidence = response.query_result.intent_detection_confidence
-    print("Intent:", intent)
-    print("Confidence:", confidence)
-    return await update.message.reply_text(response.query_result.fulfillment_text)
-
-
-async def main():
-    nest_asyncio.apply()
-    # Inizializzazione del logger
-    logging.basicConfig(
-        format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-        level=logging.INFO,
-    )
-    # Definizione dei comandi e dei gestori di messaggi
-    application = Application.builder().token(keys.API_TOKEN).build()
-
-    conv_handler = ConversationHandler(
-        entry_points=[CommandHandler("create", start)],
-        states={
-            GENDER: [MessageHandler(filters.TEXT, gender)],
-            AGE: [MessageHandler(filters.TEXT, age)],
-            PREGNANT: [MessageHandler(filters.TEXT, pregnant)],
-            CM: [MessageHandler(filters.TEXT, height)],
-            KG: [MessageHandler(filters.TEXT, weight)],
-            GOALS: [MessageHandler(filters.TEXT, goals)],
-            PH_ACTIVITY: [MessageHandler(filters.TEXT, ph_activity)],
-            LACTOSEFREE: [MessageHandler(filters.TEXT, lactosefree)],
-            GLUTENFREE: [MessageHandler(filters.TEXT, glutenfree)],
-            DIABETES: [MessageHandler(filters.TEXT, diabetes)],
-            VEGETERIAN: [MessageHandler(filters.TEXT, vegetarian)],
-            CATEGORY: [MessageHandler(filters.TEXT, category)]
-            # HT_LIFESTYLE_IMPORTANCE:[MessageHandler(filters.TEXT, ht_lifestyle_importance)],
-            # HT_LIFESTYLE:[MessageHandler(filters.TEXT,ht_lifestyle )],
-            # COOK_EXP:[MessageHandler(filters.TEXT, cook_exp)],
-            # MAX_COST_REC:[MessageHandler(filters.TEXT, max_cost_rec)],
-            # TIME_COOK:[MessageHandler(filters.TEXT, time_cook)],
-            # MOOD:[MessageHandler(filters.TEXT, mood)],
-            # SLEEP:[MessageHandler(filters.TEXT, sleep)],
-            # STRESS:[MessageHandler(filters.TEXT, stress)],
-            # DEPRESS:[MessageHandler(filters.TEXT, depress)],
-            # LOWNICKEL:[MessageHandler(filters.TEXT, nickel)],
-            # LIGHT:[MessageHandler(filters.TEXT, light)],
-        },
-        fallbacks=[MessageHandler(filters.TEXT, unknown)],
-    )
-    application.add_handler(conv_handler)
-    application.add_handlers(handlers={-1: [CommandHandler('modify', modify_profile)], 1:[MessageHandler(filters.TEXT, new_func)]})
-    application.add_handler(CallbackQueryHandler(query_handler))
-    # application.add_handler(CommandHandler('aiuto',aiuto))
-    # application.add_handler(CommandHandler('info',aiuto))
-
-    # Aggiunta del CommandHandler per il cambio modalità
-    application.add_handler(MessageHandler(filters.TEXT, dialogflow_mode))
-
-    # Aggiunta dell'ErrorHandler
-    application.add_error_handler(error)
-
-    logging.info("Bot avviato")
-    application.run_polling(allowed_updates=Update.ALL_TYPES)
-
-async def new_func():
-    print("hi")
-
-
-
-if __name__ == "__main__":
-    asyncio.run(main())
