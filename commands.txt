@@ -58,3 +58,27 @@ OPZIONALI:
     Ti senti depresso in questo periodo?
     Hai bisogno di ricette con basso Nickel?
     Vuoi che ti proponga ricette light?
+
+
+
+
+
+
+{context.user_data['category']}\n"
+{context.user_data['nickel']}\n"
+{context.user_data['vegetarian']}\n"
+{context.user_data['lactosefree']}\n"
+{context.user_data['glutenfree']}\n"
+{context.user_data['light']}\n"
+{context.user_data['diabetes']}\n"
+{context.user_data['pregnant']}\n"
+{context.user_data['cook_exp']}/5\n"
+{context.user_data['goals']}\n"
+{context.user_data['max_cost_rec']}/5\n"
+{context.user_data['time_cook']}\n"
+{context.user_data['weight']}\n"
+{context.user_data['age']}\n"
+{context.user_data['gender']}\n"
+{context.user_data['ph_activity']}\n"
+{context.user_data['stress']}\n"
+{context.user_data['sleep']}\n\n"

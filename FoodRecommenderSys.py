@@ -1,7 +1,7 @@
 import logging
-from telegram import Update, ReplyKeyboardMarkup, ReplyKeyboardRemove, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram import Update, ReplyKeyboardMarkup, ReplyKeyboardRemove
 import google.cloud.dialogflow_v2 as dialogflow
-from telegram.ext import CommandHandler, MessageHandler, filters, ConversationHandler, CallbackQueryHandler, CallbackContext
+from telegram.ext import CommandHandler, MessageHandler, filters, ConversationHandler
 import constants as keys
 from recommender_script import Recommendation, Recommendation_due, Recommendation_tre
 from expl_script import Spiegazione
@@ -382,7 +382,10 @@ async def modify_profile(update: Update, context):
         return
     else:
         profile_message = (
-            f"Ok! This is your current profile:\n\n"
+            "Ok! This is your current profile.\n"
+            "   1 means TRUE.\n"
+            "   0 means FALSE.\n"
+            "   X/5 it's a scale where 1 is lowest and 5 highest.\n\n"
             f" •  Category:  {context.user_data['category']}\n"
             f" •  Low Nickel:  {context.user_data['nickel']}\n"
             f" •  Vegetarian:  {context.user_data['vegetarian']}\n"
@@ -395,13 +398,14 @@ async def modify_profile(update: Update, context):
             f" •  Goal:  {context.user_data['goals']}\n"
             f" •  User Cost:  {context.user_data['max_cost_rec']}/5\n"
             f" •  User Time:  {context.user_data['time_cook']}\n"
-            #f" •  Fat Class: {context.user_data['weight']}\n"
+            f" •  Fat Class: {context.user_data['weight']}\n"
             f" •  Age:  {context.user_data['age']}\n"
             f" •  Sex:  {context.user_data['gender']}\n"
             f" •  Activity:  {context.user_data['ph_activity']}\n"
             f" •  Stress:  {context.user_data['stress']}\n"
             f" •  Sleep:  {context.user_data['sleep']}\n\n"
-            "What would you like to modify? Please select the attribute:"
+            "What would you like to modify?\n"
+            "Please type in the name of the attribute you want to change or 'none' if you changed your mind:"
             # f"Depression: {context.user_data['depress']}\n"
             # f"Mood: {context.user_data['mood']}"
         )
@@ -412,66 +416,251 @@ async def modify_profile(update: Update, context):
 async def choose_attribute(update: Update, context):
     attribute=update.message.text.lower()
 
-    await update.message.reply_text(f"ok you want to modify the {attribute} attribute.")
+    if attribute != 'none':
+        await update.message.reply_text(f"Ok, you want to modify the {attribute} attribute.")
 
 
     if attribute == 'category':
-        keyboard = [["8+", "-8"]]
+        keyboard = [["First courses", "Second courses", "Desserts"]]
         reply_markup = ReplyKeyboardMarkup(
         keyboard, one_time_keyboard=True, resize_keyboard=True
         )
         await update.message.reply_text(
-        "your choices are:", reply_markup=reply_markup
+        "Your choices are: 'First courses', 'Second courses' and 'Desserts'.\n Please select one:", reply_markup=reply_markup
         )
         return TO_CHOICES
 
-    if attribute == 'lownickel':
-        print("hello")
+    elif attribute == 'lownickel':
+        keyboard = [["I want low nickel suggestions", "I do NOT want low nickel suggestions"]]
+        reply_markup = ReplyKeyboardMarkup(
+        keyboard, one_time_keyboard=True, resize_keyboard=True
+        )
+        await update.message.reply_text(
+        "Your choices are: 'I want low-nickel suggestions (1)', 'I don't want low-nickel suggestions (0)'.\n Please select one:", reply_markup=reply_markup
+        )
+        return TO_CHOICES
+    
     elif attribute == 'vegetarian':
-        print("hi")
+        keyboard = [["I am vegetarian", "I am NOT vegetarian"]]
+        reply_markup = ReplyKeyboardMarkup(
+        keyboard, one_time_keyboard=True, resize_keyboard=True
+        )
+        await update.message.reply_text(
+        "Your choices are: 'I am vegetarian (1)', 'I am not vegetarian (0)'.\n Please select one:", reply_markup=reply_markup
+        )
+        return TO_CHOICES
+    
     elif attribute == 'lactosefree':
-        print("hi")
+        keyboard = [["I am lactose intolerant", "I am NOT lactose intolerant"]]
+        reply_markup = ReplyKeyboardMarkup(
+        keyboard, one_time_keyboard=True, resize_keyboard=True
+        )
+        await update.message.reply_text(
+        "Your choices are: 'I am lactose intolerant (1)', 'I am NOT lactose intolerant (0)'.\n Please select one:", reply_markup=reply_markup
+        )
+        return TO_CHOICES
+    
     elif attribute == 'glutenfree':
-        print("hi")
+        keyboard = [["I am gluten intolerant", "I am NOT gluten intolerant"]]
+        reply_markup = ReplyKeyboardMarkup(
+        keyboard, one_time_keyboard=True, resize_keyboard=True
+        )
+        await update.message.reply_text(
+        "Your choices are: 'I am gluten intolerant (1)', 'I am NOT gluten intolerant (0)'.\n Please select one:", reply_markup=reply_markup
+        )
+        return TO_CHOICES
+    
     elif attribute == 'diabetes':
-        print("hi")
+        keyboard = [["I am diabetic", "I am NOT diabetic"]]
+        reply_markup = ReplyKeyboardMarkup(
+        keyboard, one_time_keyboard=True, resize_keyboard=True
+        )
+        await update.message.reply_text(
+        "Your choices are: 'I am diabetic (1)', 'I am NOT diabetic (0)'.\n Please select one:", reply_markup=reply_markup
+        )
+        return TO_CHOICES
+    
     elif attribute == 'pregnant':
-        print("hi")
+        keyboard = [["I am pregnant", "I am NOT pregnant"]]
+        reply_markup = ReplyKeyboardMarkup(
+        keyboard, one_time_keyboard=True, resize_keyboard=True
+        )
+        await update.message.reply_text(
+        "Your choices are: 'I am pregnant (1)', 'I am NOT pregnant (0)'.\n Please select one:", reply_markup=reply_markup
+        )
+        return TO_CHOICES
+    
     elif attribute == 'userskill':
-        print("hi")
+        keyboard = [["Very low-skilled", "Low-skilled", "Medium-skilled", "High-skilled", "Very High-skilled"]]
+        reply_markup = ReplyKeyboardMarkup(
+        keyboard, one_time_keyboard=True, resize_keyboard=True
+        )
+        await update.message.reply_text(
+        "Your choices are: 'Very low-skilled' (1), 'Low-skilled' (2), 'Medium-skilled' (3), 'High-skilled' (4), 'Very High-skilled' (5).\n Please select one:", reply_markup=reply_markup
+        )
+        return TO_CHOICES
+    
     elif attribute == 'goal':
-        print("hi")
+        keyboard = [["Lose", "Maintain", "Gain"]]
+        reply_markup = ReplyKeyboardMarkup(
+        keyboard, one_time_keyboard=True, resize_keyboard=True
+        )
+        await update.message.reply_text(
+        "Your choices are: 'Lose' (-1), 'Maintain' (0) and 'Gain' (1).\n Please select one:", reply_markup=reply_markup
+        )
+        return TO_CHOICES
+    
     elif attribute == 'userbudget':
-        print("hi")
+        keyboard = [["Very low-cost", "Low-cost", "Medium-cost", "High-cost", "Very High-cost"]]
+        reply_markup = ReplyKeyboardMarkup(
+        keyboard, one_time_keyboard=True, resize_keyboard=True
+        )
+        await update.message.reply_text(
+        "Your choices are: 'Very low-cost' (1), 'Low-cost' (2), 'Medium-cost' (3), 'High-cost' (4), 'Very High-cost' (5).\n Please select one:", reply_markup=reply_markup
+        )
+        return TO_CHOICES
+    
     elif attribute == 'usertime':
-        print("hi")
+        keyboard = [["-30", "30-60", "60-90", "90-120", "120+"]]
+        reply_markup = ReplyKeyboardMarkup(
+        keyboard, one_time_keyboard=True, resize_keyboard=True
+        )
+        await update.message.reply_text(
+        "Your choices are: '-30 minutes', '30-60 minutes', '60-90 minutes' (3), '90-120 minutes', '120+ minutes'.\n Please select one:", reply_markup=reply_markup
+        )
+        flag='usertime'
+        return TO_CHOICES
+    
+    elif attribute == 'weight':
+        keyboard = [["Under", "Normal", "Over"]]
+        reply_markup = ReplyKeyboardMarkup(
+        keyboard, one_time_keyboard=True, resize_keyboard=True
+        )
+        await update.message.reply_text(
+        "Your choices are: 'Under-weight', 'Normal-weight' and 'Over-weight'.\n Please select one:", reply_markup=reply_markup
+        )
+        return TO_CHOICES
+    
     elif attribute == 'age':
-        print("hi")
+        keyboard = [["U20", "U30", "U40", "U50", "U60", "O60"]]
+        reply_markup = ReplyKeyboardMarkup(
+        keyboard, one_time_keyboard=True, resize_keyboard=True
+        )
+        await update.message.reply_text(
+        "Your choices are: 'Under20', 'Under30','Under40','Under50','Under60','Over60'.\n Please select one:", reply_markup=reply_markup
+        )
+        return TO_CHOICES
+    
     elif attribute == 'sex':
-        print("hi")
+        keyboard = [["Male", "Female", "Unspecified"]]
+        reply_markup = ReplyKeyboardMarkup(
+        keyboard, one_time_keyboard=True, resize_keyboard=True
+        )
+        await update.message.reply_text(
+        "Your choices are: 'Male', 'Female' and 'Unspecified'.\n Please select one:", reply_markup=reply_markup
+        )
+        return TO_CHOICES
+    
     elif attribute == 'activity':
-        print("hi")
+        keyboard = [["Low-activity", "Normal-activity", "High-activity"]]
+        reply_markup = ReplyKeyboardMarkup(
+        keyboard, one_time_keyboard=True, resize_keyboard=True
+        )
+        await update.message.reply_text(
+        "Your choices are: 'Low-activity', 'Normal-activity' and 'High-activity'.\n Please select one:", reply_markup=reply_markup
+        )
+        return TO_CHOICES
+    
     elif attribute == 'stress':
-        print("hi")
+        keyboard = [["I am stressed", "I am NOT stressed"]]
+        reply_markup = ReplyKeyboardMarkup(
+        keyboard, one_time_keyboard=True, resize_keyboard=True
+        )
+        await update.message.reply_text(
+        "Your choices are: 'I am stressed' (0), 'I am NOT stressed' (1).\n Please select one:", reply_markup=reply_markup
+        )
+        return TO_CHOICES
+    
     elif attribute == 'sleep':
-        print("hi")
-    elif attribute == 'i changed my mind':
-        print("changed mind")
+        keyboard = [["8+", "8-"]]
+        reply_markup = ReplyKeyboardMarkup(
+        keyboard, one_time_keyboard=True, resize_keyboard=True
+        )
+        await update.message.reply_text(
+        "Your choices are: '8+ daily hours of sleep' (good), '8- daily hours of sleep' (bad).\n Please select one:", reply_markup=reply_markup
+        )
+        return TO_CHOICES
+    
+    elif attribute == 'none':
+        await update.message.reply_text(
+        "You changed your mind, that's ok.\n Just ask me a suggestion then."
+        )
+        return ConversationHandler.END
+    
+    else:
+        await update.message.reply_text(
+        "Sorry I did not get that. Can you repeat it please?"
+        )
 
 
 async def change_attribute_value(update: Update, context):
     value=update.message.text.lower()
 
+    if value == 'first courses':
+        print(f"debug - value selected -> ({value})")
+        await update.message.reply_text(
+        f"You successefully changed attribute 'Category'\n from:  {context.user_data['category']} -> {value}."
+        )
+        context.user_data['category']=value
+        return ConversationHandler.END
+    
+    
+    if value == 'second courses':
+        print(f"debug - value selected -> ({value})")
+        await update.message.reply_text(
+        f"You successefully changed attribute 'Category'\n from:  {context.user_data['category']} -> {value}."
+        )
+        context.user_data['category']=value
+        return ConversationHandler.END
 
-    if value == '8+':
-        print(f"you can change value here ({value})")
+    if value == 'desserts':
+        print(f"debug - value selected -> ({value})")
+        await update.message.reply_text(
+        f"You successefully changed attribute 'Category'\n from:  {context.user_data['category']} -> {value}."
+        )
+        context.user_data['category']=value
+        return ConversationHandler.END
+    
+    if value == 'first courses':
+        print(f"debug - value selected -> ({value})")
+        await update.message.reply_text(
+        f"You successefully changed attribute 'Category'\n from:  {context.user_data['category']} -> {value}."
+        )
+        context.user_data['category']=value
+        return ConversationHandler.END
 
     if value == 'lownickel':
         print("hello")
     elif value == 'vegetarian':
-        print("hi")
+        keyboard = [["First courses", "Second courses", "Desserts"]]
+        reply_markup = ReplyKeyboardMarkup(
+        keyboard, one_time_keyboard=True, resize_keyboard=True
+        )
+        await update.message.reply_text(
+        "Your choices are: 'First courses', 'Second courses' and 'Desserts'.\n Please select one:", reply_markup=reply_markup
+        )
+        return TO_CHOICES
+    
     elif value == 'lactosefree':
-        print("hi")
+        keyboard = [["First courses", "Second courses", "Desserts"]]
+        reply_markup = ReplyKeyboardMarkup(
+        keyboard, one_time_keyboard=True, resize_keyboard=True
+        )
+        await update.message.reply_text(
+        "Your choices are: 'First courses', 'Second courses' and 'Desserts'.\n Please select one:", reply_markup=reply_markup
+        )
+        return TO_CHOICES
+    
 
 
 # Funzione per inviare il messaggio a Dialogflow e restituire la risposta
@@ -603,11 +792,6 @@ async def main():
     )
     application.add_handler(conv_handler)
     application.add_handler(modification_handler)
-    #application.add_handlers(handlers={-1: [CommandHandler('modify', modify_profile)], 1:[MessageHandler(filters.TEXT, new_func)]})
-    #application.add_handler(CommandHandler('modify', modify_profile))
-    #application.add_handler(CallbackQueryHandler(query_handler))
-    # application.add_handler(CommandHandler('aiuto',aiuto))
-    # application.add_handler(CommandHandler('info',aiuto))
 
     # Aggiunta del CommandHandler per il cambio modalità
     application.add_handler(MessageHandler(filters.TEXT, dialogflow_mode))
@@ -617,10 +801,6 @@ async def main():
 
     logging.info("Bot avviato")
     application.run_polling(allowed_updates=Update.ALL_TYPES)
-
-# async def new_func():
-#     print("hi")
-
 
 
 if __name__ == "__main__":
