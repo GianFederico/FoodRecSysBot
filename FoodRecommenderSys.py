@@ -1089,7 +1089,7 @@ async def dialogflow_mode(update, context):
     # Id del progetto Dialogflow
     DIALOGFLOW_PROJECT_ID = "foodrecsys-kbji"
     # Credenziali del progetto Dialogflow
-    DIALOGFLOW_CREDENTIALS = "foodrecsys-kbji-b7a61301de6a.json"
+    DIALOGFLOW_CREDENTIALS = "foodrecsys-kbji-ffc95c8f8749.json"
     # Recupera l'ID dell'utente e imposta la lingua del messaggio
     session_id = update.effective_user.id
     language_code = "it"
