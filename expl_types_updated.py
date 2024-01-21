@@ -1628,8 +1628,11 @@ def smartExplanation(user, recipeA, recipeB, listRestrictions, nutrients, restri
         expl = foodPreferences_one(user["User_restriction"], listRestrictions, restrictions, recipeA)
     else:
         expl = foodPreferences_two(user["User_restriction"], listRestrictions, restrictions, recipeA, recipeB)
-    if expl != -1 and expl != -2:
-        explanation += expl
+
+    print("@@@@@@@@@explanation", explanation)
+    print("@@@@@@@@@expl:", expl)
+    # if expl != '':#-1 and expl != -2:
+    #     explanation += expl
 
     if user["Goal"] == "lose" or user["Goal"] == "gain":
         explanationDone_flag = 1
@@ -1973,8 +1976,14 @@ def get_str_exp(user,
 
     # TYPE: smartExplanation
     elif type_explanation == 'smartExplanation_one' or type_explanation == 'smartExplanation_two':
+        print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",type_explanation)
+        print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",user, recipeA_values, recipeB_values, listRestrictions, nutrients, restrictions, \
+                                 richIn, sustainability, seasonality, dopamine)
+
         expl += smartExplanation(user, recipeA_values, recipeB_values, listRestrictions, nutrients, restrictions, \
                                  richIn, sustainability, seasonality, dopamine)
+        print("###########", expl)
+        
 
     # TYPE: foodMacros   
     elif type_explanation == 'foodMacros_one':

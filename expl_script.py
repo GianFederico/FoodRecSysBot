@@ -9,11 +9,11 @@ from translate import Translator
 
 
 class Spiegazione:
-    def __init__(self,img_url=None):
+    def __init__(self, img_url=None):
         self.img_url = img_url
+
     @staticmethod
-    def spiegazione_restrizioni(update: Update, context):
-        print("@@@@@@@@@@@@@@1@@@@@@@@@@@@@@@")
+    async def smart_explanation(update: Update, context):
         restr_list = []
 
         if context.user_data["nickel"] == 1:
@@ -31,9 +31,84 @@ class Spiegazione:
         if context.user_data["glutenfree"] == 1:
             restr_list.append("gluten-free")
 
-        print("@@@@@@@@@@@@@@2@@@@@@@@@@@@@@@")   
         restr = ",".join(restr_list) if restr_list else None
-        print("@@@@@@@@@@@@@@3@@@@@@@@@@@@@@@")  
+        url = "http://127.0.0.1:5000/expl?"
+        params = {
+            "type": 18,
+            "style":-1,
+            "imgurl1": Recommendation.img_url,
+            "difficulty": context.user_data["cook_exp"],
+            "goal": context.user_data["goals"],
+            "user_cost": context.user_data["max_cost_rec"],
+            "user_time": context.user_data["time_cook"],
+            "user_age": context.user_data["age"],
+            "sex": context.user_data["gender"],
+            "mood": context.user_data["mood"],
+            "bmi": context.user_data["weight"],
+            "activity": context.user_data["ph_activity"],
+            "stress": context.user_data["stress"],
+            "health_style": context.user_data["ht_lifestyle"],
+            "health_condition": context.user_data["ht_lifestyle_importance"],
+            "sleep": context.user_data["sleep"],
+            "depression": context.user_data["depress"],
+            "restr": restr,
+        }
+        full_url = url + urlencode(params)
+        print(full_url)
+        response = requests.get(full_url)
+        # così otteniamo la risposta come testo
+        risposta_spiegazione = response.json()
+        print("Response text:", risposta_spiegazione)
+        explanation = risposta_spiegazione.get("explanations", {}).get("smartExplanation_oneA")
+        print("@@@òEXPLANATION:", explanation)
+        if explanation:
+            max_length = 500
+            segments = [
+                explanation[i : i + max_length]
+                for i in range(0, len(explanation), max_length)
+            ]
+
+            explanation_text=[]
+            for segment in segments:
+                explanation_text.append(segment)
+
+            print("@@@@@@@@@@@@@@@@ EXPLANATION TEXT:", explanation_text, "@@@@@@@ò")
+            return await update.message.reply_text(explanation_text)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    @staticmethod
+    def spiegazione_restrizioni(update: Update, context):
+        restr_list = []
+
+        if context.user_data["nickel"] == 1:
+            restr_list.append("low_nickel")
+
+        if context.user_data["vegetarian"] == 1:
+            restr_list.append("vegetarian")
+
+        if context.user_data["lactosefree"] == 1:
+            restr_list.append("lactose-free")
+
+        # if context.user_data["light"] == 1:
+        #     restr_list.append("light")
+
+        if context.user_data["glutenfree"] == 1:
+            restr_list.append("gluten-free")
+
+        restr = ",".join(restr_list) if restr_list else None
         url = "http://127.0.0.1:5000/expl?"
         params = {
             "type": 2,
@@ -55,10 +130,8 @@ class Spiegazione:
             "depression": context.user_data["depress"],
             "restr": restr,
         }
-        print("@@@@@@@@@@@@@@4@@@@@@@@@@@@@@@")  
 
         full_url = url + urlencode(params)
-        print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",full_url)
         response = requests.get(full_url)
         # così otteniamo la risposta come testo
         risposta_spiegazione = response.json()
@@ -157,7 +230,6 @@ class Spiegazione:
 
     @staticmethod
     async def controllo_piatto(update: Update, context):
-        print("@@@@@@@@@@@@@@1@@@@@@@@@@@@@@@")  
         restr_list = []
 
         if context.user_data["nickel"] == 1:
@@ -175,7 +247,6 @@ class Spiegazione:
         if context.user_data["glutenfree"] == 1:
             restr_list.append("gluten-free")
 
-        print("@@@@@@@@@@@@@@2@@@@@@@@@@@@@@@")  
         restr = ",".join(restr_list) if restr_list else None
         url = "http://127.0.0.1:5000/expl?"
         params = {
@@ -198,7 +269,6 @@ class Spiegazione:
             "depression": context.user_data["depress"],
             "restr": restr,
         }
-        print("@@@@@@@@@@@@@@3@@@@@@@@@@@@@@@")  
         full_url = url + urlencode(params)
         print(full_url)
         response = requests.get(full_url)

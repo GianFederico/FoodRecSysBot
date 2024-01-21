@@ -1085,7 +1085,7 @@ async def change_attribute_value(update: Update, context):
 
 
 # Funzione per inviare il messaggio a Dialogflow e restituire la risposta
-async def dialogflow_mode(update, context):
+async def dialogflow_mode(update: Update, context):
     # Id del progetto Dialogflow
     DIALOGFLOW_PROJECT_ID = "foodrecsys-kbji"
     # Credenziali del progetto Dialogflow
@@ -1121,8 +1121,7 @@ async def dialogflow_mode(update, context):
         await Recommendation_tre.altro_suggerimento3(update, context)
         flag = 2
     if intent == "controllo":
-        print("@@@@@@@@@@@@@@1@@@@@@@@@@@@@@@")  
-        await Spiegazione.controllo_piatto(update, context)
+       await Spiegazione.smart_explanation(update, context)
     if intent == "Popolarità_un_piatto":
         Spiegazione.spiegazione_popolarita(update, context)
     if intent == "Spiegazione del cibo":
@@ -1172,9 +1171,11 @@ async def dialogflow_mode(update, context):
     confidence = response.query_result.intent_detection_confidence
     print("Intent:", intent)
     print("Confidence:", confidence)
-    return await update.message.reply_text(response.query_result.fulfillment_text)
-    #this retrun gives an error in the terminal when changing suggestion and ask for expl, but it does not break the servers, it useful for chitchatting with the user
-
+    if response.query_result.fulfillment_text:
+        return await update.message.reply_text(response.query_result.fulfillment_text)
+    else:
+        return
+    
 
 async def main():
     nest_asyncio.apply()
