@@ -366,7 +366,7 @@ async def category(update: Update, context):
 
         reply_markup = ReplyKeyboardRemove()
         await update.message.reply_text(
-            "Thank you for your time, now you can ask me something to eat!",
+            "Thank you for your time! \nI've assumed some other vaues for you averaging our users, if you want to check your profile out click here: /modify.\n\nOr just ask me something to eat!",
             reply_markup=reply_markup,
         )
         return ConversationHandler.END
@@ -385,7 +385,7 @@ async def aiuto(update: Update, context):
 
 async def unknown(update: Update, context):
     await update.message.reply_text(
-        "Mi dispiace, non ho capito. Puoi ripetere la tua risposta?"
+        "Sorry I did not get that, can you repeat it please?"
     )
     return
 
@@ -1120,8 +1120,9 @@ async def dialogflow_mode(update, context):
     if intent == "Change suggestion 2":
         await Recommendation_tre.altro_suggerimento3(update, context)
         flag = 2
-    if intent == "Controllo del piatto":
-        Spiegazione.controllo_piatto(update, context)
+    if intent == "controllo":
+        print("@@@@@@@@@@@@@@1@@@@@@@@@@@@@@@")  
+        await Spiegazione.controllo_piatto(update, context)
     if intent == "Popolarità_un_piatto":
         Spiegazione.spiegazione_popolarita(update, context)
     if intent == "Spiegazione del cibo":
@@ -1172,6 +1173,7 @@ async def dialogflow_mode(update, context):
     print("Intent:", intent)
     print("Confidence:", confidence)
     return await update.message.reply_text(response.query_result.fulfillment_text)
+    #this retrun gives an error in the terminal when changing suggestion and ask for expl, but it does not break the servers, it useful for chitchatting with the user
 
 
 async def main():

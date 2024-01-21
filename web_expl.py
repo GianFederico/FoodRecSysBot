@@ -2,21 +2,23 @@ import os
 from flask import Flask
 from flask import request, json
 import pandas as pd
-import expl_types as et
+import expl_types_updated as et
 
-
-#api = Api(app)
-
-#app.debug = True
 """
 REQUEST EXAMPLE:
 
-http://0.0.0.0:5003/exp/?type=2&style=-1&mood=neutral&stress=no&depression=no&bmi=over&activity=low&goal=lose&sleep=low&
+http://127.0.0.1:5000/expl?type=2&style=-1&mood=neutral&stress=no&depression=no&bmi=over&activity=low&goal=lose&sleep=low&
 restr=gluten-free,vegetarian&imgurl1=https%3A%2F%2Fwww.giallozafferano.it%2Fimages%2Fricette%2F201%2F20113%2Ffoto_hd%2Fhd650x433_wm.jpg&
 imgurl2=https%3A%2F%2Fwww.giallozafferano.it%2Fimages%2Fricette%2F176%2F17635%2Ffoto_hd%2Fhd650x433_wm.jpg&
 difficulty=1&user_time=0&user_cost=5&health_style=5&health_condition=5&user_ingredients=oil,carrot&user_age=U40&sex=m&season=winter
 """
 app = Flask(__name__)
+
+
+@app.route("/")
+def main_page():
+    return "I'm working correctly"
+
 @app.route('/expl')
 #class Explain(Resource):
 def get_expl():
@@ -242,8 +244,7 @@ def get_expl():
 
 #api.add_resource(Explain, '/exp/')
 
-if __name__ == '__main__':
-    app.run()    
-#if __name__ == '__main__':
-   # app.run(host='0.0.0.0', port=int(os.environ.get('PORT1', 5000)))
+if __name__ == "__main__":
+    app.run(host="127.0.0.1", port=int(os.environ.get("PORT", 5000)))
+
 
