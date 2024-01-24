@@ -82,3 +82,20 @@ OPZIONALI:
 {context.user_data['ph_activity']}\n"
 {context.user_data['stress']}\n"
 {context.user_data['sleep']}\n\n"
+
+TODO
+every intents
+
+what are it nutritional values?-
+how popular is it?
+why did you suggest this? 
+is it easy to cook?
+is it in line with my goals?
+does it have some healthy benefits?
+what are its health risks?
+how much does it cost?
+is it adequate for my age?
+is it ok for my restrictions?
+is it good for my lifestyle? gne
+do I have enough time?
+are its macros good?

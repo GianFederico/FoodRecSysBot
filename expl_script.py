@@ -3,8 +3,7 @@ from telegram import Update
 import requests
 from urllib.parse import urlencode
 import urllib.parse
-from recommender_script import Recommendation_due
-from recommender_script import Recommendation
+from recommender_script import Recommendation, Recommendation_due, Recommendation_tre
 from translate import Translator
 
 
@@ -31,12 +30,19 @@ class Spiegazione:
         if context.user_data["glutenfree"] == 1:
             restr_list.append("gluten-free")
 
+        if hasattr(Recommendation_tre, 'img_url'):
+            imgurl=Recommendation_tre.img_url
+        elif hasattr(Recommendation_due, 'img_url'):
+            imgurl=Recommendation_due.img_url
+        elif hasattr(Recommendation, 'img_url'):
+            imgurl=Recommendation.img_url
+
         restr = ",".join(restr_list) if restr_list else None
         url = "http://127.0.0.1:5000/expl?"
         params = {
             "type": 18,
             "style":-1,
-            "imgurl1": Recommendation.img_url,
+            "imgurl1": imgurl,
             "difficulty": context.user_data["cook_exp"],
             "goal": context.user_data["goals"],
             "user_cost": context.user_data["max_cost_rec"],
@@ -56,11 +62,9 @@ class Spiegazione:
         full_url = url + urlencode(params)
         print(full_url)
         response = requests.get(full_url)
-        # così otteniamo la risposta come testo
         risposta_spiegazione = response.json()
         print("Response text:", risposta_spiegazione)
         explanation = risposta_spiegazione.get("explanations", {}).get("smartExplanation_oneA")
-        print("@@@òEXPLANATION:", explanation)
         if explanation:
             max_length = 500
             segments = [
@@ -72,25 +76,12 @@ class Spiegazione:
             for segment in segments:
                 explanation_text.append(segment)
 
-            print("@@@@@@@@@@@@@@@@ EXPLANATION TEXT:", explanation_text, "@@@@@@@ò")
-            return await update.message.reply_text(explanation_text)
-
-
-
-
-
-
-
-
-
-
-
-
-
+            print("@@@@@@@@@@@@@@@@ EXPLANATION TEXT:", explanation_text)
+            return await update.message.reply_text(str(explanation_text)[2:-2])
 
 
     @staticmethod
-    def spiegazione_restrizioni(update: Update, context):
+    async def spiegazione_restrizioni(update: Update, context):
         restr_list = []
 
         if context.user_data["nickel"] == 1:
@@ -102,18 +93,25 @@ class Spiegazione:
         if context.user_data["lactosefree"] == 1:
             restr_list.append("lactose-free")
 
-        # if context.user_data["light"] == 1:
-        #     restr_list.append("light")
+        if context.user_data["light"] == 1:
+            restr_list.append("light")
 
         if context.user_data["glutenfree"] == 1:
             restr_list.append("gluten-free")
+
+        if hasattr(Recommendation_tre, 'img_url'):
+            imgurl=Recommendation_tre.img_url
+        elif hasattr(Recommendation_due, 'img_url'):
+            imgurl=Recommendation_due.img_url
+        elif hasattr(Recommendation, 'img_url'):
+            imgurl=Recommendation.img_url
 
         restr = ",".join(restr_list) if restr_list else None
         url = "http://127.0.0.1:5000/expl?"
         params = {
             "type": 2,
-            "style": 0,
-            "imgurl1": Recommendation.img_url,
+            "style":0,
+            "imgurl1": imgurl,
             "difficulty": context.user_data["cook_exp"],
             "goal": context.user_data["goals"],
             "user_cost": context.user_data["max_cost_rec"],
@@ -130,15 +128,12 @@ class Spiegazione:
             "depression": context.user_data["depress"],
             "restr": restr,
         }
-
         full_url = url + urlencode(params)
+        print(full_url)
         response = requests.get(full_url)
-        # così otteniamo la risposta come testo
         risposta_spiegazione = response.json()
         print("Response text:", risposta_spiegazione)
-        explanation = risposta_spiegazione.get("explanations", {}).get(
-            "foodPreferences_oneA"
-        )
+        explanation = risposta_spiegazione.get("explanations", {}).get("foodPreferences_oneA")
         if explanation:
             max_length = 500
             segments = [
@@ -146,20 +141,15 @@ class Spiegazione:
                 for i in range(0, len(explanation), max_length)
             ]
 
-            # così traduciamo ogni segmento separatamente
-            translated_segments = []
-            translator = Translator(to_lang="it", from_lang="en")
+            explanation_text=[]
             for segment in segments:
-                translated_segment = translator.translate(segment)
-                translated_segments.append(translated_segment)
+                explanation_text.append(segment)
 
-            # così concateniamo i segmenti tradotti
-            italian_text = "".join(translated_segments)
-
-            return update.message.reply_text(italian_text)
+            print("@@@@@@@@@@@@@@@@ EXPLANATION TEXT:", explanation_text)
+            return await update.message.reply_text(str(explanation_text)[2:-2])
 
     @staticmethod
-    def spiegazione_restrizioni_due_piatti(update: Update, context):
+    async def spiegazione_restrizioni_due_piatti(update: Update, context):
         restr_list = []
 
         if context.user_data["nickel"] == 1:
@@ -247,12 +237,19 @@ class Spiegazione:
         if context.user_data["glutenfree"] == 1:
             restr_list.append("gluten-free")
 
+        if hasattr(Recommendation_tre, 'img_url'):
+            imgurl=Recommendation_tre.img_url
+        elif hasattr(Recommendation_due, 'img_url'):
+            imgurl=Recommendation_due.img_url
+        elif hasattr(Recommendation, 'img_url'):
+            imgurl=Recommendation.img_url
+
         restr = ",".join(restr_list) if restr_list else None
         url = "http://127.0.0.1:5000/expl?"
         params = {
             "type": 3,
-            "style": 0,
-            "imgurl1": Recommendation.img_url,
+            "style":0,
+            "imgurl1": imgurl,
             "difficulty": context.user_data["cook_exp"],
             "goal": context.user_data["goals"],
             "user_cost": context.user_data["max_cost_rec"],
@@ -272,33 +269,25 @@ class Spiegazione:
         full_url = url + urlencode(params)
         print(full_url)
         response = requests.get(full_url)
-        # così otteniamo la risposta come testo
         risposta_spiegazione = response.json()
         print("Response text:", risposta_spiegazione)
-        explanation = risposta_spiegazione.get("explanations", {}).get(
-            "foodFeatures_oneA"
-        )
+        explanation = risposta_spiegazione.get("explanations", {}).get("foodFeatures_oneA")
         if explanation:
-            max_length = 500
+            max_length = 5000
             segments = [
                 explanation[i : i + max_length]
                 for i in range(0, len(explanation), max_length)
             ]
 
-            # così traduciamo ogni segmento separatamente
-            translated_segments = []
-            translator = Translator(to_lang="it", from_lang="en")
+            explanation_text=[]
             for segment in segments:
-                translated_segment = translator.translate(segment)
-                translated_segments.append(translated_segment)
+                explanation_text.append(segment)
 
-            # così concateniamo i segmenti tradotti
-            italian_text = "".join(translated_segments)
-
-            return await update.message.reply_text(italian_text)
+            print("@@@@@@@@@@@@@@@@ EXPLANATION TEXT:", explanation_text)
+            return await update.message.reply_text(str(explanation_text)[2:-2])
 
     @staticmethod
-    def controllo_piatto_due_piatti(update: Update, context):
+    async def controllo_piatto_due_piatti(update: Update, context):
         restr_list = []
 
         if context.user_data["nickel"] == 1:
@@ -368,7 +357,7 @@ class Spiegazione:
             return update.message.reply_text(italian_text)
 
     @staticmethod
-    def spiegazione_obiettivo(update: Update, context):
+    async def spiegazione_obiettivo(update: Update, context):
         restr_list = []
 
         if context.user_data["nickel"] == 1:
@@ -380,17 +369,25 @@ class Spiegazione:
         if context.user_data["lactosefree"] == 1:
             restr_list.append("lactose-free")
 
-        if context.user_data["light"] == 1:
-            restr_list.append("light")
+        # if context.user_data["light"] == 1:
+        #     restr_list.append("light")
 
         if context.user_data["glutenfree"] == 1:
             restr_list.append("gluten-free")
+
+        if hasattr(Recommendation_tre, 'img_url'):
+            imgurl=Recommendation_tre.img_url
+        elif hasattr(Recommendation_due, 'img_url'):
+            imgurl=Recommendation_due.img_url
+        elif hasattr(Recommendation, 'img_url'):
+            imgurl=Recommendation.img_url
+
         restr = ",".join(restr_list) if restr_list else None
         url = "http://127.0.0.1:5000/expl?"
         params = {
             "type": 1,
-            "style": 0,
-            "imgurl1": Recommendation.img_url,
+            "style":0,
+            "imgurl1": imgurl,
             "difficulty": context.user_data["cook_exp"],
             "goal": context.user_data["goals"],
             "user_cost": context.user_data["max_cost_rec"],
@@ -407,14 +404,12 @@ class Spiegazione:
             "depression": context.user_data["depress"],
             "restr": restr,
         }
-
         full_url = url + urlencode(params)
         print(full_url)
         response = requests.get(full_url)
-        # così otteniamo la risposta come testo
-        risposta_obiettivo = response.json()
-        print("Response text:", risposta_obiettivo)
-        explanation = risposta_obiettivo.get("explanations", {}).get("foodGoals_oneA")
+        risposta_spiegazione = response.json()
+        print("Response text:", risposta_spiegazione)
+        explanation = risposta_spiegazione.get("explanations", {}).get("foodGoals_oneA")
         if explanation:
             max_length = 500
             segments = [
@@ -422,20 +417,15 @@ class Spiegazione:
                 for i in range(0, len(explanation), max_length)
             ]
 
-            # così traduciamo ogni segmento separatamente
-            translated_segments = []
-            translator = Translator(to_lang="it", from_lang="en")
+            explanation_text=[]
             for segment in segments:
-                translated_segment = translator.translate(segment)
-                translated_segments.append(translated_segment)
+                explanation_text.append(segment)
 
-            # così concateniamo i segmenti tradotti
-            italian_text = "".join(translated_segments)
-
-            return update.message.reply_text(italian_text)
+            print("@@@@@@@@@@@@@@@@ EXPLANATION TEXT:", explanation_text)
+            return await update.message.reply_text(str(explanation_text)[2:-2])
 
     @staticmethod
-    def spiegazione_benefici_salute(update: Update, context):
+    async def spiegazione_benefici_salute(update: Update, context):
         restr_list = []
 
         if context.user_data["nickel"] == 1:
@@ -447,17 +437,25 @@ class Spiegazione:
         if context.user_data["lactosefree"] == 1:
             restr_list.append("lactose-free")
 
-        if context.user_data["light"] == 1:
-            restr_list.append("light")
+        # if context.user_data["light"] == 1:
+        #     restr_list.append("light")
 
         if context.user_data["glutenfree"] == 1:
             restr_list.append("gluten-free")
+
+        if hasattr(Recommendation_tre, 'img_url'):
+            imgurl=Recommendation_tre.img_url
+        elif hasattr(Recommendation_due, 'img_url'):
+            imgurl=Recommendation_due.img_url
+        elif hasattr(Recommendation, 'img_url'):
+            imgurl=Recommendation.img_url
+
         restr = ",".join(restr_list) if restr_list else None
         url = "http://127.0.0.1:5000/expl?"
         params = {
             "type": 8,
-            "style": 0,
-            "imgurl1": Recommendation.img_url,
+            "style":0,
+            "imgurl1": imgurl,
             "difficulty": context.user_data["cook_exp"],
             "goal": context.user_data["goals"],
             "user_cost": context.user_data["max_cost_rec"],
@@ -474,15 +472,12 @@ class Spiegazione:
             "depression": context.user_data["depress"],
             "restr": restr,
         }
-
         full_url = url + urlencode(params)
         print(full_url)
         response = requests.get(full_url)
-        risposta = response.json()
-        print("Response text:", risposta)
-        explanation = risposta.get("explanations", {}).get(
-            "userFeatureHealthBenefits_oneA"
-        )
+        risposta_spiegazione = response.json()
+        print("Response text:", risposta_spiegazione)
+        explanation = risposta_spiegazione.get("explanations", {}).get("userFeatureHealthBenefits_oneA")
         if explanation:
             max_length = 500
             segments = [
@@ -490,20 +485,15 @@ class Spiegazione:
                 for i in range(0, len(explanation), max_length)
             ]
 
-            # così traduciamo ogni segmento separatamente
-            translated_segments = []
-            translator = Translator(to_lang="it", from_lang="en")
+            explanation_text=[]
             for segment in segments:
-                translated_segment = translator.translate(segment)
-                translated_segments.append(translated_segment)
+                explanation_text.append(segment)
 
-            # così concateniamo i segmenti tradotti
-            italian_text = "".join(translated_segments)
-
-            return update.message.reply_text(italian_text)
+            print("@@@@@@@@@@@@@@@@ EXPLANATION TEXT:", explanation_text)
+            return await update.message.reply_text(str(explanation_text)[2:-2])
 
     @staticmethod
-    def spiegazione_rischi_salute(update: Update, context):
+    async def spiegazione_rischi_salute(update: Update, context):
         restr_list = []
 
         if context.user_data["nickel"] == 1:
@@ -515,17 +505,25 @@ class Spiegazione:
         if context.user_data["lactosefree"] == 1:
             restr_list.append("lactose-free")
 
-        if context.user_data["light"] == 1:
-            restr_list.append("light")
+        # if context.user_data["light"] == 1:
+        #     restr_list.append("light")
 
         if context.user_data["glutenfree"] == 1:
             restr_list.append("gluten-free")
+
+        if hasattr(Recommendation_tre, 'img_url'):
+            imgurl=Recommendation_tre.img_url
+        elif hasattr(Recommendation_due, 'img_url'):
+            imgurl=Recommendation_due.img_url
+        elif hasattr(Recommendation, 'img_url'):
+            imgurl=Recommendation.img_url
+
         restr = ",".join(restr_list) if restr_list else None
         url = "http://127.0.0.1:5000/expl?"
         params = {
             "type": 7,
-            "style": 0,
-            "imgurl1": Recommendation.img_url,
+            "style":0,
+            "imgurl1": imgurl,
             "difficulty": context.user_data["cook_exp"],
             "goal": context.user_data["goals"],
             "user_cost": context.user_data["max_cost_rec"],
@@ -542,14 +540,12 @@ class Spiegazione:
             "depression": context.user_data["depress"],
             "restr": restr,
         }
-
         full_url = url + urlencode(params)
         print(full_url)
         response = requests.get(full_url)
-        # così otteniamo la risposta come testo
-        risposta = response.json()
-        print("Response text:", risposta)
-        explanation = risposta.get("explanations", {}).get("userFeatureHealthRisk_oneA")
+        risposta_spiegazione = response.json()
+        print("Response text:", risposta_spiegazione)
+        explanation = risposta_spiegazione.get("explanations", {}).get("userFeatureHealthRisk_oneA")
         if explanation:
             max_length = 500
             segments = [
@@ -557,20 +553,15 @@ class Spiegazione:
                 for i in range(0, len(explanation), max_length)
             ]
 
-            # così traduciamo ogni segmento separatamente
-            translated_segments = []
-            translator = Translator(to_lang="it", from_lang="en")
+            explanation_text=[]
             for segment in segments:
-                translated_segment = translator.translate(segment)
-                translated_segments.append(translated_segment)
+                explanation_text.append(segment)
 
-            # così concateniamo i segmenti tradotti
-            italian_text = "".join(translated_segments)
-
-            return update.message.reply_text(italian_text)
+            print("@@@@@@@@@@@@@@@@ EXPLANATION TEXT:", explanation_text)
+            return await update.message.reply_text(str(explanation_text)[2:-2])
 
     @staticmethod
-    def spiegazione_benefici_salute_due_piatti(update: Update, context):
+    async def spiegazione_benefici_salute_due_piatti(update: Update, context):
         restr_list = []
 
         if context.user_data["nickel"] == 1:
@@ -640,7 +631,7 @@ class Spiegazione:
             return update.message.reply_text(italian_text)
 
     @staticmethod
-    def spiegazione_rischi_salute_due_piatti(update: Update, context):
+    async def spiegazione_rischi_salute_due_piatti(update: Update, context):
         restr_list = []
 
         if context.user_data["nickel"] == 1:
@@ -708,7 +699,7 @@ class Spiegazione:
             return update.message.reply_text(italian_text)
 
     @staticmethod
-    def spiegazione_costo(update: Update, context):
+    async def spiegazione_costo(update: Update, context):
         restr_list = []
 
         if context.user_data["nickel"] == 1:
@@ -720,17 +711,25 @@ class Spiegazione:
         if context.user_data["lactosefree"] == 1:
             restr_list.append("lactose-free")
 
-        if context.user_data["light"] == 1:
-            restr_list.append("light")
+        # if context.user_data["light"] == 1:
+        #     restr_list.append("light")
 
         if context.user_data["glutenfree"] == 1:
             restr_list.append("gluten-free")
+
+        if hasattr(Recommendation_tre, 'img_url'):
+            imgurl=Recommendation_tre.img_url
+        elif hasattr(Recommendation_due, 'img_url'):
+            imgurl=Recommendation_due.img_url
+        elif hasattr(Recommendation, 'img_url'):
+            imgurl=Recommendation.img_url
+
         restr = ",".join(restr_list) if restr_list else None
         url = "http://127.0.0.1:5000/expl?"
         params = {
             "type": 10,
-            "style": 0,
-            "imgurl1": Recommendation.img_url,
+            "style":0,
+            "imgurl1": imgurl,
             "difficulty": context.user_data["cook_exp"],
             "goal": context.user_data["goals"],
             "user_cost": context.user_data["max_cost_rec"],
@@ -747,14 +746,12 @@ class Spiegazione:
             "depression": context.user_data["depress"],
             "restr": restr,
         }
-
         full_url = url + urlencode(params)
         print(full_url)
-        # Esegui la richiesta GET al secondo codice Flask
         response = requests.get(full_url)
-        # così otteniamo la risposta come testo
-        response_costo = response.json()
-        explanation = response_costo.get("explanations", {}).get("userCosts_oneA")
+        risposta_spiegazione = response.json()
+        print("Response text:", risposta_spiegazione)
+        explanation = risposta_spiegazione.get("explanations", {}).get("userCosts_oneA")
         if explanation:
             max_length = 500
             segments = [
@@ -762,20 +759,15 @@ class Spiegazione:
                 for i in range(0, len(explanation), max_length)
             ]
 
-            # così traduciamo ogni segmento separatamente
-            translated_segments = []
-            translator = Translator(to_lang="it", from_lang="en")
+            explanation_text=[]
             for segment in segments:
-                translated_segment = translator.translate(segment)
-                translated_segments.append(translated_segment)
+                explanation_text.append(segment)
 
-            # così concateniamo i segmenti tradotti
-            italian_text = "".join(translated_segments)
-
-            return update.message.reply_text(italian_text)
-
+            print("@@@@@@@@@@@@@@@@ EXPLANATION TEXT:", explanation_text)
+            return await update.message.reply_text(str(explanation_text)[2:-2])
+        
     @staticmethod
-    def spiegazione_costo_due_piatti(update: Update, context):
+    async def spiegazione_costo_due_piatti(update: Update, context):
         restr_list = []
 
         if context.user_data["nickel"] == 1:
@@ -843,7 +835,7 @@ class Spiegazione:
             return update.message.reply_text(italian_text)
 
     @staticmethod
-    def spiegazione_popolarita(update: Update, context):
+    async def spiegazione_popolarita(update: Update, context):
         restr_list = []
 
         if context.user_data["nickel"] == 1:
@@ -855,17 +847,25 @@ class Spiegazione:
         if context.user_data["lactosefree"] == 1:
             restr_list.append("lactose-free")
 
-        if context.user_data["light"] == 1:
-            restr_list.append("light")
+        # if context.user_data["light"] == 1:
+        #     restr_list.append("light")
 
         if context.user_data["glutenfree"] == 1:
             restr_list.append("gluten-free")
+
+        if hasattr(Recommendation_tre, 'img_url'):
+            imgurl=Recommendation_tre.img_url
+        elif hasattr(Recommendation_due, 'img_url'):
+            imgurl=Recommendation_due.img_url
+        elif hasattr(Recommendation, 'img_url'):
+            imgurl=Recommendation.img_url
+
         restr = ",".join(restr_list) if restr_list else None
         url = "http://127.0.0.1:5000/expl?"
         params = {
             "type": 0,
-            "style": 0,
-            "imgurl1": Recommendation.img_url,
+            "style":0,
+            "imgurl1": imgurl,
             "difficulty": context.user_data["cook_exp"],
             "goal": context.user_data["goals"],
             "user_cost": context.user_data["max_cost_rec"],
@@ -882,15 +882,12 @@ class Spiegazione:
             "depression": context.user_data["depress"],
             "restr": restr,
         }
-
         full_url = url + urlencode(params)
         print(full_url)
         response = requests.get(full_url)
-        # così otteniamo la risposta come testo
-        risposta_obiettivo = response.json()
-
-        print("Response text:", risposta_obiettivo)
-        explanation = risposta_obiettivo.get("explanations", {}).get("popularity_oneA")
+        risposta_spiegazione = response.json()
+        print("Response text:", risposta_spiegazione)
+        explanation = risposta_spiegazione.get("explanations", {}).get("popularity_oneA")
         if explanation:
             max_length = 500
             segments = [
@@ -898,20 +895,15 @@ class Spiegazione:
                 for i in range(0, len(explanation), max_length)
             ]
 
-            # così traduciamo ogni segmento separatamente
-            translated_segments = []
-            translator = Translator(to_lang="it", from_lang="en")
+            explanation_text=[]
             for segment in segments:
-                translated_segment = translator.translate(segment)
-                translated_segments.append(translated_segment)
+                explanation_text.append(segment)
 
-            # così concateniamo i segmenti tradotti
-            italian_text = "".join(translated_segments)
-
-            return update.message.reply_text(italian_text)
+            print("@@@@@@@@@@@@@@@@ EXPLANATION TEXT:", explanation_text)
+            return await update.message.reply_text(str(explanation_text)[2:-2])
 
     @staticmethod
-    def spiegazione_popolarita_due_piatti(update: Update, context):
+    async def spiegazione_popolarita_due_piatti(update: Update, context):
         restr_list = []
 
         if context.user_data["nickel"] == 1:
@@ -1048,7 +1040,7 @@ class Spiegazione:
             return update.message.reply_text(italian_text)
 
     @staticmethod
-    def spiegazione_tempo(update: Update, context):
+    async def spiegazione_tempo(update: Update, context):
         restr_list = []
 
         if context.user_data["nickel"] == 1:
@@ -1060,17 +1052,25 @@ class Spiegazione:
         if context.user_data["lactosefree"] == 1:
             restr_list.append("lactose-free")
 
-        if context.user_data["light"] == 1:
-            restr_list.append("light")
+        # if context.user_data["light"] == 1:
+        #     restr_list.append("light")
 
         if context.user_data["glutenfree"] == 1:
             restr_list.append("gluten-free")
+
+        if hasattr(Recommendation_tre, 'img_url'):
+            imgurl=Recommendation_tre.img_url
+        elif hasattr(Recommendation_due, 'img_url'):
+            imgurl=Recommendation_due.img_url
+        elif hasattr(Recommendation, 'img_url'):
+            imgurl=Recommendation.img_url
+
         restr = ",".join(restr_list) if restr_list else None
         url = "http://127.0.0.1:5000/expl?"
         params = {
             "type": 9,
-            "style": 0,
-            "imgurl1": Recommendation.img_url,
+            "style":0,
+            "imgurl1": imgurl,
             "difficulty": context.user_data["cook_exp"],
             "goal": context.user_data["goals"],
             "user_cost": context.user_data["max_cost_rec"],
@@ -1087,14 +1087,12 @@ class Spiegazione:
             "depression": context.user_data["depress"],
             "restr": restr,
         }
-
         full_url = url + urlencode(params)
         print(full_url)
         response = requests.get(full_url)
-        # così otteniamo la risposta come testo
-        risposta_obiettivo = response.json()
-        print("Response text:", risposta_obiettivo)
-        explanation = risposta_obiettivo.get("explanations", {}).get("userTime_oneA")
+        risposta_spiegazione = response.json()
+        print("Response text:", risposta_spiegazione)
+        explanation = risposta_spiegazione.get("explanations", {}).get("userTime_oneA")
         if explanation:
             max_length = 500
             segments = [
@@ -1102,20 +1100,15 @@ class Spiegazione:
                 for i in range(0, len(explanation), max_length)
             ]
 
-            # così traduciamo ogni segmento separatamente
-            translated_segments = []
-            translator = Translator(to_lang="it", from_lang="en")
+            explanation_text=[]
             for segment in segments:
-                translated_segment = translator.translate(segment)
-                translated_segments.append(translated_segment)
+                explanation_text.append(segment)
 
-            # così concateniamo i segmenti tradotti
-            italian_text = "".join(translated_segments)
-
-            return update.message.reply_text(italian_text)
+            print("@@@@@@@@@@@@@@@@ EXPLANATION TEXT:", explanation_text)
+            return await update.message.reply_text(str(explanation_text)[2:-2])
 
     @staticmethod
-    def spiegazione_tempo_due_piatti(update: Update, context):
+    async def spiegazione_tempo_due_piatti(update: Update, context):
         restr_list = []
 
         if context.user_data["nickel"] == 1:
@@ -1183,7 +1176,7 @@ class Spiegazione:
             return update.message.reply_text(italian_text)
 
     @staticmethod
-    def spiegazione_lifestyle(update: Update, context):
+    async def spiegazione_lifestyle(update: Update, context):
         restr_list = []
 
         if context.user_data["nickel"] == 1:
@@ -1195,17 +1188,25 @@ class Spiegazione:
         if context.user_data["lactosefree"] == 1:
             restr_list.append("lactose-free")
 
-        if context.user_data["light"] == 1:
-            restr_list.append("light")
+        # if context.user_data["light"] == 1:
+        #     restr_list.append("light")
 
         if context.user_data["glutenfree"] == 1:
             restr_list.append("gluten-free")
+
+        if hasattr(Recommendation_tre, 'img_url'):
+            imgurl=Recommendation_tre.img_url
+        elif hasattr(Recommendation_due, 'img_url'):
+            imgurl=Recommendation_due.img_url
+        elif hasattr(Recommendation, 'img_url'):
+            imgurl=Recommendation.img_url
+
         restr = ",".join(restr_list) if restr_list else None
         url = "http://127.0.0.1:5000/expl?"
         params = {
             "type": 11,
-            "style": 0,
-            "imgurl1": Recommendation.img_url,
+            "style":0,
+            "imgurl1": imgurl,
             "difficulty": context.user_data["cook_exp"],
             "goal": context.user_data["goals"],
             "user_cost": context.user_data["max_cost_rec"],
@@ -1222,17 +1223,12 @@ class Spiegazione:
             "depression": context.user_data["depress"],
             "restr": restr,
         }
-
         full_url = url + urlencode(params)
         print(full_url)
         response = requests.get(full_url)
-        # così otteniamo la risposta come testo
-        risposta_obiettivo = response.json()
-        # risposta_obiettivo = re.sub(r'\\', '', risposta_obiettivo)
-        print("Response text:", risposta_obiettivo)
-        explanation = risposta_obiettivo.get("explanations", {}).get(
-            "userLifestyle_oneA"
-        )
+        risposta_spiegazione = response.json()
+        print("Response text:", risposta_spiegazione)
+        explanation = risposta_spiegazione.get("explanations", {}).get("userLifestyle_oneA")
         if explanation:
             max_length = 500
             segments = [
@@ -1240,20 +1236,15 @@ class Spiegazione:
                 for i in range(0, len(explanation), max_length)
             ]
 
-            # così traduciamo ogni segmento separatamente
-            translated_segments = []
-            translator = Translator(to_lang="it", from_lang="en")
+            explanation_text=[]
             for segment in segments:
-                translated_segment = translator.translate(segment)
-                translated_segments.append(translated_segment)
+                explanation_text.append(segment)
 
-            # così concateniamo i segmenti tradotti
-            italian_text = "".join(translated_segments)
-
-            return update.message.reply_text(italian_text)
+            print("@@@@@@@@@@@@@@@@ EXPLANATION TEXT:", explanation_text)
+            return await update.message.reply_text(str(explanation_text)[2:-2])
 
     @staticmethod
-    def spiegazione_lifestyle_due_piatti(update: Update, context):
+    async def spiegazione_lifestyle_due_piatti(update: Update, context):
         restr_list = []
 
         if context.user_data["nickel"] == 1:
@@ -1324,7 +1315,7 @@ class Spiegazione:
             return update.message.reply_text(italian_text)
 
     @staticmethod
-    def spiegazione_eta(update: Update, context):
+    async def spiegazione_eta(update: Update, context):
         restr_list = []
 
         if context.user_data["nickel"] == 1:
@@ -1336,17 +1327,25 @@ class Spiegazione:
         if context.user_data["lactosefree"] == 1:
             restr_list.append("lactose-free")
 
-        if context.user_data["light"] == 1:
-            restr_list.append("light")
+        # if context.user_data["light"] == 1:
+        #     restr_list.append("light")
 
         if context.user_data["glutenfree"] == 1:
             restr_list.append("gluten-free")
+
+        if hasattr(Recommendation_tre, 'img_url'):
+            imgurl=Recommendation_tre.img_url
+        elif hasattr(Recommendation_due, 'img_url'):
+            imgurl=Recommendation_due.img_url
+        elif hasattr(Recommendation, 'img_url'):
+            imgurl=Recommendation.img_url
+
         restr = ",".join(restr_list) if restr_list else None
         url = "http://127.0.0.1:5000/expl?"
         params = {
             "type": 13,
-            "style": 0,
-            "imgurl1": Recommendation.img_url,
+            "style":0,
+            "imgurl1": imgurl,
             "difficulty": context.user_data["cook_exp"],
             "goal": context.user_data["goals"],
             "user_cost": context.user_data["max_cost_rec"],
@@ -1363,14 +1362,12 @@ class Spiegazione:
             "depression": context.user_data["depress"],
             "restr": restr,
         }
-
         full_url = url + urlencode(params)
         print(full_url)
         response = requests.get(full_url)
-        # così otteniamo la risposta come testo
-        risposta_obiettivo = response.json()
-        print("Response text:", risposta_obiettivo)
-        explanation = risposta_obiettivo.get("explanations", {}).get("userAge_oneA")
+        risposta_spiegazione = response.json()
+        print("Response text:", risposta_spiegazione)
+        explanation = risposta_spiegazione.get("explanations", {}).get("userAge_oneA")
         if explanation:
             max_length = 500
             segments = [
@@ -1378,20 +1375,15 @@ class Spiegazione:
                 for i in range(0, len(explanation), max_length)
             ]
 
-            # così traduciamo ogni segmento separatamente
-            translated_segments = []
-            translator = Translator(to_lang="it", from_lang="en")
+            explanation_text=[]
             for segment in segments:
-                translated_segment = translator.translate(segment)
-                translated_segments.append(translated_segment)
+                explanation_text.append(segment)
 
-            # così concateniamo i segmenti tradotti
-            italian_text = "".join(translated_segments)
-
-            return update.message.reply_text(italian_text)
+            print("@@@@@@@@@@@@@@@@ EXPLANATION TEXT:", explanation_text)
+            return await update.message.reply_text(str(explanation_text)[2:-2])
 
     @staticmethod
-    def spiegazione_eta_due_piatti(update: Update, context):
+    async def spiegazione_eta_due_piatti(update: Update, context):
         restr_list = []
 
         if context.user_data["nickel"] == 1:
@@ -1461,7 +1453,7 @@ class Spiegazione:
             return update.message.reply_text(italian_text)
 
     @staticmethod
-    def spiegazione_piatto(update: Update, context):
+    async def spiegazione_piatto(update: Update, context):
         restr_list = []
 
         if context.user_data["nickel"] == 1:
@@ -1473,17 +1465,25 @@ class Spiegazione:
         if context.user_data["lactosefree"] == 1:
             restr_list.append("lactose-free")
 
-        if context.user_data["light"] == 1:
-            restr_list.append("light")
+        # if context.user_data["light"] == 1:
+        #     restr_list.append("light")
 
         if context.user_data["glutenfree"] == 1:
             restr_list.append("gluten-free")
+
+        if hasattr(Recommendation_tre, 'img_url'):
+            imgurl=Recommendation_tre.img_url
+        elif hasattr(Recommendation_due, 'img_url'):
+            imgurl=Recommendation_due.img_url
+        elif hasattr(Recommendation, 'img_url'):
+            imgurl=Recommendation.img_url
+
         restr = ",".join(restr_list) if restr_list else None
         url = "http://127.0.0.1:5000/expl?"
         params = {
-            "type": 18,
-            "style": 0,
-            "imgurl1": Recommendation.img_url,
+            "type": 17,
+            "style":0,
+            "imgurl1": imgurl,
             "difficulty": context.user_data["cook_exp"],
             "goal": context.user_data["goals"],
             "user_cost": context.user_data["max_cost_rec"],
@@ -1500,17 +1500,12 @@ class Spiegazione:
             "depression": context.user_data["depress"],
             "restr": restr,
         }
-
         full_url = url + urlencode(params)
         print(full_url)
         response = requests.get(full_url)
-        # così otteniamo la risposta come testo
-        risposta_obiettivo = response.json()
-
-        print("Response text:", risposta_obiettivo)
-        explanation = risposta_obiettivo.get("explanations", {}).get(
-            "smartExplanation_oneA"
-        )
+        risposta_spiegazione = response.json()
+        print("Response text:", risposta_spiegazione)
+        explanation = risposta_spiegazione.get("explanations", {}).get("descriptionA")
         if explanation:
             max_length = 500
             segments = [
@@ -1518,20 +1513,15 @@ class Spiegazione:
                 for i in range(0, len(explanation), max_length)
             ]
 
-            # così traduciamo ogni segmento separatamente
-            translated_segments = []
-            translator = Translator(to_lang="it", from_lang="en")
+            explanation_text=[]
             for segment in segments:
-                translated_segment = translator.translate(segment)
-                translated_segments.append(translated_segment)
+                explanation_text.append(segment)
 
-            # così concateniamo i segmenti tradotti
-            italian_text = "".join(translated_segments)
-
-            return update.message.reply_text(italian_text)
+            print("@@@@@@@@@@@@@@@@ EXPLANATION TEXT:", explanation_text)
+            return await update.message.reply_text(str(explanation_text)[2:-2])
 
     @staticmethod
-    def spiegazione_piatto_due_piatti(update: Update, context):
+    async def spiegazione_piatto_due_piatti(update: Update, context):
         restr_list = []
 
         if context.user_data["nickel"] == 1:
@@ -1602,7 +1592,7 @@ class Spiegazione:
             return update.message.reply_text(italian_text)
 
     @staticmethod
-    def spiegazione_skill_cucina(update: Update, context):
+    async def spiegazione_skill_cucina(update: Update, context):
         restr_list = []
 
         if context.user_data["nickel"] == 1:
@@ -1614,17 +1604,25 @@ class Spiegazione:
         if context.user_data["lactosefree"] == 1:
             restr_list.append("lactose-free")
 
-        if context.user_data["light"] == 1:
-            restr_list.append("light")
+        # if context.user_data["light"] == 1:
+        #     restr_list.append("light")
 
         if context.user_data["glutenfree"] == 1:
             restr_list.append("gluten-free")
+
+        if hasattr(Recommendation_tre, 'img_url'):
+            imgurl=Recommendation_tre.img_url
+        elif hasattr(Recommendation_due, 'img_url'):
+            imgurl=Recommendation_due.img_url
+        elif hasattr(Recommendation, 'img_url'):
+            imgurl=Recommendation.img_url
+
         restr = ",".join(restr_list) if restr_list else None
         url = "http://127.0.0.1:5000/expl?"
         params = {
             "type": 4,
-            "style": 0,
-            "imgurl1": Recommendation.img_url,
+            "style":0,
+            "imgurl1": imgurl,
             "difficulty": context.user_data["cook_exp"],
             "goal": context.user_data["goals"],
             "user_cost": context.user_data["max_cost_rec"],
@@ -1641,15 +1639,12 @@ class Spiegazione:
             "depression": context.user_data["depress"],
             "restr": restr,
         }
-
         full_url = url + urlencode(params)
         print(full_url)
         response = requests.get(full_url)
-        # così otteniamo la risposta come testo
-        risposta_obiettivo = response.json()
-
-        print("Response text:", risposta_obiettivo)
-        explanation = risposta_obiettivo.get("explanations", {}).get("userSkills_oneA")
+        risposta_spiegazione = response.json()
+        print("Response text:", risposta_spiegazione)
+        explanation = risposta_spiegazione.get("explanations", {}).get("userSkills_oneA")
         if explanation:
             max_length = 500
             segments = [
@@ -1657,20 +1652,15 @@ class Spiegazione:
                 for i in range(0, len(explanation), max_length)
             ]
 
-            # così traduciamo ogni segmento separatamente
-            translated_segments = []
-            translator = Translator(to_lang="it", from_lang="en")
+            explanation_text=[]
             for segment in segments:
-                translated_segment = translator.translate(segment)
-                translated_segments.append(translated_segment)
+                explanation_text.append(segment)
 
-            # così concateniamo i segmenti tradotti
-            italian_text = "".join(translated_segments)
-
-            return update.message.reply_text(italian_text)
+            print("@@@@@@@@@@@@@@@@ EXPLANATION TEXT:", explanation_text)
+            return await update.message.reply_text(str(explanation_text)[2:-2])
 
     @staticmethod
-    def spiegazione_skill_cucina_due_piatti(update: Update, context):
+    async def spiegazione_skill_cucina_due_piatti(update: Update, context):
         restr_list = []
 
         if context.user_data["nickel"] == 1:
@@ -1736,3 +1726,419 @@ class Spiegazione:
             italian_text = "".join(translated_segments)
 
             return update.message.reply_text(italian_text)
+
+
+    @staticmethod
+    async def spiegazione_macros(update: Update, context):
+        restr_list = []
+
+        if context.user_data["nickel"] == 1:
+            restr_list.append("low_nickel")
+
+        if context.user_data["vegetarian"] == 1:
+            restr_list.append("vegetarian")
+
+        if context.user_data["lactosefree"] == 1:
+            restr_list.append("lactose-free")
+
+        # if context.user_data["light"] == 1:
+        #     restr_list.append("light")
+
+        if context.user_data["glutenfree"] == 1:
+            restr_list.append("gluten-free")
+
+        if hasattr(Recommendation_tre, 'img_url'):
+            imgurl=Recommendation_tre.img_url
+        elif hasattr(Recommendation_due, 'img_url'):
+            imgurl=Recommendation_due.img_url
+        elif hasattr(Recommendation, 'img_url'):
+            imgurl=Recommendation.img_url
+
+        restr = ",".join(restr_list) if restr_list else None
+        url = "http://127.0.0.1:5000/expl?"
+        params = {
+            "type": 19,
+            "style":0,
+            "imgurl1": imgurl,
+            "difficulty": context.user_data["cook_exp"],
+            "goal": context.user_data["goals"],
+            "user_cost": context.user_data["max_cost_rec"],
+            "user_time": context.user_data["time_cook"],
+            "user_age": context.user_data["age"],
+            "sex": context.user_data["gender"],
+            "mood": context.user_data["mood"],
+            "bmi": context.user_data["weight"],
+            "activity": context.user_data["ph_activity"],
+            "stress": context.user_data["stress"],
+            "health_style": context.user_data["ht_lifestyle"],
+            "health_condition": context.user_data["ht_lifestyle_importance"],
+            "sleep": context.user_data["sleep"],
+            "depression": context.user_data["depress"],
+            "restr": restr,
+        }
+        full_url = url + urlencode(params)
+        print(full_url)
+        response = requests.get(full_url)
+        risposta_spiegazione = response.json()
+        print("Response text:", risposta_spiegazione)
+        explanation = risposta_spiegazione.get("explanations", {}).get("foodMacros_oneA")
+        if explanation:
+            max_length = 500
+            segments = [
+                explanation[i : i + max_length]
+                for i in range(0, len(explanation), max_length)
+            ]
+
+            explanation_text=[]
+            for segment in segments:
+                explanation_text.append(segment)
+
+            print("@@@@@@@@@@@@@@@@ EXPLANATION TEXT:", explanation_text)
+            #message = str(explanation_text)[2:-2]
+            return await update.message.reply_text(str(explanation_text)[2:-2])
+        
+    @staticmethod
+    async def spiegazione_macros_due_piatti(update: Update, context):
+        restr_list = []
+
+        if context.user_data["nickel"] == 1:
+            restr_list.append("low_nickel")
+
+        if context.user_data["vegetarian"] == 1:
+            restr_list.append("vegetarian")
+
+        if context.user_data["lactosefree"] == 1:
+            restr_list.append("lactose-free")
+
+        # if context.user_data["light"] == 1:
+        #     restr_list.append("light")
+
+        if context.user_data["glutenfree"] == 1:
+            restr_list.append("gluten-free")
+
+        if hasattr(Recommendation_tre, 'img_url'):
+            imgurl=Recommendation_tre.img_url
+        elif hasattr(Recommendation_due, 'img_url'):
+            imgurl=Recommendation_due.img_url
+        elif hasattr(Recommendation, 'img_url'):
+            imgurl=Recommendation.img_url
+
+        restr = ",".join(restr_list) if restr_list else None
+        url = "http://127.0.0.1:5000/expl?"
+        params = {
+            "type": 19,
+            "style":1,
+            "imgurl1": imgurl,
+            "difficulty": context.user_data["cook_exp"],
+            "goal": context.user_data["goals"],
+            "user_cost": context.user_data["max_cost_rec"],
+            "user_time": context.user_data["time_cook"],
+            "user_age": context.user_data["age"],
+            "sex": context.user_data["gender"],
+            "mood": context.user_data["mood"],
+            "bmi": context.user_data["weight"],
+            "activity": context.user_data["ph_activity"],
+            "stress": context.user_data["stress"],
+            "health_style": context.user_data["ht_lifestyle"],
+            "health_condition": context.user_data["ht_lifestyle_importance"],
+            "sleep": context.user_data["sleep"],
+            "depression": context.user_data["depress"],
+            "restr": restr,
+        }
+        full_url = url + urlencode(params)
+        print(full_url)
+        response = requests.get(full_url)
+        risposta_spiegazione = response.json()
+        print("Response text:", risposta_spiegazione)
+        explanation = risposta_spiegazione.get("explanations", {}).get("smartExplanation_oneA")
+        if explanation:
+            max_length = 500
+            segments = [
+                explanation[i : i + max_length]
+                for i in range(0, len(explanation), max_length)
+            ]
+
+            explanation_text=[]
+            for segment in segments:
+                explanation_text.append(segment)
+
+            print("@@@@@@@@@@@@@@@@ EXPLANATION TEXT:", explanation_text)
+            return await update.message.reply_text(str(explanation_text)[2:-2])
+        
+    @staticmethod
+    async def spiegazione_sustainability(update: Update, context):
+        restr_list = []
+
+        if context.user_data["nickel"] == 1:
+            restr_list.append("low_nickel")
+
+        if context.user_data["vegetarian"] == 1:
+            restr_list.append("vegetarian")
+
+        if context.user_data["lactosefree"] == 1:
+            restr_list.append("lactose-free")
+
+        # if context.user_data["light"] == 1:
+        #     restr_list.append("light")
+
+        if context.user_data["glutenfree"] == 1:
+            restr_list.append("gluten-free")
+
+        if hasattr(Recommendation_tre, 'img_url'):
+            imgurl=Recommendation_tre.img_url
+        elif hasattr(Recommendation_due, 'img_url'):
+            imgurl=Recommendation_due.img_url
+        elif hasattr(Recommendation, 'img_url'):
+            imgurl=Recommendation.img_url
+
+        restr = ",".join(restr_list) if restr_list else None
+        url = "http://127.0.0.1:5000/expl?"
+        params = {
+            "type": 14,
+            "style":0,
+            "imgurl1": imgurl,
+            "difficulty": context.user_data["cook_exp"],
+            "goal": context.user_data["goals"],
+            "user_cost": context.user_data["max_cost_rec"],
+            "user_time": context.user_data["time_cook"],
+            "user_age": context.user_data["age"],
+            "sex": context.user_data["gender"],
+            "mood": context.user_data["mood"],
+            "bmi": context.user_data["weight"],
+            "activity": context.user_data["ph_activity"],
+            "stress": context.user_data["stress"],
+            "health_style": context.user_data["ht_lifestyle"],
+            "health_condition": context.user_data["ht_lifestyle_importance"],
+            "sleep": context.user_data["sleep"],
+            "depression": context.user_data["depress"],
+            "restr": restr,
+        }
+        full_url = url + urlencode(params)
+        print(full_url)
+        response = requests.get(full_url)
+        risposta_spiegazione = response.json()
+        print("Response text:", risposta_spiegazione)
+        explanation = risposta_spiegazione.get("explanations", {}).get("ingredientsSustainability_oneA")
+        if explanation:
+            max_length = 500
+            segments = [
+                explanation[i : i + max_length]
+                for i in range(0, len(explanation), max_length)
+            ]
+
+            explanation_text=[]
+            for segment in segments:
+                explanation_text.append(segment)
+
+            print("@@@@@@@@@@@@@@@@ EXPLANATION TEXT:", explanation_text)
+            #message = str(explanation_text)[2:-2]
+            return await update.message.reply_text(str(explanation_text)[2:-2])
+        
+
+    @staticmethod
+    async def spiegazione_sustainability_due_piatti(update: Update, context):
+        restr_list = []
+
+        if context.user_data["nickel"] == 1:
+            restr_list.append("low_nickel")
+
+        if context.user_data["vegetarian"] == 1:
+            restr_list.append("vegetarian")
+
+        if context.user_data["lactosefree"] == 1:
+            restr_list.append("lactose-free")
+
+        # if context.user_data["light"] == 1:
+        #     restr_list.append("light")
+
+        if context.user_data["glutenfree"] == 1:
+            restr_list.append("gluten-free")
+
+        if hasattr(Recommendation_tre, 'img_url'):
+            imgurl=Recommendation_tre.img_url
+        elif hasattr(Recommendation_due, 'img_url'):
+            imgurl=Recommendation_due.img_url
+        elif hasattr(Recommendation, 'img_url'):
+            imgurl=Recommendation.img_url
+
+        restr = ",".join(restr_list) if restr_list else None
+        url = "http://127.0.0.1:5000/expl?"
+        params = {
+            "type": 19,
+            "style":0,
+            "imgurl1": imgurl,
+            "difficulty": context.user_data["cook_exp"],
+            "goal": context.user_data["goals"],
+            "user_cost": context.user_data["max_cost_rec"],
+            "user_time": context.user_data["time_cook"],
+            "user_age": context.user_data["age"],
+            "sex": context.user_data["gender"],
+            "mood": context.user_data["mood"],
+            "bmi": context.user_data["weight"],
+            "activity": context.user_data["ph_activity"],
+            "stress": context.user_data["stress"],
+            "health_style": context.user_data["ht_lifestyle"],
+            "health_condition": context.user_data["ht_lifestyle_importance"],
+            "sleep": context.user_data["sleep"],
+            "depression": context.user_data["depress"],
+            "restr": restr,
+        }
+        full_url = url + urlencode(params)
+        print(full_url)
+        response = requests.get(full_url)
+        risposta_spiegazione = response.json()
+        print("Response text:", risposta_spiegazione)
+        explanation = risposta_spiegazione.get("explanations", {}).get("smartExplanation_oneAA")
+        if explanation:
+            max_length = 500
+            segments = [
+                explanation[i : i + max_length]
+                for i in range(0, len(explanation), max_length)
+            ]
+
+            explanation_text=[]
+            for segment in segments:
+                explanation_text.append(segment)
+
+            print("@@@@@@@@@@@@@@@@ EXPLANATION TEXT:", explanation_text)
+            #message = str(explanation_text)[2:-2]
+            return await update.message.reply_text(str(explanation_text)[2:-2])
+
+
+    @staticmethod
+    async def spiegazione_seasonability(update: Update, context):
+        restr_list = []
+
+        if context.user_data["nickel"] == 1:
+            restr_list.append("low_nickel")
+
+        if context.user_data["vegetarian"] == 1:
+            restr_list.append("vegetarian")
+
+        if context.user_data["lactosefree"] == 1:
+            restr_list.append("lactose-free")
+
+        # if context.user_data["light"] == 1:
+        #     restr_list.append("light")
+
+        if context.user_data["glutenfree"] == 1:
+            restr_list.append("gluten-free")
+
+        if hasattr(Recommendation_tre, 'img_url'):
+            imgurl=Recommendation_tre.img_url
+        elif hasattr(Recommendation_due, 'img_url'):
+            imgurl=Recommendation_due.img_url
+        elif hasattr(Recommendation, 'img_url'):
+            imgurl=Recommendation.img_url
+
+        restr = ",".join(restr_list) if restr_list else None
+        url = "http://127.0.0.1:5000/expl?"
+        params = {
+            "type": 15,
+            "style":0,
+            "imgurl1": imgurl,
+            "difficulty": context.user_data["cook_exp"],
+            "goal": context.user_data["goals"],
+            "user_cost": context.user_data["max_cost_rec"],
+            "user_time": context.user_data["time_cook"],
+            "user_age": context.user_data["age"],
+            "sex": context.user_data["gender"],
+            "mood": context.user_data["mood"],
+            "bmi": context.user_data["weight"],
+            "activity": context.user_data["ph_activity"],
+            "stress": context.user_data["stress"],
+            "health_style": context.user_data["ht_lifestyle"],
+            "health_condition": context.user_data["ht_lifestyle_importance"],
+            "sleep": context.user_data["sleep"],
+            "depression": context.user_data["depress"],
+            "restr": restr,
+        }
+        full_url = url + urlencode(params)
+        print(full_url)
+        response = requests.get(full_url)
+        risposta_spiegazione = response.json()
+        print("Response text:", risposta_spiegazione)
+        explanation = risposta_spiegazione.get("explanations", {}).get("ingredientsSeasonality_oneA")
+        if explanation:
+            max_length = 500
+            segments = [
+                explanation[i : i + max_length]
+                for i in range(0, len(explanation), max_length)
+            ]
+
+            explanation_text=[]
+            for segment in segments:
+                explanation_text.append(segment)
+
+            print("@@@@@@@@@@@@@@@@ EXPLANATION TEXT:", explanation_text)
+            #message = str(explanation_text)[2:-2]
+            return await update.message.reply_text(str(explanation_text)[2:-2])
+        
+    @staticmethod
+    async def spiegazione_seasonability_due_piatti(update: Update, context):
+        restr_list = []
+
+        if context.user_data["nickel"] == 1:
+            restr_list.append("low_nickel")
+
+        if context.user_data["vegetarian"] == 1:
+            restr_list.append("vegetarian")
+
+        if context.user_data["lactosefree"] == 1:
+            restr_list.append("lactose-free")
+
+        # if context.user_data["light"] == 1:
+        #     restr_list.append("light")
+
+        if context.user_data["glutenfree"] == 1:
+            restr_list.append("gluten-free")
+
+        if hasattr(Recommendation_tre, 'img_url'):
+            imgurl=Recommendation_tre.img_url
+        elif hasattr(Recommendation_due, 'img_url'):
+            imgurl=Recommendation_due.img_url
+        elif hasattr(Recommendation, 'img_url'):
+            imgurl=Recommendation.img_url
+
+        restr = ",".join(restr_list) if restr_list else None
+        url = "http://127.0.0.1:5000/expl?"
+        params = {
+            "type": 14,
+            "style":0,
+            "imgurl1": imgurl,
+            "difficulty": context.user_data["cook_exp"],
+            "goal": context.user_data["goals"],
+            "user_cost": context.user_data["max_cost_rec"],
+            "user_time": context.user_data["time_cook"],
+            "user_age": context.user_data["age"],
+            "sex": context.user_data["gender"],
+            "mood": context.user_data["mood"],
+            "bmi": context.user_data["weight"],
+            "activity": context.user_data["ph_activity"],
+            "stress": context.user_data["stress"],
+            "health_style": context.user_data["ht_lifestyle"],
+            "health_condition": context.user_data["ht_lifestyle_importance"],
+            "sleep": context.user_data["sleep"],
+            "depression": context.user_data["depress"],
+            "restr": restr,
+        }
+        full_url = url + urlencode(params)
+        print(full_url)
+        response = requests.get(full_url)
+        risposta_spiegazione = response.json()
+        print("Response text:", risposta_spiegazione)
+        explanation = risposta_spiegazione.get("explanations", {}).get("ingredientsSustainability_oneA")
+        if explanation:
+            max_length = 500
+            segments = [
+                explanation[i : i + max_length]
+                for i in range(0, len(explanation), max_length)
+            ]
+
+            explanation_text=[]
+            for segment in segments:
+                explanation_text.append(segment)
+
+            print("@@@@@@@@@@@@@@@@ EXPLANATION TEXT:", explanation_text)
+            #message = str(explanation_text)[2:-2]
+            return await update.message.reply_text(str(explanation_text)[2:-2])

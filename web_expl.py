@@ -116,25 +116,26 @@ def get_expl():
 
         # exps for the configuration
         two_recipes_experiment = [
-            "popularity_two",                   # 0
-            "foodGoals_two",                    # 1
-            "foodPreferences_two",              # 2
-            "foodFeatures_two",                 # 3
-            "userSkills_two",                   # 4
-            "foodFeatureHealthRisk_two",        # 5
-            "foodFeatureHealthBenefits_two",    # 6
-            "userFeatureHealthRisk_two",        # 7
-            "userFeatureHealthBenefits_two",    # 8
-            "userTime_two",                     # 9
-            "userCosts_two",                    # 10
-            "userLifestyle_two",                # 11
-            "userIngredients_two",              # 12
-            "userAge_two",                      # 13
-            "ingredientsSustainability_two",    # 14
-            "ingredientsSeasonality_two",       # 15
-            "ingredientsDopamine_two",          # 16
-            "descriptions",                     # 17
-            "smartExplanation_two"              # 18
+            "popularity_two",                   # 0 | no need explicit comp
+            "foodGoals_two",                    # 1  | ok
+            "foodPreferences_two",              # 2  | ok
+            "foodFeatures_two",                 # 3  | plain comparison a-priori
+            "userSkills_two",                   # 4  | there already is a comp
+            "foodFeatureHealthRisk_two",        # 5  | plain comparison a-priori - don't know what the user wants from a recipe
+            "foodFeatureHealthBenefits_two",    # 6  | plain comparison a-priori - don't know what the user wants from a recipe
+            "userFeatureHealthRisk_two",        # 7  | plain comparison a-priori - don't know what the user wants from a recipe
+            "userFeatureHealthBenefits_two",    # 8  | plain comparison a-priori - don't know what the user wants from a recipe
+            "userTime_two",                     # 9  | ok
+            "userCosts_two",                    # 10 | no need explicit comp
+            "userLifestyle_two",                # 11 | there already is a comp
+            "userIngredients_two",              # 12 | there already is a comp
+            "userAge_two",                      # 13 | there already is a comp
+            "ingredientsSustainability_two",    # 14 | there already is a comp
+            "ingredientsSeasonality_two",       # 15 | there already is a comp
+            "ingredientsDopamine_two",          # 16 | remove
+            "descriptions",                     # 17 | no need explicit comp
+            "smartExplanation_two",             # 18 | no need explicit comp
+            "foodMacros_two"                    # 19 | ok
         ]
 
         one_recipe_experiment = [
@@ -156,7 +157,8 @@ def get_expl():
             "ingredientsSeasonality_one",       # 15
             "ingredientsDopamine_one",          # 16
             "description",                      # 17
-            "smartExplanation_one"              # 18
+            "smartExplanation_one",             # 18 
+            "foodMacros_one"                    # 19
         ]
 
         explanations = {}

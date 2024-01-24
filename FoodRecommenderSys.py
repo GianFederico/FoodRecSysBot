@@ -352,7 +352,7 @@ async def category(update: Update, context):
         context.user_data["category"] = user_category
 
         # default values for parameters that are not mandatory
-        context.user_data["ht_lifestyle_importance"] = 3
+        context.user_data["ht_lifestyle_importance"] = 5 #assume users want to improve their lifestyle
         context.user_data["ht_lifestyle"] = 3
         context.user_data["cook_exp"] = 3
         context.user_data["max_cost_rec"] = 3
@@ -366,7 +366,7 @@ async def category(update: Update, context):
 
         reply_markup = ReplyKeyboardRemove()
         await update.message.reply_text(
-            "Thank you for your time! \nI've assumed some other vaues for you averaging our users, if you want to check your profile out click here: /modify.\n\nOr just ask me something to eat!",
+            "Thank you for your time! \nI've assumed some other values for you (averaging our users), if you want to check your profile out click here: /modify.\n\nOr just ask me something to eat!",
             reply_markup=reply_markup,
         )
         return ConversationHandler.END
@@ -411,6 +411,7 @@ async def modify_profile(update: Update, context):
             f" •  Diabetic:  {context.user_data['diabetes']}\n"
             f" •  Pregnant:  {context.user_data['pregnant']}\n"
             f" •  User Skill:  {context.user_data['cook_exp']}/5\n"
+            f" •  User Lifestyle:  {context.user_data['ht_lifestyle']}/5\n"
             f" •  Goal:  {context.user_data['goals']}\n"
             f" •  User Budget:  {context.user_data['max_cost_rec']}/5\n"
             f" •  User Time:  {context.user_data['time_cook']}\n"
@@ -421,7 +422,7 @@ async def modify_profile(update: Update, context):
             f" •  Stress:  {context.user_data['stress']}\n"
             f" •  Sleep:  {context.user_data['sleep']}\n\n"
             "What would you like to modify?\n"
-            "Please type in the name of the attribute you want to change or 'none' if you changed your mind:"
+            "Please type in the name of the attribute you want to modify or 'none' if you changed your mind:"
             # f"Depression: {context.user_data['depress']}\n"
             # f"Mood: {context.user_data['mood']}"
         )
@@ -441,6 +442,7 @@ async def choose_attribute(update: Update, context):
         "diabetes",
         "pregnant",
         "user skill",
+        "user lifestyle",
         "goal",
         "user budget",
         "user time",
@@ -552,6 +554,25 @@ async def choose_attribute(update: Update, context):
             reply_markup=reply_markup,
         )
         return TO_CHOICES
+    
+    elif attribute == "user lifestyle":
+        keyboard = [
+            [
+                "Very Unhealty-lifestyle",
+                "Unhealty-lifestyle",
+                "Normal-lifestyle",
+                "Healty-lifestyle",
+                "Very Healty-lifestyle",
+            ]
+        ]
+        reply_markup = ReplyKeyboardMarkup(
+            keyboard, one_time_keyboard=True, resize_keyboard=True
+        )
+        await update.message.reply_text(
+            "Your choices are: \n'Very Unhealty-lifestyle' (1), 'Unhealty-lifestyle' (2), 'Normal-lifestyle' (3), 'Healty-lifestyle' (4), 'Very Healty-lifestyle' (5).\nPlease select one:",
+            reply_markup=reply_markup,
+        )
+        return TO_CHOICES
 
     elif attribute == "goal":
         keyboard = [["Lose", "Maintain", "Gain"]]
@@ -657,7 +678,7 @@ async def choose_attribute(update: Update, context):
 
     elif attribute == "none":
         await update.message.reply_text(
-            "You changed your mind, that's ok.\n Just ask me a suggestion then."
+            "You changed your mind, that's ok.\nJust ask me a suggestion then."
         )
         return ConversationHandler.END
 
@@ -820,6 +841,46 @@ async def change_attribute_value(update: Update, context):
             f"You successfully changed attribute 'User Skill'\nfrom:  {context.user_data['cook_exp']} -> 5.\n\nNow you can ask me to suggest something again."
         )
         context.user_data["cook_exp"] = 5
+        return ConversationHandler.END
+    
+    elif value == "very unhealty-lifestyle":
+        print(f"debug - value selected -> ({value})")
+        await update.message.reply_text(
+            f"You successfully changed attribute 'User Lifestyle'\nfrom:  {context.user_data['ht_lifestyle']} -> 1.\n\nNow you can ask me to suggest something again."
+        )
+        context.user_data["ht_lifestyle"] = 1
+        return ConversationHandler.END
+
+    elif value == "unhealty-lifestyle":
+        print(f"debug - value selected -> ({value})")
+        await update.message.reply_text(
+            f"You successfully changed attribute 'User Lifestyle'\nfrom:  {context.user_data['ht_lifestyle']} -> 2.\n\nNow you can ask me to suggest something again."
+        )
+        context.user_data["ht_lifestyle"] = 2
+        return ConversationHandler.END
+
+    elif value == "normal-lifestyle":
+        print(f"debug - value selected -> ({value})")
+        await update.message.reply_text(
+            f"You successfully changed attribute 'User Lifestyle'\nfrom:  {context.user_data['ht_lifestyle']} -> 3.\n\nNow you can ask me to suggest something again."
+        )
+        context.user_data["ht_lifestyle"] = 3
+        return ConversationHandler.END
+
+    elif value == "healty-lifestyle":
+        print(f"debug - value selected -> ({value})")
+        await update.message.reply_text(
+            f"You successfully changed attribute 'User Lifestyle'\nfrom:  {context.user_data['ht_lifestyle']} -> 4.\n\nNow you can ask me to suggest something again."
+        )
+        context.user_data["ht_lifestyle"] = 4
+        return ConversationHandler.END
+
+    elif value == "very healty-lifestyle":
+        print(f"debug - value selected -> ({value})")
+        await update.message.reply_text(
+            f"You successfully changed attribute 'User Lifestyle'\nfrom:  {context.user_data['ht_lifestyle']} -> 5.\n\nNow you can ask me to suggest something again."
+        )
+        context.user_data["ht_lifestyle"] = 5
         return ConversationHandler.END
 
     elif value == "lose":
@@ -1113,37 +1174,44 @@ async def dialogflow_mode(update: Update, context):
     confidence = response.query_result.intent_detection_confidence
     if intent == "Suggestion":
         await Recommendation.suggerimento(update, context)
-        flag = 0
     if intent == "Change suggestion 1":
         await Recommendation_due.altro_suggerimento2(update, context)
-        flag = 1
     if intent == "Change suggestion 2":
         await Recommendation_tre.altro_suggerimento3(update, context)
-        flag = 2
-    if intent == "controllo":
+    if intent == "prova why":
        await Spiegazione.smart_explanation(update, context)
-    if intent == "Popolarità_un_piatto":
-        Spiegazione.spiegazione_popolarita(update, context)
-    if intent == "Spiegazione del cibo":
-        Spiegazione.spiegazione_piatto(update, context)
-    if intent == "Spiegazione del cibo, Abilità di cucina":
-        Spiegazione.spiegazione_skill_cucina(update, context)
-    if intent == "Spiegazione del cibo, Obiettivi":
-        Spiegazione.spiegazione_obiettivo(update, context)
-    if intent == "Spiegazione del cibo, Benefici di salute":
-        Spiegazione.spiegazione_benefici_salute(update, context)
-    if intent == "Spiegazione del cibo, Rischi di Salute":
-        Spiegazione.spiegazione_rischi_salute(update, context)
-    if intent == "Spiegazione del cibo, Costo":
-        Spiegazione.spiegazione_costo(update, context)
-    if intent == "Spiegazione del cibo, Età":
-        Spiegazione.spiegazione_eta(update, context)
-    if intent == "Spiegazione del cibo, Restrizioni":
-        Spiegazione.spiegazione_restrizioni(update, context)
-    if intent == "Spiegazione del cibo, Stile di vita":
-        Spiegazione.spiegazione_lifestyle(update, context)
-    if intent == "Spiegazione del cibo, Tempo":
-        Spiegazione.spiegazione_tempo(update, context)
+    if intent == "Meal check":
+       await Spiegazione.controllo_piatto(update, context)
+    if intent == "Meal popularity":
+       await Spiegazione.spiegazione_popolarita(update, context)
+    if intent == "Explanation meal":
+        await Spiegazione.spiegazione_piatto(update, context)
+    if intent == "Explanation skill":
+        await Spiegazione.spiegazione_skill_cucina(update, context)
+    if intent == "Explanation goals":
+        await Spiegazione.spiegazione_obiettivo(update, context)
+    if intent == "Explanation health-benefit":
+        await Spiegazione.spiegazione_benefici_salute(update, context)
+    if intent == "Explanation health-risk":
+        await Spiegazione.spiegazione_rischi_salute(update, context)
+    if intent == "Explanation cost":
+        await Spiegazione.spiegazione_costo(update, context)
+    if intent == "Explanation age":
+        await Spiegazione.spiegazione_eta(update, context)
+    if intent == "Explanation restriction":
+        await Spiegazione.spiegazione_restrizioni(update, context)
+    if intent == "Explanation lifestyle":
+        await Spiegazione.spiegazione_lifestyle(update, context)
+    if intent == "Explanation time":
+        await Spiegazione.spiegazione_tempo(update, context)
+    if intent == "Explanation macros":
+        await Spiegazione.spiegazione_macros(update, context)
+    if intent == "Explanation sustainability":
+        await Spiegazione.spiegazione_sustainability(update, context)
+    if intent == "Explanation seasonability":
+        await Spiegazione.spiegazione_seasonability(update, context)
+
+
     if intent == "Controllo del piatto due piatti":
         Spiegazione.controllo_piatto_due_piatti(update, context)
     if intent == "Popolarità_due_piatti":
