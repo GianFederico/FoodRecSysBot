@@ -79,7 +79,6 @@ class Spiegazione:
             print("@@@@@@@@@@@@@@@@ EXPLANATION TEXT:", explanation_text)
             return await update.message.reply_text(str(explanation_text)[2:-2])
 
-
     @staticmethod
     async def spiegazione_restrizioni(update: Update, context):
         restr_list = []
@@ -166,13 +165,21 @@ class Spiegazione:
 
         if context.user_data["glutenfree"] == 1:
             restr_list.append("gluten-free")
+
+        if hasattr(Recommendation_tre, 'img_url'):
+            first=Recommendation_due.img_url
+            second=Recommendation_tre.img_url
+        elif hasattr(Recommendation_due, 'img_url'):
+            first=Recommendation.img_url
+            second=Recommendation_due.img_url
+
         restr = ",".join(restr_list) if restr_list else None
         url = "http://127.0.0.1:5000/expl?"
         params = {
             "type": 2,
             "style": 1,
-            "imgurl1": Recommendation.img_url,
-            "imgurl2": Recommendation_due.img_url,
+            "imgurl1": first,
+            "imgurl2": second,
             "difficulty": context.user_data["cook_exp"],
             "goal": context.user_data["goals"],
             "user_cost": context.user_data["max_cost_rec"],
@@ -196,9 +203,7 @@ class Spiegazione:
         # così otteniamo la risposta come testo
         risposta_spiegazione = response.json()
         print("Response text:", risposta_spiegazione)
-        explanation = risposta_spiegazione.get("explanations", {}).get(
-            "foodPreferences_two"
-        )
+        explanation = risposta_spiegazione.get("explanations", {}).get("foodPreferences_two")
         if explanation:
             max_length = 500
             segments = [
@@ -206,17 +211,12 @@ class Spiegazione:
                 for i in range(0, len(explanation), max_length)
             ]
 
-            # così traduciamo ogni segmento separatamente
-            translated_segments = []
-            translator = Translator(to_lang="it", from_lang="en")
+            explanation_text=[]
             for segment in segments:
-                translated_segment = translator.translate(segment)
-                translated_segments.append(translated_segment)
+                explanation_text.append(segment)
 
-            # così concateniamo i segmenti tradotti
-            italian_text = "".join(translated_segments)
-
-            return update.message.reply_text(italian_text)
+            print("@@@@@@@@@@@@@@@@ EXPLANATION TEXT:", explanation_text)
+            return await update.message.reply_text(str(explanation_text)[2:-2])
 
     @staticmethod
     async def controllo_piatto(update: Update, context):
@@ -304,13 +304,22 @@ class Spiegazione:
 
         if context.user_data["glutenfree"] == 1:
             restr_list.append("gluten-free")
+        
+        
+        if hasattr(Recommendation_tre, 'img_url'):
+            first=Recommendation_due.img_url
+            second=Recommendation_tre.img_url
+        elif hasattr(Recommendation_due, 'img_url'):
+            first=Recommendation.img_url
+            second=Recommendation_due.img_url
+
         restr = ",".join(restr_list) if restr_list else None
         url = "http://127.0.0.1:5000/expl?"
         params = {
             "type": 3,
             "style": 1,
-            "imgurl1": Recommendation.img_url,
-            "imgurl2": Recommendation_due.img_url,
+            "imgurl1": first,
+            "imgurl2": second,
             "difficulty": context.user_data["cook_exp"],
             "goal": context.user_data["goals"],
             "user_cost": context.user_data["max_cost_rec"],

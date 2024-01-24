@@ -349,6 +349,7 @@ or if the specified user restrictions are not included in the list mentioned abo
 respective error codes are returned.
 """
 def foodPreferences_one(userRestrictions, listRestrictions, restrictions, recipe):
+    print("@@@@@@food1@@@@@@@@@@òò@@@@@@@ò", userRestrictions, listRestrictions, restrictions, recipe)
     explanation = ""
     restr_and_desc = {}
 
@@ -390,7 +391,7 @@ def foodPreferences_one(userRestrictions, listRestrictions, restrictions, recipe
 
             explanation += "."
 
-    return explanation, not_followed_restrictions
+    return explanation
 
 
 """
@@ -398,7 +399,7 @@ The foodPreferences_two explanation function calls foodPreferences_one on two re
 """
 def foodPreferences_two(userRestrictions, listRestrictions, restrictions, recipeA, recipeB): 
     explanation = ""
-
+    print("@@@@@@@@@@@@@@@@@@@",userRestrictions, listRestrictions, restrictions, recipeA, recipeB)
     explA, not_followed_rest_A = foodPreferences_one(userRestrictions, listRestrictions, restrictions, recipeA)
     explB, not_followed_rest_B = foodPreferences_one(userRestrictions, listRestrictions, restrictions, recipeB)
     if explA != -1 and explA != -2:

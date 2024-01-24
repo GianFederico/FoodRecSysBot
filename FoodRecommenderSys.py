@@ -1172,17 +1172,18 @@ async def dialogflow_mode(update: Update, context):
     # Invia la risposta di Dialogflow all'utente
     intent = response.query_result.intent.display_name
     confidence = response.query_result.intent_detection_confidence
+    
     if intent == "Suggestion":
         await Recommendation.suggerimento(update, context)
     if intent == "Change suggestion 1":
         await Recommendation_due.altro_suggerimento2(update, context)
     if intent == "Change suggestion 2":
         await Recommendation_tre.altro_suggerimento3(update, context)
-    if intent == "prova why":
+    if intent == "Explanation smart":
        await Spiegazione.smart_explanation(update, context)
-    if intent == "Meal check":
+    if intent == "Explanation check":
        await Spiegazione.controllo_piatto(update, context)
-    if intent == "Meal popularity":
+    if intent == "Explanation popularity":
        await Spiegazione.spiegazione_popolarita(update, context)
     if intent == "Explanation meal":
         await Spiegazione.spiegazione_piatto(update, context)
@@ -1212,30 +1213,37 @@ async def dialogflow_mode(update: Update, context):
         await Spiegazione.spiegazione_seasonability(update, context)
 
 
-    if intent == "Controllo del piatto due piatti":
-        Spiegazione.controllo_piatto_due_piatti(update, context)
-    if intent == "Popolarità_due_piatti":
-        Spiegazione.spiegazione_popolarita_due_piatti(update, context)
-    if intent == "Spiegazione del cibo due piatti":
-        Spiegazione.spiegazione_piatto_due_piatti(update, context)
-    if intent == "Spiegazione del cibo - Abilità di cucina due ricette":
-        Spiegazione.spiegazione_skill_cucina_due_piatti(update, context)
-    if intent == "Spiegazione del cibo, Obiettivi_due_ricette":
-        Spiegazione.spiegazione_obiettivi_due_piatti(update, context)
-    if intent == "Spiegazione del cibo, Benefici di salute due piatti":
-        Spiegazione.spiegazione_benefici_salute_due_piatti(update, context)
-    if intent == "Spiegazione del cibo, Rischi di Salute due piatti":
-        Spiegazione.spiegazione_rischi_salute_due_piatti(update, context)
-    if intent == "Spiegazione del cibo, Costo due piatti":
-        Spiegazione.spiegazione_costo_due_piatti(update, context)
-    if intent == "Spiegazione del cibo, Età due piatti":
-        Spiegazione.spiegazione_eta_due_piatti(update, context)
-    if intent == "Spiegazione del cibo, Restrizioni due ricette":
-        Spiegazione.spiegazione_restrizioni_due_piatti(update, context)
-    if intent == "Spiegazione del cibo, Stile di vita due piatti":
-        Spiegazione.spiegazione_lifestyle_due_piatti(update, context)
-    if intent == "Spiegazione del cibo, Tempo due piatti":
-        Spiegazione.spiegazione_tempo_due_piatti(update, context)
+    if intent == "Comparison two meals":
+       await Spiegazione.controllo_piatto_due_piatti(update, context)
+    if intent == "Comparison popularity":
+        await Spiegazione.spiegazione_popolarita_due_piatti(update, context)
+    if intent == "Comparison meal checks":
+        await Spiegazione.spiegazione_piatto_due_piatti(update, context)
+    if intent == "Comparison skill":
+        await Spiegazione.spiegazione_skill_cucina_due_piatti(update, context)
+    if intent == "Comparison goal":
+        await Spiegazione.spiegazione_obiettivi_due_piatti(update, context)
+    if intent == "Comparison health-benefit":
+        await Spiegazione.spiegazione_benefici_salute_due_piatti(update, context)
+    if intent == "Comparison health-risk":
+        await Spiegazione.spiegazione_rischi_salute_due_piatti(update, context)
+    if intent == "Comparison cost":
+        await Spiegazione.spiegazione_costo_due_piatti(update, context)
+    if intent == "Comparison age":
+        await Spiegazione.spiegazione_eta_due_piatti(update, context)
+    if intent == "Comparison restriction":
+        await Spiegazione.spiegazione_restrizioni_due_piatti(update, context)
+    if intent == "Comparison lifestyle":
+        await Spiegazione.spiegazione_lifestyle_due_piatti(update, context)
+    if intent == "Comparison time":
+        await Spiegazione.spiegazione_tempo_due_piatti(update, context)
+    if intent == "Comparison macros":
+        await Spiegazione.spiegazione_macros_due_piatti(update, context)
+    if intent == "Comparison sustainability":
+        await Spiegazione.spiegazione_sustainability_due_piatti(update, context)
+    if intent == "Comparison seasonability":
+        await Spiegazione.spiegazione_seasonability_due_piatti(update, context)
+
     confidence = response.query_result.intent_detection_confidence
     print("Intent:", intent)
     print("Confidence:", confidence)
