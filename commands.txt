@@ -83,11 +83,11 @@ OPZIONALI:
 {context.user_data['stress']}\n"
 {context.user_data['sleep']}\n\n"
 
-TODO
-every intents
+
 
 what are it nutritional values?-
 how popular is it?
+what are its characteristics?
 why did you suggest this? 
 is it easy to cook?
 is it in line with my goals?
@@ -99,3 +99,24 @@ is it ok for my restrictions?
 is it good for my lifestyle? gne
 do I have enough time?
 are its macros good?
+is it sustainable?
+is it seasonal?
+
+-to check- compare them according to what you think is best
+compare them according to their nutritional values
+compare them according to their popularity\rating
+compare them according to their charactersitics
+compare them according to the skill required to cook them
+compare them according to my goals
+compare them according to their health benefits
+compare them according to their health risks
+compare them according to thei costs
+compare them according to my age
+compare them according to my restrictions
+compare them according to my lifestyle
+compare them according to cooking time
+compare them according to their macros
+compare them according to their sustainability
+compare them according to their seasonability
+
+TODO comparison\explanaion lifestyle

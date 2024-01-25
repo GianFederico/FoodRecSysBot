@@ -245,8 +245,8 @@ def foodGoals_two(recipeA, recipeB, user):
     user_activity = user["Activity"]
 
     average_daily_intake = {
-    "m": {"lose": 2000, "gain": 2500, "no": 2250},
-    "f": {"lose": 1500, "gain": 1800, "no": 1650},
+    "m": {"-1": 2000, "1": 2500, "0": 2250},
+    "f": {"-1": 1500, "1": 1800, "0": 1650},
     }
     intake = average_daily_intake[user_sex][user_goal]
     man_or_woman = "man" if user_sex == "m" else "woman"
@@ -265,12 +265,12 @@ def foodGoals_two(recipeA, recipeB, user):
         same_kcals = recipeA["calories"]
 
         average_daily_intake = {
-        "m": {"lose": 2000, "gain": 2500, "no": 2250},
-        "f": {"lose": 1500, "gain": 1800, "no": 1650},
+        "m": {"-1": 2000, "1": 2500, "0": 2250},
+        "f": {"-1": 1500, "1": 1800, "0": 1650},
         }
 
         if user_sex is None or user_sex == "": # TO CHECK cannot take none or "" as user[sex] value 
-            intake = average_daily_intake["m"]["no"] if user_goal == "no" else average_daily_intake["f"]["no"]
+            intake = average_daily_intake["m"]["0"] if user_goal == "0" else average_daily_intake["f"]["0"]
             man_or_woman = "person of unspecified sex"
 
         if user_activity == 'low':
@@ -280,21 +280,21 @@ def foodGoals_two(recipeA, recipeB, user):
         elif user_activity == 'high':
             intake +=250
 
-        if same_kcals < intake*0.15 and user_goal=='lose':
-            explanation += "They are a good choice, since you are aiming to " + user_goal + " weight."
-        elif same_kcals > intake*0.15 and user_goal=='lose':
-            explanation += "They may not be the best choice, since you are aiming to " + user_goal + " weight (high-kcal). "
+        if same_kcals < intake*0.15 and user_goal=='-1':
+            explanation += "They are a good choice, since you are aiming to lose weight."
+        elif same_kcals > intake*0.15 and user_goal=='-1':
+            explanation += "They may not be the best choice, since you are aiming to lose weight (high-kcal). "
 
-        if same_kcals > intake*0.25 and user_goal=='gain':
-            explanation += "They are a good choice, since you are aiming to " + user_goal + " weight. "
-        elif same_kcals < intake*0.25 and user_goal=='gain':
-            explanation += "They may not be the best choice, since you are aiming to " + user_goal + " weight (low-kcal). "
+        if same_kcals > intake*0.25 and user_goal=='1':
+            explanation += "They are a good choice, since you are aiming to gain weight. "
+        elif same_kcals < intake*0.25 and user_goal=='1':
+            explanation += "They may not be the best choice, since you are aiming to gain weight (low-kcal). "
 
-        if intake*0.15 < same_kcals < intake*0.25 and user_goal=='no':
+        if intake*0.15 < same_kcals < intake*0.25 and user_goal=='0':
             explanation += "They are a good choice, since you are aiming to maintain weight. "
-        elif same_kcals < intake*0.15  and user_goal=='no':
+        elif same_kcals < intake*0.15  and user_goal=='0':
             explanation += "They may not be the best choice, since you are aiming to maintain weight (low-kcal). "
-        elif same_kcals > intake*0.25 and user_goal=='no':
+        elif same_kcals > intake*0.25 and user_goal=='0':
             explanation += "They may not be the best choice, since you are aiming to maintain weight (high-kcal). "
 
         percentage = round((same_kcals / intake) * 100, 2)
@@ -391,7 +391,7 @@ def foodPreferences_one(userRestrictions, listRestrictions, restrictions, recipe
 
             explanation += "."
 
-    return explanation
+    return explanation, not_followed_restrictions
 
 
 """
@@ -415,7 +415,7 @@ def foodPreferences_two(userRestrictions, listRestrictions, restrictions, recipe
         explanation += " In this case there really isn't a better recipe between the two."
         
 
-    return explanation
+    return explanation 
 
 
 """

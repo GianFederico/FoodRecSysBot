@@ -1213,6 +1213,8 @@ async def dialogflow_mode(update: Update, context):
         await Spiegazione.spiegazione_seasonability(update, context)
 
 
+    if intent == "Comparison smart":
+       await Spiegazione.smartExplanation_due_piatti(update, context)
     if intent == "Comparison two meals":
        await Spiegazione.controllo_piatto_due_piatti(update, context)
     if intent == "Comparison popularity":

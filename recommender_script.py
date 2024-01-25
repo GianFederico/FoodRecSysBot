@@ -146,7 +146,7 @@ class Recommendation_tre:
                 if recipe_data:
                     url_ricetta = recipe_data[0]
                     title = recipe_data[1]
-                    Recommendation_due.img_url = recipe_data[4]
+                    Recommendation_tre.img_url = recipe_data[4]
                 return await update.message.reply_text(f"Ricetta: {title}\nURL: {url_ricetta}")
  
         # await update.message.reply_text("Mi scuso,ma è probabile che in riferimento a ciascuna delle tue informazioni, l'unica ricetta presente nel database è la prima che ti ho consigliato.\nCi adoperemo sicuramente ad inserire ulteriori ricette tenendo presente la combinazione delle tue caratteristiche!\nSe vuoi, puoi ricominciare e cambiare qualche parametro e quasi sicuramente potrò aiutarti con più di una ricetta!")
