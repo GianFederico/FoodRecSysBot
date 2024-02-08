@@ -11,8 +11,10 @@ The popularity_one explanation function returns a string
 containing the average rating of the given recipe and the number of ratings.
 """
 def popularity_one(recipe):
-    explanation = recipe["title"] + " has an average rating of " + str(recipe["ratingValue"]) \
-                  + "/5 out of " + str(recipe["ratingCount"])[:-2] + " community ratings."
+    explanation = (
+        recipe["title"] + " has an average rating of *" + str(recipe["ratingValue"]) +
+        "*/5 out of " + str(recipe["ratingCount"])[:-2] + " community ratings."
+    )
     return explanation
 
 
@@ -31,16 +33,16 @@ def popularity_two(recipeA, recipeB):
     recipeB_rv = recipeB["ratingValue"]
 
     if recipeA_rc > recipeB_rc:
-        explanation = recipeA_name + " (" + str(recipeA_rc)[:-2] + " ratings, average: " + str(recipeA_rv) \
-                      + "/5) is more popular than " + recipeB_name + " (" + str(recipeB_rc)[:-2] \
-                      + " ratings, average: " + str(recipeB_rv) + "/5) in the community."
+        explanation = recipeA_name + " (" + str(recipeA_rc)[:-2] + " ratings, average: *" + str(recipeA_rv) \
+                      + "*/5) is more popular than " + recipeB_name + " (" + str(recipeB_rc)[:-2] \
+                      + " ratings, average: *" + str(recipeB_rv) + "*/5) in the community."
     if recipeA_rc < recipeB_rc:
-        explanation = recipeA_name + " (" + str(recipeA_rc)[:-2] + " ratings, average: " + str(recipeA_rv) \
-                      + "/5) is less popular than " + recipeB_name + " (" + str(recipeB_rc)[:-2] \
-                      + " ratings, average: " + str(recipeB_rv) + "/5) in the community."
+        explanation = recipeA_name + " (" + str(recipeA_rc)[:-2] + " ratings, average: *" + str(recipeA_rv) \
+                      + "*/5) is less popular than " + recipeB_name + " (" + str(recipeB_rc)[:-2] \
+                      + " ratings, average: *" + str(recipeB_rv) + "*/5) in the community."
     if recipeA_rc == recipeB_rc:
-        explanation = recipeA_name + " (average rating: " + recipeA_rv + ") is as popular as " \
-                      + recipeB_name + " (average rating: " + recipeB_rv + ") in the community (" \
+        explanation = recipeA_name + " (average rating: *" + recipeA_rv + "*) is as popular as " \
+                      + recipeB_name + " (average rating: *" + recipeB_rv + "*) in the community (" \
                       + str(recipeA_rc)[:-2] + " ratings)."
 
     return explanation
@@ -136,7 +138,7 @@ def foodGoals_one(recipe, user):
     user_goal = user["Goal"]
     user_activity = user["Activity"]
 
-    explanation = recipe["title"] + " has " + str(recipe_calories) + " Kcal. "
+    explanation = recipe["title"] + " has *" + str(recipe_calories) + "* Kcal. "
 
     # Average daily calorie intake for men: 2500 Kcal
     # Average daily calorie intake for women: 2000 Kcal
@@ -176,45 +178,45 @@ def foodGoals_one(recipe, user):
         + str(intake)
         + " Kcal and this recipe represents "
         + str(percentage)
-        + "% of your daily intake. "
+        + "% of your daily intake. \n\n"
     )
 
     if recipe_calories < intake*0.07 and user_goal=='-1':
-        explanation += "It is a good choice, since you are aiming to lose weight. "
-        explanation += additional_explanation
-        explanation += "Many users with similar goals and activity levels have enjoyed this recipe." ###############################################social proof
+        explanation += "It is a good choice, since you are aiming to _lose_ weight. \n"
+        #explanation += additional_explanation
+        explanation += "Many users with similar goals and activity levels have enjoyed this recipe.\n" ###############################################social proof
         
     elif recipe_calories > intake*0.07 and user_goal=='-1':
-        explanation += "It may not be the best choice, since you are aiming to lose weight (high-kcal). "
-        explanation += additional_explanation
-        explanation += "While this recipe may not align perfectly with your current goals and activity levels, you could adjust the portions to fit your needs." 
+        explanation += "It may not be the best choice, since you are aiming to _lose_ weight (high-kcal). \n"
+        #explanation += additional_explanation
+        explanation += "While this recipe may not align perfectly with your current goals and activity levels, you could adjust the portions to fit your needs.\n" 
                             #########################pos language still encouraging the user
 
-    if recipe_calories > intake*0.10 and user_goal=='1':
-        explanation += "It is a good choice, since you are aiming to gain weight. "
-        explanation += additional_explanation
-        explanation += "Many users with similar goals and activity levels have enjoyed this recipe." ###############################################social proof
+    elif recipe_calories > intake*0.10 and user_goal=='1':
+        explanation += "It is a good choice, since you are aiming to _gain_ weight. \n"
+        #explanation += additional_explanation
+        explanation += "Many users with similar goals and activity levels have enjoyed this recipe.\n" ###############################################social proof
     elif recipe_calories < intake*0.10 and user_goal=='1':
-        explanation += "It may not be the best choice, since you are aiming to gain weight (low-kcal). "
-        explanation += additional_explanation
-        explanation += "While this recipe may not align perfectly with your current goals and activity levels, you could adjust the portions to fit your needs."
+        explanation += "It may not be the best choice, since you are aiming to _gain_ weight (low-kcal). \n"
+        #explanation += additional_explanation
+        explanation += "While this recipe may not align perfectly with your current goals and activity levels, you could adjust the portions to fit your needs.\n"
 
-    if intake*0.07 < recipe_calories < intake*0.10 and user_goal=='0':
-        explanation += "It is a good choice, since you are aiming to maintain weight. "
-        explanation += additional_explanation
-        explanation += "Many users with similar goals and activity levels have enjoyed this recipe." ###############################################social proof
+    elif intake*0.07 < recipe_calories < intake*0.10 and user_goal=='0':
+        explanation += "It is a good choice, since you are aiming to _maintain_ weight. \n"
+        #explanation += additional_explanation
+        explanation += "Many users with similar goals and activity levels have enjoyed this recipe.\n" ###############################################social proof
     elif recipe_calories < intake*0.07  and user_goal=='0':
-        explanation += "It may not be the best choice, since you are aiming to maintain weight (low-kcal). "
-        explanation += additional_explanation
-        explanation += "While this recipe may not align perfectly with your current goals and activity levels, you could adjust the portions to fit your needs."
+        explanation += "It may not be the best choice, since you are aiming to _maintain_ weight (low-kcal). \n"
+        #explanation += additional_explanation
+        explanation += "While this recipe may not align perfectly with your current goals and activity levels, you could adjust the portions to fit your needs.\n"
                                 #########################pos language still encouraging the user
     elif recipe_calories > intake*0.10 and user_goal=='0':
-        explanation += "It may not be the best choice, since you are aiming to maintain weight (high-kcal). "
-        explanation += additional_explanation
-        explanation += "While this recipe may not align perfectly with your current goals and activity levels, you could adjust the portions to fit your needs."
+        explanation += "It may not be the best choice, since you are aiming to _maintain_ weight (high-kcal). \n"
+        #explanation += additional_explanation
+        explanation += "While this recipe may not align perfectly with your current goals and activity levels, you could adjust the portions to fit your needs.\n"
                                 #########################pos language still encouraging the user
     
-    return explanation
+    return explanation + additional_explanation
 
 # #______________________________________________________________________________________________________________________________________________________________________________________
 
@@ -245,8 +247,8 @@ def foodGoals_two(recipeA, recipeB, user):
     user_activity = user["Activity"]
 
     average_daily_intake = {
-    "m": {"-1": 2000, "1": 2500, "0": 2250},
-    "f": {"-1": 1500, "1": 1800, "0": 1650},
+        "m": {'-1': 2000, '1': 2500, '0': 2250},
+        "f": {'-1': 1600, '1': 1900, '0': 1700},
     }
     intake = average_daily_intake[user_sex][user_goal]
     man_or_woman = "man" if user_sex == "m" else "woman"
@@ -259,9 +261,9 @@ def foodGoals_two(recipeA, recipeB, user):
         intake +=250
 
     if recipeA_calories == recipeB_calories:
-        explanation = "Both recipies have the same amount of Kcals. "
-        explanation += recipeA["title"] + " has " + str(recipeA_calories) + "Kcal and "
-        explanation += recipeB["title"] + " has " + str(recipeB_calories) + "Kcal. "
+        explanation = "Both recipies have the *same amount* of Kcals. "
+        explanation += recipeA["title"] + " has *" + str(recipeA_calories) + "*Kcal and "
+        explanation += recipeB["title"] + " has *" + str(recipeB_calories) + "*Kcal. \n"
         same_kcals = recipeA["calories"]
 
         average_daily_intake = {
@@ -281,57 +283,60 @@ def foodGoals_two(recipeA, recipeB, user):
             intake +=250
 
         if same_kcals < intake*0.15 and user_goal=='-1':
-            explanation += "They are a good choice, since you are aiming to lose weight."
+            explanation += "They are a good choice, since you are aiming to _lose_ weight.\n"
         elif same_kcals > intake*0.15 and user_goal=='-1':
-            explanation += "They may not be the best choice, since you are aiming to lose weight (high-kcal). "
+            explanation += "They may not be the best choice, since you are aiming to _lose_ weight (high-kcal). \n"
 
         if same_kcals > intake*0.25 and user_goal=='1':
-            explanation += "They are a good choice, since you are aiming to gain weight. "
+            explanation += "They are a good choice, since you are aiming to _gain_ weight. \n"
         elif same_kcals < intake*0.25 and user_goal=='1':
-            explanation += "They may not be the best choice, since you are aiming to gain weight (low-kcal). "
+            explanation += "They may not be the best choice, since you are aiming to _gain_ weight (low-kcal). \n"
 
         if intake*0.15 < same_kcals < intake*0.25 and user_goal=='0':
-            explanation += "They are a good choice, since you are aiming to maintain weight. "
+            explanation += "They are a good choice, since you are aiming to _maintain_ weight. \n"
         elif same_kcals < intake*0.15  and user_goal=='0':
-            explanation += "They may not be the best choice, since you are aiming to maintain weight (low-kcal). "
+            explanation += "They may not be the best choice, since you are aiming to _maintain_ weight (low-kcal). \n"
         elif same_kcals > intake*0.25 and user_goal=='0':
-            explanation += "They may not be the best choice, since you are aiming to maintain weight (high-kcal). "
+            explanation += "They may not be the best choice, since you are aiming to _maintain_ weight (high-kcal). \n"
 
         percentage = round((same_kcals / intake) * 100, 2)
         explanation += (
             "The average daily calorie intake for a "
             + man_or_woman
             + " with your goal and type of activity is "
-            + str(intake)
+            + str((intake))
             + " Kcal and this recipe represents "
             + str(percentage)
-            + "% of your daily intake. "
+            + "% of your daily intake. \n"
         )
     else:
         explanation_A = foodGoals_one(recipeA, user)
         explanation_B = foodGoals_one(recipeB, user)
         useless_expl = (
-            ". The average daily calorie intake for a "
+            ".\nThe average daily calorie intake for a "
             + man_or_woman
             + " with your goal and type of activity is "
             + str(intake)
             + " Kcal and ")
 
+        print(useless_expl)
+        print(str(intake))
         explanation_A = str(explanation_A).replace(useless_expl, ", ")
         explanation = explanation_A + explanation_B
+        print("ò@@@@", explanation_A)
 
             
-        if user_goal == 'gain':
+        if user_goal == '1':
             if recipeA_calories > recipeB_calories:
-                explanation += "Anyway, between the two, " + recipeA["title"] + " seems more suitable for you since it has more calories."
+                explanation += "Anyway, between the two, " + recipeA["title"] + " seems *more suitable* for you since it has more calories."
             else:
-                explanation += "Anyway, between the two, " + recipeB["title"] + " seems more suitable for you since it has more calories."
+                explanation += "Anyway, between the two, " + recipeB["title"] + " seems *more suitable* for you since it has more calories."
 
-        if user_goal == 'lose':
+        if user_goal == '-1':
             if recipeA_calories > recipeB_calories:
-                explanation += "Anyway, between the two, " + recipeB["title"] + " seems more suitable for you since it has less calories."
+                explanation += "Anyway, between the two, " + recipeB["title"] + " seems *more suitable* for you since it has less calories."
             else:
-                explanation += "Anyway, between the two, " + recipeA["title"] + " seems more suitable for you since it has less calories."
+                explanation += "Anyway, between the two, " + recipeA["title"] + " seems *more suitable* for you since it has less calories."
 
         #caso maintain? non ha senso farlo
     return explanation  
@@ -375,7 +380,7 @@ def foodPreferences_one(userRestrictions, listRestrictions, restrictions, recipe
                     not_followed_restrictions.append(restr_and_desc[isRestr][0])
 
             if not_followed_restrictions:
-                explanation = recipe["title"] + " does not respect your restrictions, since it is not "
+                explanation = recipe["title"] + " does *not* respect your restrictions, since it is not "
                 for restr in not_followed_restrictions:
                     explanation += restr + " nor "
 
@@ -385,9 +390,9 @@ def foodPreferences_one(userRestrictions, listRestrictions, restrictions, recipe
                 explanation = recipe["title"]
 
                 for restr in restr_and_desc.keys():
-                    explanation += " is a " + restr_and_desc[restr][0] + " recipe, so " + restr_and_desc[restr][1] + "; furthermore, it"
+                    explanation += " is a " + restr_and_desc[restr][0] + " recipe, so " + restr_and_desc[restr][1] + ";\nfurthermore, it"
 
-                explanation = explanation[:-len("; furthermore, it")]
+                explanation = explanation[:-len(";\nfurthermore, it")]#####################################################################################################àto try#####
 
             explanation += "."
 
@@ -403,16 +408,16 @@ def foodPreferences_two(userRestrictions, listRestrictions, restrictions, recipe
     explA, not_followed_rest_A = foodPreferences_one(userRestrictions, listRestrictions, restrictions, recipeA)
     explB, not_followed_rest_B = foodPreferences_one(userRestrictions, listRestrictions, restrictions, recipeB)
     if explA != -1 and explA != -2:
-        explanation = explA + " On the other hand, " + explB
+        explanation = explA + "\n\nOn the other hand, " + explB
     else:
         explanation = explA
 
     if not_followed_rest_A > not_followed_rest_B:
-        explanation += " It seems that " + recipeB["title"] + "fits better your restrictions."
+        explanation += "\n\nIt seems that " + recipeB["title"] + "fits better your restrictions."
     elif not_followed_rest_A < not_followed_rest_B:
-        explanation += " It seems that " + recipeA["title"] + "fits better your restrictions."
+        explanation += "\n\nIt seems that " + recipeA["title"] + "fits better your restrictions."
     else:
-        explanation += " In this case there really isn't a better recipe between the two."
+        explanation += "\n\nIn this case there really isn't a better recipe between the two."
         
 
     return explanation 
@@ -448,20 +453,20 @@ def foodFeatures(recipeA, recipeB, nutrients): #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
                 if recipeA[item] <= nutrients[item]["RI"] * 0.4:
                     smallList.append(item)
                     nutrient = re.sub(r"(\w)([A-Z])", r"\1 \2", item)
-                    explanation += recipeA_name + " has a smaller amount of " + nutrient.lower() + " (" + \
+                    explanation += recipeA_name + " has a *smaller* amount of " + nutrient.lower() + " (" + \
                                    str(recipeA[item]) + " gr) than 40% of its daily reference intake (" + \
-                                   str(round(nutrients[item]["RI"] * 0.4, 3)) + " gr). "
+                                   str(round(nutrients[item]["RI"] * 0.4, 3)) + " gr).\n"
                 else:
                     greatList.append(item)
                     nutrient = re.sub(r"(\w)([A-Z])", r"\1 \2", item)
-                    explanation += recipeA_name + " has a greater amount of " + nutrient.lower() + " (" + \
+                    explanation += recipeA_name + " has a *greater* amount of " + nutrient.lower() + " (" + \
                                    str(recipeA[item]) + " gr) than 40% of its daily reference intake (" + \
-                                   str(round(nutrients[item]["RI"] * 0.4, 3)) + " gr). "
+                                   str(round(nutrients[item]["RI"] * 0.4, 3)) + " gr).\n"
 
         if not smallList:
-            explanation += "There isn't a lower amount of any nutrient than 40% of its daily reference intake. "
+            explanation += "There isn't a *lower* amount of any nutrient than 40% of its daily reference intake.\n"
         if not greatList:
-            explanation += "There isn't a higher amount of any nutrient than 40% of its daily reference intake. "
+            explanation += "There isn't a *higher* amount of any nutrient than 40% of its daily reference intake.\n"
 
     else:
         for item in listNutrients:
@@ -469,16 +474,16 @@ def foodFeatures(recipeA, recipeB, nutrients): #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
                 if recipeA[item] < recipeB[item]:
                     smallList.append(item)
                     nutrient = re.sub(r"(\w)([A-Z])", r"\1 \2", item)
-                    explanation += recipeA_name + " has a smaller amount of " + nutrient.lower() + " (" + \
+                    explanation += recipeA_name + " has a *smaller* amount of " + nutrient.lower() + " (" + \
                                    str(recipeA[item]) + " gr) than " + recipeB_name + " (" + \
-                                   str(recipeB[item]) + " gr). "
+                                   str(recipeB[item]) + " gr).\n\n"
 
                 if recipeA[item] > recipeB[item]:
                     greatList.append(item)
                     nutrient = re.sub(r"(\w)([A-Z])", r"\1 \2", item)
-                    explanation += recipeA_name + " has a greater amount of " + nutrient.lower() + " (" + \
+                    explanation += recipeA_name + " has a *greater* amount of " + nutrient.lower() + " (" + \
                                    str(recipeA[item]) + " gr) than " + recipeB_name + " (" + \
-                                   str(recipeB[item]) + " gr). "
+                                   str(recipeB[item]) + " gr).\n\n"
 
     return explanation, smallList, greatList
 
@@ -521,9 +526,9 @@ def userSkills_one(user_skills, recipe):
     explanation = recipe["title"] + " is rated by the users as " + recipe_difficulty_en + " to prepare, "
 
     if recipe_difficulty_num > user_skills:
-        explanation += "which is beyond your cooking skills."
+        explanation += "which is beyond your cooking skills.\n"
     else:
-        explanation += "and it is adequate to your cooking skills."
+        explanation += "and it is adequate to your cooking skills.\n"
 
     return explanation
 
@@ -541,11 +546,11 @@ def userSkills_two(user_skills, recipeA, recipeB):
     diffB_num, diffB_en = convertRecipeDifficulty(recipeB["difficulty"])
 
     if diffA_num < diffB_num:
-        explanation = recipeA_name + " (" + diffA_en + ") is rated by the users as easier to prepare than " \
+        explanation = recipeA_name + " (" + diffA_en + ") is rated by the users as *easier* to prepare than " \
                       + recipeB_name + " (" + diffB_en + "), "
         easier_diff = diffA_num
     elif diffA_num > diffB_num:
-        explanation = recipeB_name + " (" + diffB_en + ") is rated by the users as easier to prepare than " \
+        explanation = recipeB_name + " (" + diffB_en + ") is rated by the users as *easier* to prepare than " \
                       + recipeA_name + " (" + diffA_en + "), "
         easier_diff = diffB_num
     else:
@@ -568,13 +573,13 @@ def compareCalories(recipeA_name, recipeB_name, recipeA_cal, recipeB_cal):
 
     if not np.isnan(recipeA_cal) and not np.isnan(recipeB_cal):
         if recipeA_cal > recipeB_cal:
-            explanation += "Furthermore, " + recipeA_name + " has more calories (" + str(recipeA_cal) \
+            explanation += "\nFurthermore, " + recipeA_name + " has *more* calories (" + str(recipeA_cal) \
                            + " Kcal) than " + recipeB_name + " (" + str(recipeB_cal) + " Kcal)."
         elif recipeA_cal < recipeB_cal:
-            explanation += "Furthermore, " + recipeA_name + " has less calories (" + str(recipeA_cal) \
+            explanation += "\nFurthermore, " + recipeA_name + " has *less* calories (" + str(recipeA_cal) \
                            + " Kcal) than " + recipeB_name + " (" + str(recipeB_cal) + " Kcal)."
         else:
-            explanation += "Furthermore, both recipes have got the same amount of calories (" + str(recipeA_cal) \
+            explanation += "\nFurthermore, both recipes have got the *same amount* of calories (" + str(recipeA_cal) \
                            + " Kcal)."
 
     return explanation
@@ -692,14 +697,14 @@ def foodFeatureHealthRiskBenefit(recipeA, recipeB, nutrients, type):
             risk_benefit = random.choice(nutrients[item][kind_of_risks])
             nutrient = re.sub(r"(\w)([A-Z])", r"\1 \2", item)
             explanation += recipeA_name + "'s quantity of " + nutrient.lower() + " (" + str(recipeA[item]) \
-                           + " g) is " + higher_or_lower + " than "
+                           + " g) is *" + higher_or_lower + "* than "
             if recipeB is None:
                 explanation += "40% of its daily reference intake (" \
                                + str(round(nutrients[item]["RI"] * 0.4)) + " g)"
             else:
                 explanation += recipeB_name + "'s (" + str(recipeB[item]) + " g)"
             explanation += "; a " + higher_or_lower[:-2] + " intake of " + nutrient.lower() \
-                        + " could increase the risk of " + risk_benefit + "."
+                        + " could increase the risk of *" + risk_benefit + "*."
 
     else:
         # benefits
@@ -708,7 +713,7 @@ def foodFeatureHealthRiskBenefit(recipeA, recipeB, nutrients, type):
         closestNutrient2 = re.sub(r"(\w)([A-Z])", r"\1 \2", closest_to_RI[1]).lower()
 
         explanation += recipeA_name + "'s quantities of " + closestNutrient1 + " and " + closestNutrient2 \
-                       + ", among all nutrients in the recipe, are the closest to the respective recommended intakes; " \
+                       + ", among all nutrients in the recipe, are the closest to the respective recommended intakes;\n" \
                        + closestNutrient1 + " can " + random.choice(nutrients[closest_to_RI[0]]["benefits"]) \
                        + ", while " + closestNutrient2 + " can " + random.choice(nutrients[closest_to_RI[1]]["benefits"]) \
                        + "."
@@ -743,7 +748,7 @@ def userFeatureHealthRisk(user, recipeA, recipeB, nutrients):
         for item in greatA:
             item_fixed = re.sub(r"(\w)([A-Z])", r"\1 \2", item).lower()
             explanation += recipeA_name + "'s quantity of " + item_fixed + " (" + str(recipeA[item]) \
-                           + " g) is higher than "
+                           + " g) is *higher* than "
             if recipeB is None:
                 explanation += "40% of its reference daily intake (" \
                                + str(round(nutrients[item]["RI"] * 0.4)) + " g). "
@@ -754,18 +759,18 @@ def userFeatureHealthRisk(user, recipeA, recipeB, nutrients):
                     or user["Depressed"] == "yes" or user["Stressed"] == "yes":
 
                 if item in listMood:
-                    explanation += "An excess of " + item_fixed + " can swing your mood. "
+                    explanation += "\nAn excess of " + item_fixed + " can swing your mood. "
 
         # check if there is a significant difference
         if len(full_greatA) >= len(full_smallA) * 2:
-            explanation += "Given that you are overweight, keep in mind that " \
+            explanation += "\nGiven that you are _overweight_, keep in mind that " \
                         + recipeA_name + " may not be able to help you to lose weight. "
 
     elif user["BMI"] == "under" and smallA:
         for item in smallA:
             item_fixed = re.sub(r"(\w)([A-Z])", r"\1 \2", item).lower()
             explanation += recipeA_name + "'s quantity of " + item_fixed + " (" + str(recipeA[item]) \
-                           + " g) is lower than "
+                           + " g) is *lower* than "
             if recipeB is None:
                 explanation += "40% of its reference daily intake (" \
                                + str(round(nutrients[item]["RI"] * 0.4)) + " g). "
@@ -774,16 +779,16 @@ def userFeatureHealthRisk(user, recipeA, recipeB, nutrients):
 
         # check if there is a significant difference
         if len(full_greatA) * 2 <= len(full_smallA):
-            explanation += "Given that you are underweight, keep in mind that " \
+            explanation += "\nGiven that you are _underweight_, keep in mind that " \
                         + recipeA_name + " may not be able to help you to gain weight. "
 
     elif user["BMI"] == "over" or user["BMI"] == "under":
         if user["BMI"] == "over":
-            more_or_less = " exceeds "
+            more_or_less = " *exceeds* "
         else:
-            more_or_less = " is less than "
+            more_or_less = " is *less* than "
 
-        explanation += "Considering that you are " + user["BMI"] + "weight, " \
+        explanation += "\nConsidering that you are " + user["BMI"] + "weight, " \
                     + recipeA_name + " has no nutrient whose quantity" + more_or_less
         if recipeB is None:
             explanation += "40% of its daily reference intake, "
@@ -832,7 +837,7 @@ def userFeatureHealthBenefits(user, recipeA, recipeB, nutrients):
                 + str(round(nutrients[recipeA_nutr1]["RI"] * 0.4)) + " g and " + str(round(nutrients[recipeA_nutr2]["RI"] * 0.4)) + " g). "
 
     if user["BMI"] == "under" or user["BMI"] == "over":
-        explanation += "A correct intake of such nutrients can help you to " + lose_or_gain + " weight. "
+        explanation += "\nA correct intake of such nutrients can help you to _" + lose_or_gain + "_ weight. "
 
     if user["Mood"] == "bad" or user["Mood"] == "neutral" \
             or user["Depressed"] == "yes" or user["Stressed"] == "yes":
@@ -841,7 +846,7 @@ def userFeatureHealthBenefits(user, recipeA, recipeB, nutrients):
         closest_mood = list(set(recipeA_closest_to_RI) & set(listMood))
 
         if len(closest_mood) != 0:
-            explanation += "Furthermore, " + recipeA_name + "'s intake of " + closest_mood[0]
+            explanation += "\nFurthermore, " + recipeA_name + "'s intake of " + closest_mood[0]
             if len(closest_mood) == 2:
                 explanation += " and " + closest_mood[1]
             explanation += " is good for your mood. "
@@ -850,10 +855,10 @@ def userFeatureHealthBenefits(user, recipeA, recipeB, nutrients):
         recipeA_closestRI_sum = recipeA_nutr1 + recipeA_nutr2
         recipeB_closestRI_sum = recipeB_closest_to_RI[0] + recipeB_closest_to_RI[1]
         if recipeA_closestRI_sum < recipeB_closestRI_sum:
-            explanation += "Also, " + recipeA_name + "'s nutrients closest to the recommended intake are closer than " \
+            explanation += "\n\nAlso, the " + recipeA_name + "'s nutrients closest to the recommended intake are closer than " \
                         + recipeB_name + "'s. "
         else:
-            explanation += "On the other hand, " + recipeB_name + "'s nutrients closest to the recommended intake are closer than " \
+            explanation += "\n\nOn the other hand, the " + recipeB_name + "'s nutrients closest to the recommended intake are closer than " \
                            + recipeA_name + "'s, which may be better for you. "
 
         explanation += compareCalories(recipeA_name, recipeB["title"], recipeA["calories"], recipeB["calories"])
@@ -871,11 +876,11 @@ def userTime_one(user_time, recipe_values):
     recipe_prepTime = int(re.findall(r'\d+', recipe_values['totalTime'])[0])
 
     if recipe_prepTime > user_time:
-        compare = "longer than"
+        compare = "*longer* than"
     elif recipe_prepTime < user_time:
-        compare = "shorter than"
+        compare = "*shorter* than"
     else:
-        compare = "equal to"
+        compare = "*equal* to"
 
     # value 0 stands for 'no constraints'
     if user_time != 0:
@@ -901,22 +906,22 @@ def userTime_two(user_time, recipeA_values, recipeB_values):
 
 
     if recipeA_prepTime < recipeB_prepTime:
-        explanation = recipeA_values['title'] + " can be prepared in less time (" \
+        explanation = recipeA_values['title'] + " can be prepared in *less* time (" \
                       + str(recipeA_prepTime) + " minutes) than " + recipeB_values['title'] + " (" \
                       + str(recipeB_prepTime) + " minutes)"
     elif recipeA_prepTime > recipeB_prepTime:
-        explanation = recipeA_values['title'] + " takes more preparation time (" \
+        explanation = recipeA_values['title'] + " takes *more* preparation time (" \
                       + str(recipeA_prepTime) + " minutes) than " + recipeB_values['title'] + " (" \
                       + str(recipeB_prepTime) + " minutes)"
     else:  # same preparation time
-        explanation = recipeA_values['title'] + " takes the same preparation time as " \
+        explanation = recipeA_values['title'] + " takes *the same* preparation time as " \
                       + recipeB_values['title'] + " (" + str(recipeA_prepTime) + " minutes)"
 
     if user_time != 0:
         diffA = abs(recipeA_prepTime - int(user_time))
         diffB = abs(recipeB_prepTime - int(user_time))
-        explanation += ", and you prefer recipes that require a maximum of " \
-                       + str(user_time) + " minutes of preparation time. "
+        explanation += ", and you prefer recipes that require a maximum of _" \
+                       + str(user_time) + "_ minutes of preparation time.\n\n"
         if diffA > diffB:
             explanation +=  recipeB_values['title'] + " seems closer to your time-frame."
         else:
@@ -964,11 +969,11 @@ def userCosts_one(user_cost, recipe_values):
         # if the user cost is 5, it means that for the user the cost is not important,
         # so we show only the cost level of the recommended recipe
         if user_cost != 5:
-            explanation = recipe_values['title'] + " has a " + recipe_cost_en + " cost level, "
+            explanation = recipe_values['title'] + " has a *" + recipe_cost_en + "* cost level, "
             if recipe_cost_num > user_cost:
-                explanation += "which is beyond your intended cost level (" + user_cost_en + ")."
+                explanation += "which is *beyond* your intended cost level (_" + user_cost_en + "_)."
             else:
-                explanation += "in line with how much you intend to spend (" + user_cost_en + " cost level)."
+                explanation += "*in line* with how much you intend to spend (" + user_cost_en + " cost level)."
         else:
             explanation = recipe_values['title'] + " has a " \
                           + recipe_cost_en + " cost level."
@@ -992,17 +997,17 @@ def userCosts_two(user_cost, recipeA_values, recipeB_values):
         # if the user cost is 5, it means that for the user the cost is not important,
         # so we show only the cost level of the recommended recipe
         if recipeA_cost_num == recipeB_cost_num:
-            explanation = recipeA_values['title'] + " has the same cost level of " \
+            explanation = recipeA_values['title'] + " has the *same* cost level of " \
                           + recipeB_values['title'] + " (" + recipeA_cost_en + ")"
         elif recipeA_cost_num > recipeB_cost_num:
-            explanation = recipeA_values['title'] + " has an higher cost level (" + recipeA_cost_en + ") than " \
+            explanation = recipeA_values['title'] + " has an *higher* cost level (" + recipeA_cost_en + ") than " \
                           + recipeB_values['title'] + " (" + recipeB_cost_en + ")"
         else:
-            explanation = recipeA_values['title'] + " has a lower cost level (" + recipeA_cost_en + ") than " \
+            explanation = recipeA_values['title'] + " has a *lower* cost level (" + recipeA_cost_en + ") than " \
                           + recipeB_values['title'] + " (" + recipeB_cost_en + ")"
 
         if user_cost != 5:
-            explanation += ", and your preference on the level cost is " + user_cost_en + "."
+            explanation += ", and your preference on the level cost is _" + user_cost_en + "_."
         else:
             explanation += "."
 
@@ -1089,7 +1094,7 @@ def userLifestyle_one(user_health_lifestyle, user_health_condition, recipe_value
 
     if user_health_lifestyle > user_health_condition:
         # user wants to improve the lifestyle
-        explanation = "You want to improve your lifestyle, "
+        explanation = "If you want to _improve_ your lifestyle, "
     elif user_health_lifestyle == user_health_condition:
         # user wants to maintain the lifestyle
         explanation = "You want to maintain your lifestyle, "
@@ -1121,14 +1126,14 @@ def userLifestyle_two(user_health_condition, recipeA_values, recipeB_values):
     scoreB_level_cmp, scoreB_level_str = getScores(rsa_score(recipeB_values))
 
     if (scoreA_level_cmp > user_health_condition) or (scoreB_level_cmp > user_health_condition):
-        str_equal = "Both recipes allow you to improve your lifestyle"
-        str_different = "and can help you to improve your lifestyle."
+        str_equal = "\n\nBoth recipes allow you to _improve_ your lifestyle"
+        str_different = "and can help you to _improve_ your lifestyle."
     elif (scoreA_level_cmp == user_health_condition) or (scoreB_level_cmp == user_health_condition):
-        str_equal = "Both recipes allow you to maintain your lifestyle"
-        str_different = "and can help you to maintain your lifestyle."
+        str_equal = "\n\nBoth recipes allow you to _maintain_ your lifestyle"
+        str_different = "and can help you to _maintain_ your lifestyle."
     else:
-        str_equal = "Both recipes make your lifestyle worse"
-        str_different = "but both recipes make your lifestyle worse."
+        str_equal = "\n\nBoth recipes won't make your lifestyle better"
+        str_different = "but both recipes won't make your lifestyle better."
 
     if scoreA_level_cmp == scoreB_level_cmp:
         explanation = str_equal + ", since they are " + scoreA_level_str + " (according to FSA guidelines)."
@@ -1142,7 +1147,7 @@ def userLifestyle_two(user_health_condition, recipeA_values, recipeB_values):
             better = recipeB_values['title']
             worse = recipeA_values['title']
 
-        explanation = better + " is healthier than " + worse + " (according to FSA guidelines) " + str_different
+        explanation = better + " is *healthier* than " + worse + " (according to FSA guidelines) " + str_different
 
     return explanation
 
@@ -1194,13 +1199,13 @@ to show a list of the user's favourite ingredients contained in a given recipe.
 def listFavIngredientsInRecipe(favIngredientsInRecipe, recipe_values):
     explanation = ""
     if len(favIngredientsInRecipe) == 1:
-        explanation = recipe_values['title'] + " is prepared with " + favIngredientsInRecipe[0] \
-                      + ", which is one of your favourite ingredients"
+        explanation = recipe_values['title'] + " is prepared with *" + favIngredientsInRecipe[0] \
+                      + "*, which is one of your favourite ingredients"
     else:
-        explanation = recipe_values['title'] + " is prepared with "
+        explanation = recipe_values['title'] + " is prepared with *"
         # concatenate list of ingredients separated by ',' to the explanation
         explanation += str(reduce(lambda x, y: x + ", " + y, favIngredientsInRecipe))
-        explanation += " which are some of your favourite ingredients"
+        explanation += "* which are some of your favourite ingredients"
 
     return explanation
 
@@ -1217,7 +1222,7 @@ def userIngredients_one(user_ingredients, recipe_values):
     if len(favIngredientsInRecipe) > 0:
         explanation = listFavIngredientsInRecipe(favIngredientsInRecipe, recipe_values) + "."
     else:
-        explanation = recipe_values['title'] + " does not contain any of your favourite ingredients."
+        explanation = recipe_values['title'] + " does *not* contain any of your favourite ingredients."
 
     return explanation, favIngredientsInRecipe
 
@@ -1239,20 +1244,20 @@ def userIngredients_two(user_ingredients, recipeA_values, recipeB_values):
             # recipe B doesn't contain any fav ingredient
             explanation = listFavIngredientsInRecipe(favIngredientsInRecipeA, recipeA_values) \
                           + ", compared to " + recipeB_values['title'] \
-                          + " which doesn't contain any favourite ingredients."
+                          + " which *doesn't* contain any favourite ingredients."
         elif len(favIngredientsInRecipeA) == 0:
             # recipe A doesn't contain any fav ingredient
             explanation = listFavIngredientsInRecipe(favIngredientsInRecipeB, recipeB_values) \
                           + ", compared to " + recipeA_values['title'] \
-                          + " which doesn't contain any favourite ingredients."
+                          + " which *doesn't* contain any favourite ingredients."
         else:
             # both recipes contain some fav ingredients
             explanation = listFavIngredientsInRecipe(favIngredientsInRecipeA, recipeA_values) \
-                          + ". On the other hand, " \
+                          + ".\nOn the other hand, " \
                           + listFavIngredientsInRecipe(favIngredientsInRecipeB, recipeB_values) + "."
 
     else:
-        explanation = "Both recipes don't contain any of your favourite ingredients."
+        explanation = "\n\nBoth recipes don't contain any of your favourite ingredients."
 
     return explanation, favIngredientsInRecipeA, favIngredientsInRecipeB
 
@@ -1367,7 +1372,7 @@ def userAge_one(user_age, recipe_values, richIn):
     if user_age in ['U20', 'U30', 'U40', 'U50', 'U60', 'O60']:
         explanation += richIn['motivation'][user_age][:-1] + "; "
         if present_list:
-            explanation += recipe_values['title'].lower() + " contains "
+            explanation += "\n" + recipe_values['title'].lower() + " contains "
             i = 0
             for item in present_list:
                 explanation += item
@@ -1378,7 +1383,7 @@ def userAge_one(user_age, recipe_values, richIn):
             if present_list:
                 explanation += ", but it lacks "
             else:
-                explanation += recipe_values['title'].lower() + " lacks "
+                explanation += "\n" + recipe_values['title'].lower() + " lacks "
             i = 0
             for item in lacking_list:
                 explanation += item
@@ -1404,7 +1409,7 @@ def userAge_two(user_age, recipeA_values, recipeB_values, richIn):
     explA = userAge_one(user_age, recipeA_values, richIn)
     explB = userAge_one(user_age, recipeB_values, richIn).replace(richIn["motivation"][user_age][:-1], "")
 
-    explanation += explA + " On the other hand, " + explB[2:]
+    explanation += explA + "\nOn the other hand, " + explB[3:]
 
     return explanation
 
@@ -1430,10 +1435,10 @@ def ingredientsSustainability_one(recipe, sustainability):
             has_or_have = "have"
             for i in range(1, len(recipe_sustainable)):
                 explanation += " and " + recipe_sustainable[i]
-        explanation += ", which " + has_or_have + " high carbon/water footprint sustainability."
+        explanation += ", which " + has_or_have + " *high* carbon/water footprint sustainability."
 
         if recipe_notSustainable:
-            explanation += " On the other hand, "
+            explanation += "\nOn the other hand, "
 
     if recipe_notSustainable:
         has_or_have = "has"
@@ -1442,11 +1447,11 @@ def ingredientsSustainability_one(recipe, sustainability):
             has_or_have = "have"
             for i in range(1, len(recipe_notSustainable)):
                 explanation += " and " + recipe_notSustainable[i]
-        explanation += ", which " + has_or_have + " low carbon/water footprint sustainability."
+        explanation += ", which " + has_or_have + " *low* carbon/water footprint sustainability."
 
     if not recipe_sustainable and not recipe_notSustainable:
         explanation += recipe["title"] + \
-                       " contains no ingredient that has either high or low carbon/water footprint sustainability."
+                       " contains *no ingredient* that has either high or low carbon/water footprint sustainability."
 
     return explanation, recipe_sustainable, recipe_notSustainable
 
@@ -1466,26 +1471,26 @@ def ingredientsSustainability_two(recipeA, recipeB, sustainability):
     explA, recipeA_sustainable, recipeA_notSustainable = ingredientsSustainability_one(recipeA, sustainability)
     explB, recipeB_sustainable, recipeB_notSustainable = ingredientsSustainability_one(recipeB, sustainability)
 
-    explanation = explA + " " + explB + " "
+    explanation = explA + "\n\n" + explB + "\n\n"
 
     if recipeA_sustainable or recipeB_sustainable:
         if len(recipeA_sustainable) > len(recipeB_sustainable):
-            explanation += recipeA_name + " has more ingredients with high sustainability than " + recipeB_name + "."
+            explanation += recipeA_name + " has *more* ingredients with high sustainability than " + recipeB_name + "\n."
         elif len(recipeA_sustainable) < len(recipeB_sustainable):
-            explanation += recipeA_name + " has less ingredients with high sustainability than " + recipeB_name + "."
+            explanation += recipeA_name + " has *less* ingredients with high sustainability than " + recipeB_name + "\n."
         else:
-            explanation += "Both recipes have the same amount of ingredients with high sustainability."
+            explanation += "\n\nBoth recipes have the *same amount* of ingredients with high sustainability."
 
         if recipeA_notSustainable or recipeB_notSustainable:
-            explanation += " On the other hand, "
+            explanation += "\nOn the other hand, "
 
     if recipeA_notSustainable or recipeB_notSustainable:
         if len(recipeA_notSustainable) > len(recipeB_notSustainable):
-            explanation += recipeA_name + " has more ingredients with low sustainability than " + recipeB_name + "."
+            explanation += recipeA_name + " has *more* ingredients with low sustainability than " + recipeB_name + "."
         elif len(recipeA_notSustainable) < len(recipeB_notSustainable):
-            explanation += recipeA_name + " has less ingredients with low sustainability than " + recipeB_name + "."
+            explanation += recipeA_name + " has *less* ingredients with low sustainability than " + recipeB_name + "."
         else:
-            explanation += "Both recipes have the same amount of ingredients with low sustainability."
+            explanation += "\n\nBoth recipes have the *same amount* of ingredients with low sustainability."
 
     return explanation, recipeA_sustainable, recipeA_notSustainable, recipeB_sustainable, recipeB_notSustainable
 
@@ -1523,11 +1528,11 @@ def ingredientsSeasonality_one(recipe, season, seasonality):
             is_or_are = "are"
             for i in range(1, len(recipe_seasonal)):
                 explanation += " and " + recipe_seasonal[i]
-        explanation += ", which " + is_or_are + " in season in " + season + "."
+        explanation += ", which *" + is_or_are + " in season* in " + season + "."
 
     else:
         explanation += recipe["title"] + \
-                       " contains no ingredient that is in season in " + season + "."
+                       " contains *no ingredient* that is in season in " + season + "."
 
     return explanation, recipe_seasonal
 
@@ -1548,14 +1553,14 @@ def ingredientsSeasonality_two(recipeA, recipeB, season, seasonality):
     explA, recipeA_seasonal = ingredientsSeasonality_one(recipeA, season, seasonality)
     explB, recipeB_seasonal = ingredientsSeasonality_one(recipeB, season, seasonality)
 
-    explanation = explA + " On the other hand, " + explB + " "
+    explanation = explA + "\n\nOn the other hand, " + explB + " "
 
     if len(recipeA_seasonal) > len(recipeB_seasonal):
-        explanation += recipeA_name + " has more seasonal ingredients than " + recipeB_name + "."
+        explanation += recipeA_name + " has *more* seasonal ingredients than " + recipeB_name + "."
     elif len(recipeA_seasonal) < len(recipeB_seasonal):
-        explanation += recipeA_name + " has less seasonal ingredients than " + recipeB_name + "."
+        explanation += recipeA_name + " has *less* seasonal ingredients than " + recipeB_name + "."
     elif len(recipeA_seasonal) != 0:
-        explanation += "Both recipes have the same amount of seasonal ingredients."
+        explanation += "\nBoth recipes have the *same amount* of seasonal ingredients."
 
     return explanation, recipeA_seasonal, recipeB_seasonal
 
@@ -1816,10 +1821,10 @@ def get_str_exp(user,
             expl = foodPreferences_two(userRestrictions, listRestrictions, restrictions, recipeA_values, recipeB_values)
 
         if expl == -1:
-            expl = "No user restrictions were specified. " \
+            expl = "No user restrictions were specified.\n" \
                    "Compatible user restrictions: vegetarian, lactose-free, gluten-free, low-nichel, light."
         elif expl == -2:
-            expl = "No compatible user restrictions were specified. " \
+            expl = "No compatible user restrictions were specified.\n" \
                    "Compatible user restrictions: vegetarian, lactose-free, gluten-free, low-nichel, light."
 
     # TYPE: foodFeatures
@@ -2017,7 +2022,7 @@ def foodMacros_one(recipe, user):
     user_activity = user["Activity"]
 
     explanation = recipe["title"] + " has the following macronutrient distribution: "
-    explanation += f"{recipe_macros['carbs']}g of carbs, {recipe_macros['fats']}g of fats, and {recipe_macros['proteins']}g of proteins. "
+    explanation += f"*{recipe_macros['carbs']}*g of carbs, *{recipe_macros['fats']}*g of fats, and *{recipe_macros['proteins']}*g of proteins. "
 
     # Ideal macronutrient distribution (50%-20%-30%)
     ideal_macros_distribution = {"carbs": 50, "fats": 20, "proteins": 30} #fonte
@@ -2052,10 +2057,10 @@ def foodMacros_one(recipe, user):
         ideal_macros["proteins"] += 10
 
     explanation += (
-        "The ideal macronutrient distribution for a "
+        "\nThe ideal macronutrient distribution for a "
         + man_or_woman
         + " with your type of activity is "
-        + f"{ideal_macros['carbs']}% carbs, {ideal_macros['fats']}% fats, {ideal_macros['proteins']}% proteins. ")
+        + f"{ideal_macros['carbs']}% carbs, {ideal_macros['fats']}% fats, {ideal_macros['proteins']}% proteins.\n")
 
     total_recipe_macros = (recipe_macros["carbs"] + recipe_macros["fats"] + recipe_macros["proteins"])
 
@@ -2068,31 +2073,31 @@ def foodMacros_one(recipe, user):
     deviation_summary = []
 
     if carbs_deviation > deviation_threshold:
-        deviation_summary.append("It is high in carbs.")
+        deviation_summary.append("It is *high* in carbs.")
     elif carbs_deviation < -deviation_threshold:
-        deviation_summary.append("It is low in carbs.")
+        deviation_summary.append("It is *low* in carbs.")
 
     if fats_deviation > deviation_threshold:
-        deviation_summary.append("It is high in fats.")
+        deviation_summary.append("It is *high* in fats.")
     elif fats_deviation < -deviation_threshold:
-        deviation_summary.append("It is low in fats.")
+        deviation_summary.append("It is *low* in fats.")
 
     if proteins_deviation > deviation_threshold:
-        deviation_summary.append("It is high in proteins.")
+        deviation_summary.append("It is *high* in proteins.")
     elif proteins_deviation < -deviation_threshold:
-        deviation_summary.append("It is low in proteins.")
+        deviation_summary.append("It is *low* in proteins.")
 
     if deviation_summary:
-        explanation += "This recipe may not be the best choice as it deviates significantly from the ideal macronutrient ratio. "
+        explanation += "\nThis recipe may not be the best choice as it deviates significantly from the ideal macronutrient ratio. "
         explanation += " ".join(deviation_summary) + " Consider adjusting the portion size or exploring other recipes. "
     else:
-        explanation += "This recipe is a good choice as it closely aligns with the ideal macronutrient distribution, in fact "
+        explanation += "\nThis recipe is a good choice as it closely aligns with the ideal macronutrient distribution, in fact "
 
     #remove?
-    explanation += f"The deviations from ideal values are: carbs = {round(carbs_deviation, 2)}, "
+    explanation += f"\nThe deviations from ideal values are: carbs = {round(carbs_deviation, 2)}, "
     explanation += f"fats= {round(fats_deviation, 2)}, "
     explanation += f"proteins = {round(proteins_deviation, 2)}"
-    explanation += " (anything in [-"+ str(deviation_threshold) + "," + str(deviation_threshold) + "] is good). "
+    explanation += " (anything in [-"+ str(deviation_threshold) + "," + str(deviation_threshold) + "] is good).\n\n"
 
     return explanation, deviation_summary
     
@@ -2140,7 +2145,7 @@ def foodMacros_two(recipeA, recipeB, user):
         ideal_macros["proteins"] += 10
 
     useless_expl = (
-        "The ideal macronutrient distribution for a "
+        "\nThe ideal macronutrient distribution for a "
         + man_or_woman
         + " with your goal and type of activity is "
         + f"{ideal_macros['carbs']}% carbs, {ideal_macros['fats']}% fats, {ideal_macros['proteins']}% proteins. "
@@ -2150,27 +2155,27 @@ def foodMacros_two(recipeA, recipeB, user):
     explanation = str(explanation).replace(useless_expl, "")
 
     if deviation_summaryA == [] and deviation_summaryB == []:
-        explanation += "In this case there is really no recipe better than the other, they both seem well balanced in the macro-nurients composition."
+        explanation += "In this case there is really no recipe better than the other, they *both seem well balanced* in the macro-nurients composition."
 
     if deviation_summaryA == [] and deviation_summaryB != []:
-        explanation += "Between the two, " + recipeA["title"] + " seems more balanced in the macro-nurients composition."
+        explanation += "Between the two, " + recipeA["title"] + " seems *more balanced* in the macro-nurients composition."
 
     if deviation_summaryB == [] and deviation_summaryA != []:
-        explanation += "Between the two, " + recipeB["title"] + " seems more balanced in the macro-nurients composition."
+        explanation += "Between the two, " + recipeB["title"] + " seems *more balanced* in the macro-nurients composition."
 
     if deviation_summaryA != [] and deviation_summaryB != []:
         if len(deviation_summaryA) == len(deviation_summaryB):
             if deviation_summaryA.count('low') == deviation_summaryB.count('low'):
-                explanation += "In this case there is really no recipe better than the other, they both seem very unbalanced in the macro-nurients composition."
+                explanation += "In this case there is really no recipe better than the other, they both *seem very unbalanced* in the macro-nurients composition."
 
             if deviation_summaryA.count('low') > deviation_summaryB.count('low'):
-                explanation += "Between the two, " + recipeA["title"] + " seems less unbalanced in the macro-nurients composition."
+                explanation += "Between the two, " + recipeA["title"] + " seems *less unbalanced* in the macro-nurients composition."
             elif deviation_summaryA.count('low') < deviation_summaryB.count('low'):
-                explanation += "Between the two, " + recipeB["title"] + " seems less unbalanced in the macro-nurients composition."
+                explanation += "Between the two, " + recipeB["title"] + " seems *less unbalanced* in the macro-nurients composition."
 
         if len(deviation_summaryA) < len(deviation_summaryB):
-            explanation += "Between the two, " + recipeA["title"] + " seems less unbalanced in the macro-nurients composition."
+            explanation += "Between the two, " + recipeA["title"] + " seems *less unbalanced* in the macro-nurients composition."
         elif len(deviation_summaryA) > len(deviation_summaryB):
-            explanation += "Between the two, " + recipeB["title"] + " seems less unbalanced in the macro-nurients composition."
+            explanation += "Between the two, " + recipeB["title"] + " seems *less unbalanced* in the macro-nurients composition."
 
     return explanation

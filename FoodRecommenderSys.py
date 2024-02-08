@@ -81,19 +81,19 @@ async def gender(update: Update, context):
 # Funzione di gestione della risposta sull'età
 async def age(update: Update, context):
     user_age = update.message.text
-    if 0 < int(user_age) or int(user_age) <= 19:
+    if 0 < int(user_age) and int(user_age) <= 19:
         user_age = "U20"
         context.user_data["age"] = "U20"
-    elif 20 <= int(user_age) or int(user_age) <= 29:
+    elif 20 <= int(user_age) and int(user_age) <= 29:
         user_age = "U30"
         context.user_data["age"] = "U30"
-    elif 30 <= int(user_age) or int(user_age) <= 39:
+    elif 30 <= int(user_age) and int(user_age) <= 39:
         user_age = "U40"
         context.user_data["age"] = "U40"
-    elif 40 <= int(user_age) or int(user_age) <= 49:
+    elif 40 <= int(user_age) and int(user_age) <= 49:
         user_age = "U50"
         context.user_data["age"] = "U50"
-    elif 50 <= int(user_age) or int(user_age) <= 59:
+    elif 50 <= int(user_age) and int(user_age) <= 59:
         user_age = "U60"
         context.user_data["age"] = "U60"
     elif int(user_age) >= 60:
@@ -149,7 +149,7 @@ async def height(update: Update, context):
 
     # Controllo sulla validità dell'altezza
     if not user_height.isdigit() or int(user_height) < 90 or int(user_height) > 230:
-        await update.message.reply_text("Insert an height between 100cm and 230cm")
+        await update.message.reply_text("Insert an height between 100 and 230 centimeters")
         return CM
     else:
         context.user_data["height"] = int(user_height)
@@ -393,7 +393,7 @@ async def unknown(update: Update, context):
 async def modify_profile(update: Update, context):
     if "gender" not in context.user_data:
         await update.message.reply_text(
-            "You have not created your profile yet. \nTry /create first."
+            "You have *not* created your profile yet. \nTry /create first.", parse_mode='Markdown'
         )
         return
     else:
@@ -402,31 +402,31 @@ async def modify_profile(update: Update, context):
             "       1 means TRUE.\n"
             "       0 means FALSE.\n"
             "       X/5 it's a scale where 1 is lowest and 5 highest.\n\n"
-            f" •  Category:  {context.user_data['category']}\n"
-            f" •  Low Nickel:  {context.user_data['nickel']}\n"
-            f" •  Vegetarian:  {context.user_data['vegetarian']}\n"
-            f" •  Lactose Free:  {context.user_data['lactosefree']}\n"
-            f" •  Gluten Free:  {context.user_data['glutenfree']}\n"
+            f" •  *Category*:  {context.user_data['category']}\n"
+            f" •  *Low Nickel*:  {context.user_data['nickel']}\n"
+            f" •  *Vegetarian*:  {context.user_data['vegetarian']}\n"
+            f" •  *Lactose Free*:  {context.user_data['lactosefree']}\n"
+            f" •  *Gluten Free*:  {context.user_data['glutenfree']}\n"
             # f" • Light: {context.user_data['light']}\n"
-            f" •  Diabetic:  {context.user_data['diabetes']}\n"
-            f" •  Pregnant:  {context.user_data['pregnant']}\n"
-            f" •  User Skill:  {context.user_data['cook_exp']}/5\n"
-            f" •  User Lifestyle:  {context.user_data['ht_lifestyle']}/5\n"
-            f" •  Goal:  {context.user_data['goals']}\n"
-            f" •  User Budget:  {context.user_data['max_cost_rec']}/5\n"
-            f" •  User Time:  {context.user_data['time_cook']}\n"
-            f" •  Weight: {context.user_data['weight']}\n"
-            f" •  Age:  {context.user_data['age']}\n"
-            f" •  Sex:  {context.user_data['gender']}\n"
-            f" •  Activity:  {context.user_data['ph_activity']}\n"
-            f" •  Stress:  {context.user_data['stress']}\n"
-            f" •  Sleep:  {context.user_data['sleep']}\n\n"
+            f" •  *Diabetic*:  {context.user_data['diabetes']}\n"
+            f" •  *Pregnant*:  {context.user_data['pregnant']}\n"
+            f" •  *User Skill*:  {context.user_data['cook_exp']}/5\n"
+            f" •  *User Lifestyle*:  {context.user_data['ht_lifestyle']}/5\n"
+            f" •  *Goal*:  {context.user_data['goals']}\n"
+            f" •  *User Budget*:  {context.user_data['max_cost_rec']}/5\n"
+            f" •  *User Time*:  {context.user_data['time_cook']}\n"
+            f" •  *Weight*: {context.user_data['weight']}\n"
+            f" •  *Age*:  {context.user_data['age']}\n"
+            f" •  *Sex*:  {context.user_data['gender']}\n"
+            f" •  *Activity*:  {context.user_data['ph_activity']}\n"
+            f" •  *Stress*:  {context.user_data['stress']}\n"
+            f" •  *Sleep*:  {context.user_data['sleep']}\n\n"
             "What would you like to modify?\n"
-            "Please type in the name of the attribute you want to modify or 'none' if you changed your mind:"
+            "Please type in the attribute you want to modify or '*none*' if you changed your mind:"
             # f"Depression: {context.user_data['depress']}\n"
             # f"Mood: {context.user_data['mood']}"
         )
-        await update.message.reply_text(profile_message)
+        await update.message.reply_text(profile_message, parse_mode='Markdown')
     return ATTRIBUTE
 
 
@@ -454,7 +454,7 @@ async def choose_attribute(update: Update, context):
         "sleep",
     ]:
         await update.message.reply_text(
-            f"Ok, you want to modify the {attribute} attribute."
+            f"Ok, you want to modify the _{attribute}_ attribute.", parse_mode='Markdown'
         )
 
     if attribute == "category":
@@ -678,7 +678,7 @@ async def choose_attribute(update: Update, context):
 
     elif attribute == "none":
         await update.message.reply_text(
-            "You changed your mind, that's ok.\nJust ask me a suggestion then."
+            "You changed your mind, that's ok.\nJust ask me a something then."
         )
         return ConversationHandler.END
 
@@ -902,7 +902,7 @@ async def change_attribute_value(update: Update, context):
     elif value == "gain":
         print(f"debug - value selected -> ({value})")
         await update.message.reply_text(
-            f"You successfully changed attribute 'Goal'\nfrom:  {context.user_data['goal']} -> 1.\n\nNow you can ask me to suggest something again."
+            f"You successfully changed attribute 'Goal'\nfrom:  {context.user_data['goals']} -> 1.\n\nNow you can ask me to suggest something again."
         )
         context.user_data["goal"] = 1
         return ConversationHandler.END

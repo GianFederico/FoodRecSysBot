@@ -74,7 +74,7 @@ class Spiegazione:
                 explanation_text.append(segment)
 
             print("@@@@@@@@@@@@@@@@ EXPLANATION TEXT:", explanation_text)
-            return await update.message.reply_text(str(explanation_text)[2:-2])
+            return await update.message.reply_text(str(explanation_text)[2:-2].replace(r"\n", "\n"), parse_mode='Markdown')
 
     @staticmethod
     async def smartExplanation_due_piatti(update: Update, context):
@@ -142,7 +142,7 @@ class Spiegazione:
                 explanation_text.append(segment)
 
             print("@@@@@@@@@@@@@@@@ EXPLANATION TEXT:", explanation_text)
-            return await update.message.reply_text(str(explanation_text)[2:-2])
+            return await update.message.reply_text(str(explanation_text)[2:-2].replace(r"\n", "\n"), parse_mode='Markdown')
 
     @staticmethod
     async def spiegazione_restrizioni(update: Update, context):
@@ -210,7 +210,7 @@ class Spiegazione:
                 explanation_text.append(segment)
 
             print("@@@@@@@@@@@@@@@@ EXPLANATION TEXT:", explanation_text)
-            return await update.message.reply_text(str(explanation_text)[2:-2])
+            return await update.message.reply_text(str(explanation_text)[2:-2].replace(r"\n", "\n"), parse_mode='Markdown')
 
     @staticmethod
     async def spiegazione_restrizioni_due_piatti(update: Update, context):
@@ -283,7 +283,7 @@ class Spiegazione:
                 explanation_text.append(segment)
 
             print("@@@@@@@@@@@@@@@@ EXPLANATION TEXT:", explanation_text)
-            return await update.message.reply_text(str(explanation_text)[2:-2])
+            return await update.message.reply_text(str(explanation_text)[2:-2].replace(r"\n", "\n"), parse_mode='Markdown')
 
     @staticmethod
     async def controllo_piatto(update: Update, context):
@@ -351,7 +351,7 @@ class Spiegazione:
                 explanation_text.append(segment)
 
             print("@@@@@@@@@@@@@@@@ EXPLANATION TEXT:", explanation_text)
-            return await update.message.reply_text(str(explanation_text)[2:-2])
+            return await update.message.reply_text(str(explanation_text)[2:-2].replace(r"\n", "\n"), parse_mode='Markdown')
 
     @staticmethod
     async def controllo_piatto_due_piatti(update: Update, context):
@@ -424,7 +424,7 @@ class Spiegazione:
                 explanation_text.append(segment)
 
             print("@@@@@@@@@@@@@@@@ EXPLANATION TEXT:", explanation_text)
-            return await update.message.reply_text(str(explanation_text)[2:-2])
+            return await update.message.reply_text(str(explanation_text)[2:-2].replace(r"\n", "\n"), parse_mode='Markdown')
 
     @staticmethod
     async def spiegazione_obiettivo(update: Update, context):
@@ -492,7 +492,7 @@ class Spiegazione:
                 explanation_text.append(segment)
 
             print("@@@@@@@@@@@@@@@@ EXPLANATION TEXT:", explanation_text)
-            return await update.message.reply_text(str(explanation_text)[2:-2])
+            return await update.message.reply_text(str(explanation_text)[2:-2].replace(r"\n", "\n"), parse_mode='Markdown')
 
     @staticmethod
     async def spiegazione_benefici_salute(update: Update, context):
@@ -560,7 +560,7 @@ class Spiegazione:
                 explanation_text.append(segment)
 
             print("@@@@@@@@@@@@@@@@ EXPLANATION TEXT:", explanation_text)
-            return await update.message.reply_text(str(explanation_text)[2:-2])
+            return await update.message.reply_text(str(explanation_text)[2:-2].replace(r"\n", "\n"), parse_mode='Markdown')
 
     @staticmethod
     async def spiegazione_rischi_salute(update: Update, context):
@@ -628,7 +628,7 @@ class Spiegazione:
                 explanation_text.append(segment)
 
             print("@@@@@@@@@@@@@@@@ EXPLANATION TEXT:", explanation_text)
-            return await update.message.reply_text(str(explanation_text)[2:-2])
+            return await update.message.reply_text(str(explanation_text)[2:-2].replace(r"\n", "\n"), parse_mode='Markdown')
 
     @staticmethod
     async def spiegazione_benefici_salute_due_piatti(update: Update, context):
@@ -701,7 +701,7 @@ class Spiegazione:
                 explanation_text.append(segment)
 
             print("@@@@@@@@@@@@@@@@ EXPLANATION TEXT:", explanation_text)
-            return await update.message.reply_text(str(explanation_text)[2:-2])
+            return await update.message.reply_text(str(explanation_text)[2:-2].replace(r"\n", "\n"), parse_mode='Markdown')
 
     @staticmethod
     async def spiegazione_rischi_salute_due_piatti(update: Update, context):
@@ -772,7 +772,7 @@ class Spiegazione:
                 explanation_text.append(segment)
 
             print("@@@@@@@@@@@@@@@@ EXPLANATION TEXT:", explanation_text)
-            return await update.message.reply_text(str(explanation_text)[2:-2])
+            return await update.message.reply_text(str(explanation_text)[2:-2].replace(r"\n", "\n"), parse_mode='Markdown')
 
     @staticmethod
     async def spiegazione_costo(update: Update, context):
@@ -840,7 +840,7 @@ class Spiegazione:
                 explanation_text.append(segment)
 
             print("@@@@@@@@@@@@@@@@ EXPLANATION TEXT:", explanation_text)
-            return await update.message.reply_text(str(explanation_text)[2:-2])
+            return await update.message.reply_text(str(explanation_text)[2:-2].replace(r"\n", "\n"), parse_mode='Markdown')
         
     @staticmethod
     async def spiegazione_costo_due_piatti(update: Update, context):
@@ -911,7 +911,7 @@ class Spiegazione:
                 explanation_text.append(segment)
 
             print("@@@@@@@@@@@@@@@@ EXPLANATION TEXT:", explanation_text)
-            return await update.message.reply_text(str(explanation_text)[2:-2])
+            return await update.message.reply_text(str(explanation_text)[2:-2].replace(r"\n", "\n"), parse_mode='Markdown')
 
     @staticmethod
     async def spiegazione_popolarita(update: Update, context):
@@ -967,6 +967,7 @@ class Spiegazione:
         risposta_spiegazione = response.json()
         print("Response text:", risposta_spiegazione)
         explanation = risposta_spiegazione.get("explanations", {}).get("popularity_oneA")
+        explanation
         if explanation:
             max_length = 5000
             segments = [
@@ -979,7 +980,7 @@ class Spiegazione:
                 explanation_text.append(segment)
 
             print("@@@@@@@@@@@@@@@@ EXPLANATION TEXT:", explanation_text)
-            return await update.message.reply_text(str(explanation_text)[2:-2])
+            return await update.message.reply_text(str(explanation_text)[2:-2].replace(r"\n", "\n").replace(r"\n", "\n"), parse_mode='Markdown')
 
     @staticmethod
     async def spiegazione_popolarita_due_piatti(update: Update, context):
@@ -1050,7 +1051,7 @@ class Spiegazione:
                 explanation_text.append(segment)
 
             print("@@@@@@@@@@@@@@@@ EXPLANATION TEXT:", explanation_text)
-            return await update.message.reply_text(str(explanation_text)[2:-2])
+            return await update.message.reply_text(str(explanation_text)[2:-2].replace(r"\n", "\n"), parse_mode='Markdown')
 
     @staticmethod
     async def spiegazione_obiettivi_due_piatti(update: Update, context):
@@ -1121,7 +1122,7 @@ class Spiegazione:
                 explanation_text.append(segment)
 
             print("@@@@@@@@@@@@@@@@ EXPLANATION TEXT:", explanation_text)
-            return await update.message.reply_text(str(explanation_text)[2:-2])
+            return await update.message.reply_text(str(explanation_text)[2:-2].replace(r"\n", "\n"), parse_mode='Markdown')
 
     @staticmethod
     async def spiegazione_tempo(update: Update, context):
@@ -1189,7 +1190,7 @@ class Spiegazione:
                 explanation_text.append(segment)
 
             print("@@@@@@@@@@@@@@@@ EXPLANATION TEXT:", explanation_text)
-            return await update.message.reply_text(str(explanation_text)[2:-2])
+            return await update.message.reply_text(str(explanation_text)[2:-2].replace(r"\n", "\n"), parse_mode='Markdown')
 
     @staticmethod
     async def spiegazione_tempo_due_piatti(update: Update, context):
@@ -1260,7 +1261,7 @@ class Spiegazione:
                 explanation_text.append(segment)
 
             print("@@@@@@@@@@@@@@@@ EXPLANATION TEXT:", explanation_text)
-            return await update.message.reply_text(str(explanation_text)[2:-2])
+            return await update.message.reply_text(str(explanation_text)[2:-2].replace(r"\n", "\n"), parse_mode='Markdown')
 
     @staticmethod
     async def spiegazione_lifestyle(update: Update, context):
@@ -1328,7 +1329,7 @@ class Spiegazione:
                 explanation_text.append(segment)
 
             print("@@@@@@@@@@@@@@@@ EXPLANATION TEXT:", explanation_text)
-            return await update.message.reply_text(str(explanation_text)[2:-2])
+            return await update.message.reply_text(str(explanation_text)[2:-2].replace(r"\n", "\n"), parse_mode='Markdown')
 
     @staticmethod
     async def spiegazione_lifestyle_due_piatti(update: Update, context):
@@ -1399,7 +1400,7 @@ class Spiegazione:
                 explanation_text.append(segment)
 
             print("@@@@@@@@@@@@@@@@ EXPLANATION TEXT:", explanation_text)
-            return await update.message.reply_text(str(explanation_text)[2:-2])
+            return await update.message.reply_text(str(explanation_text)[2:-2].replace(r"\n", "\n"), parse_mode='Markdown')
 
     @staticmethod
     async def spiegazione_eta(update: Update, context):
@@ -1467,7 +1468,7 @@ class Spiegazione:
                 explanation_text.append(segment)
 
             print("@@@@@@@@@@@@@@@@ EXPLANATION TEXT:", explanation_text)
-            return await update.message.reply_text(str(explanation_text)[2:-2])
+            return await update.message.reply_text(str(explanation_text)[2:-2].replace(r"\n", "\n"), parse_mode='Markdown')
 
     @staticmethod
     async def spiegazione_eta_due_piatti(update: Update, context):
@@ -1538,7 +1539,7 @@ class Spiegazione:
                 explanation_text.append(segment)
 
             print("@@@@@@@@@@@@@@@@ EXPLANATION TEXT:", explanation_text)
-            return await update.message.reply_text(str(explanation_text)[2:-2])
+            return await update.message.reply_text(str(explanation_text)[2:-2].replace(r"\n", "\n"), parse_mode='Markdown')
 
     @staticmethod
     async def spiegazione_piatto(update: Update, context):
@@ -1606,7 +1607,7 @@ class Spiegazione:
                 explanation_text.append(segment)
 
             print("@@@@@@@@@@@@@@@@ EXPLANATION TEXT:", explanation_text)
-            return await update.message.reply_text(str(explanation_text)[2:-2])
+            return await update.message.reply_text(str(explanation_text)[2:-2].replace(r"\n", "\n"), parse_mode='Markdown')
 
     @staticmethod
     async def spiegazione_piatto_due_piatti(update: Update, context):
@@ -1677,7 +1678,7 @@ class Spiegazione:
                 explanation_text.append(segment)
 
             print("@@@@@@@@@@@@@@@@ EXPLANATION TEXT:", explanation_text)
-            return await update.message.reply_text(str(explanation_text)[2:-2])
+            return await update.message.reply_text(str(explanation_text)[2:-2].replace(r"\n", "\n"), parse_mode='Markdown')
 
     @staticmethod
     async def spiegazione_skill_cucina(update: Update, context):
@@ -1745,7 +1746,7 @@ class Spiegazione:
                 explanation_text.append(segment)
 
             print("@@@@@@@@@@@@@@@@ EXPLANATION TEXT:", explanation_text)
-            return await update.message.reply_text(str(explanation_text)[2:-2])
+            return await update.message.reply_text(str(explanation_text)[2:-2].replace(r"\n", "\n"), parse_mode='Markdown')
 
     @staticmethod
     async def spiegazione_skill_cucina_due_piatti(update: Update, context):
@@ -1816,7 +1817,7 @@ class Spiegazione:
                 explanation_text.append(segment)
 
             print("@@@@@@@@@@@@@@@@ EXPLANATION TEXT:", explanation_text)
-            return await update.message.reply_text(str(explanation_text)[2:-2])
+            return await update.message.reply_text(str(explanation_text)[2:-2].replace(r"\n", "\n"), parse_mode='Markdown')
 
     @staticmethod
     async def spiegazione_macros(update: Update, context):
@@ -1884,8 +1885,8 @@ class Spiegazione:
                 explanation_text.append(segment)
 
             print("@@@@@@@@@@@@@@@@ EXPLANATION TEXT:", explanation_text)
-            #message = str(explanation_text)[2:-2]
-            return await update.message.reply_text(str(explanation_text)[2:-2])
+            #message = str(explanation_text)[2:-2].replace(r"\n", "\n")
+            return await update.message.reply_text(str(explanation_text)[2:-2].replace(r"\n", "\n"), parse_mode='Markdown')
         
     @staticmethod
     async def spiegazione_macros_due_piatti(update: Update, context):
@@ -1956,7 +1957,7 @@ class Spiegazione:
                 explanation_text.append(segment)
 
             print("@@@@@@@@@@@@@@@@ EXPLANATION TEXT:", explanation_text)
-            return await update.message.reply_text(str(explanation_text)[2:-2])
+            return await update.message.reply_text(str(explanation_text)[2:-2].replace(r"\n", "\n"), parse_mode='Markdown')
         
     @staticmethod
     async def spiegazione_sustainability(update: Update, context):
@@ -2024,8 +2025,8 @@ class Spiegazione:
                 explanation_text.append(segment)
 
             print("@@@@@@@@@@@@@@@@ EXPLANATION TEXT:", explanation_text)
-            #message = str(explanation_text)[2:-2]
-            return await update.message.reply_text(str(explanation_text)[2:-2])
+            #message = str(explanation_text)[2:-2].replace(r"\n", "\n")
+            return await update.message.reply_text(str(explanation_text)[2:-2].replace(r"\n", "\n"), parse_mode='Markdown')
 
     @staticmethod
     async def spiegazione_sustainability_due_piatti(update: Update, context):
@@ -2096,7 +2097,7 @@ class Spiegazione:
                 explanation_text.append(segment)
 
             print("@@@@@@@@@@@@@@@@ EXPLANATION TEXT:", explanation_text)
-            return await update.message.reply_text(str(explanation_text)[2:-2])
+            return await update.message.reply_text(str(explanation_text)[2:-2].replace(r"\n", "\n"), parse_mode='Markdown')
 
     @staticmethod
     async def spiegazione_seasonability(update: Update, context):
@@ -2164,8 +2165,8 @@ class Spiegazione:
                 explanation_text.append(segment)
 
             print("@@@@@@@@@@@@@@@@ EXPLANATION TEXT:", explanation_text)
-            #message = str(explanation_text)[2:-2]
-            return await update.message.reply_text(str(explanation_text)[2:-2])
+            #message = str(explanation_text)[2:-2].replace(r"\n", "\n")
+            return await update.message.reply_text(str(explanation_text)[2:-2].replace(r"\n", "\n"), parse_mode='Markdown')
         
     @staticmethod
     async def spiegazione_seasonability_due_piatti(update: Update, context):
@@ -2236,4 +2237,4 @@ class Spiegazione:
                 explanation_text.append(segment)
 
             print("@@@@@@@@@@@@@@@@ EXPLANATION TEXT:", explanation_text)
-            return await update.message.reply_text(str(explanation_text)[2:-2])
+            return await update.message.reply_text(str(explanation_text)[2:-2].replace(r"\n", "\n"), parse_mode='Markdown')
