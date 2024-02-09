@@ -1,7 +1,7 @@
 from telegram import Update
 import requests
 from urllib.parse import urlencode
-from recommender_script import Recommendation, Recommendation_due, Recommendation_tre
+from recommender_script import Recommendation, Recommendation_due, Recommendation_tre, SpecificRec
 
 
 class Spiegazione:
@@ -27,7 +27,9 @@ class Spiegazione:
         if context.user_data["glutenfree"] == 1:
             restr_list.append("gluten-free")
 
-        if hasattr(Recommendation_tre, 'img_url'):
+        if hasattr(SpecificRec, 'img_url'):
+            imgurl=SpecificRec.img_url
+        elif hasattr(Recommendation_tre, 'img_url'):
             imgurl=Recommendation_tre.img_url
         elif hasattr(Recommendation_due, 'img_url'):
             imgurl=Recommendation_due.img_url
@@ -95,7 +97,9 @@ class Spiegazione:
         if context.user_data["glutenfree"] == 1:
             restr_list.append("gluten-free")
 
-        if hasattr(Recommendation_tre, 'img_url'):
+        if hasattr(SpecificRec, 'img_url'):
+            imgurl=SpecificRec.img_url
+        elif hasattr(Recommendation_tre, 'img_url'):
             imgurl=Recommendation_tre.img_url
         elif hasattr(Recommendation_due, 'img_url'):
             imgurl=Recommendation_due.img_url
@@ -163,7 +167,9 @@ class Spiegazione:
         if context.user_data["glutenfree"] == 1:
             restr_list.append("gluten-free")
 
-        if hasattr(Recommendation_tre, 'img_url'):
+        if hasattr(SpecificRec, 'img_url'):
+            imgurl=SpecificRec.img_url
+        elif hasattr(Recommendation_tre, 'img_url'):
             imgurl=Recommendation_tre.img_url
         elif hasattr(Recommendation_due, 'img_url'):
             imgurl=Recommendation_due.img_url
@@ -232,11 +238,9 @@ class Spiegazione:
             restr_list.append("gluten-free")
 
         if hasattr(Recommendation_tre, 'img_url'):
-            print("@@@@@@@@@@@@@@@@@@@@here")
             first=Recommendation_due.img_url
             second=Recommendation_tre.img_url
         elif hasattr(Recommendation_due, 'img_url'):
-            print("@@@@@@@@@@@@@@hope not@@@@@@here")
             first=Recommendation.img_url
             second=Recommendation_due.img_url
 
@@ -304,7 +308,9 @@ class Spiegazione:
         if context.user_data["glutenfree"] == 1:
             restr_list.append("gluten-free")
 
-        if hasattr(Recommendation_tre, 'img_url'):
+        if hasattr(SpecificRec, 'img_url'):
+            imgurl=SpecificRec.img_url
+        elif hasattr(Recommendation_tre, 'img_url'):
             imgurl=Recommendation_tre.img_url
         elif hasattr(Recommendation_due, 'img_url'):
             imgurl=Recommendation_due.img_url
@@ -445,7 +451,9 @@ class Spiegazione:
         if context.user_data["glutenfree"] == 1:
             restr_list.append("gluten-free")
 
-        if hasattr(Recommendation_tre, 'img_url'):
+        if hasattr(SpecificRec, 'img_url'):
+            imgurl=SpecificRec.img_url
+        elif hasattr(Recommendation_tre, 'img_url'):
             imgurl=Recommendation_tre.img_url
         elif hasattr(Recommendation_due, 'img_url'):
             imgurl=Recommendation_due.img_url
@@ -513,7 +521,9 @@ class Spiegazione:
         if context.user_data["glutenfree"] == 1:
             restr_list.append("gluten-free")
 
-        if hasattr(Recommendation_tre, 'img_url'):
+        if hasattr(SpecificRec, 'img_url'):
+            imgurl=SpecificRec.img_url
+        elif hasattr(Recommendation_tre, 'img_url'):
             imgurl=Recommendation_tre.img_url
         elif hasattr(Recommendation_due, 'img_url'):
             imgurl=Recommendation_due.img_url
@@ -581,7 +591,9 @@ class Spiegazione:
         if context.user_data["glutenfree"] == 1:
             restr_list.append("gluten-free")
 
-        if hasattr(Recommendation_tre, 'img_url'):
+        if hasattr(SpecificRec, 'img_url'):
+            imgurl=SpecificRec.img_url
+        elif hasattr(Recommendation_tre, 'img_url'):
             imgurl=Recommendation_tre.img_url
         elif hasattr(Recommendation_due, 'img_url'):
             imgurl=Recommendation_due.img_url
@@ -932,7 +944,9 @@ class Spiegazione:
         if context.user_data["glutenfree"] == 1:
             restr_list.append("gluten-free")
 
-        if hasattr(Recommendation_tre, 'img_url'):
+        if hasattr(SpecificRec, 'img_url'):
+            imgurl=SpecificRec.img_url
+        elif hasattr(Recommendation_tre, 'img_url'):
             imgurl=Recommendation_tre.img_url
         elif hasattr(Recommendation_due, 'img_url'):
             imgurl=Recommendation_due.img_url
@@ -1143,7 +1157,9 @@ class Spiegazione:
         if context.user_data["glutenfree"] == 1:
             restr_list.append("gluten-free")
 
-        if hasattr(Recommendation_tre, 'img_url'):
+        if hasattr(SpecificRec, 'img_url'):
+            imgurl=SpecificRec.img_url
+        elif hasattr(Recommendation_tre, 'img_url'):
             imgurl=Recommendation_tre.img_url
         elif hasattr(Recommendation_due, 'img_url'):
             imgurl=Recommendation_due.img_url
@@ -1282,7 +1298,9 @@ class Spiegazione:
         if context.user_data["glutenfree"] == 1:
             restr_list.append("gluten-free")
 
-        if hasattr(Recommendation_tre, 'img_url'):
+        if hasattr(SpecificRec, 'img_url'):
+            imgurl=SpecificRec.img_url
+        elif hasattr(Recommendation_tre, 'img_url'):
             imgurl=Recommendation_tre.img_url
         elif hasattr(Recommendation_due, 'img_url'):
             imgurl=Recommendation_due.img_url
@@ -1421,7 +1439,9 @@ class Spiegazione:
         if context.user_data["glutenfree"] == 1:
             restr_list.append("gluten-free")
 
-        if hasattr(Recommendation_tre, 'img_url'):
+        if hasattr(SpecificRec, 'img_url'):
+            imgurl=SpecificRec.img_url
+        elif hasattr(Recommendation_tre, 'img_url'):
             imgurl=Recommendation_tre.img_url
         elif hasattr(Recommendation_due, 'img_url'):
             imgurl=Recommendation_due.img_url
@@ -1560,7 +1580,9 @@ class Spiegazione:
         if context.user_data["glutenfree"] == 1:
             restr_list.append("gluten-free")
 
-        if hasattr(Recommendation_tre, 'img_url'):
+        if hasattr(SpecificRec, 'img_url'):
+            imgurl=SpecificRec.img_url
+        elif hasattr(Recommendation_tre, 'img_url'):
             imgurl=Recommendation_tre.img_url
         elif hasattr(Recommendation_due, 'img_url'):
             imgurl=Recommendation_due.img_url
@@ -1699,7 +1721,9 @@ class Spiegazione:
         if context.user_data["glutenfree"] == 1:
             restr_list.append("gluten-free")
 
-        if hasattr(Recommendation_tre, 'img_url'):
+        if hasattr(SpecificRec, 'img_url'):
+            imgurl=SpecificRec.img_url
+        elif hasattr(Recommendation_tre, 'img_url'):
             imgurl=Recommendation_tre.img_url
         elif hasattr(Recommendation_due, 'img_url'):
             imgurl=Recommendation_due.img_url
@@ -1838,7 +1862,9 @@ class Spiegazione:
         if context.user_data["glutenfree"] == 1:
             restr_list.append("gluten-free")
 
-        if hasattr(Recommendation_tre, 'img_url'):
+        if hasattr(SpecificRec, 'img_url'):
+            imgurl=SpecificRec.img_url
+        elif hasattr(Recommendation_tre, 'img_url'):
             imgurl=Recommendation_tre.img_url
         elif hasattr(Recommendation_due, 'img_url'):
             imgurl=Recommendation_due.img_url
@@ -1978,7 +2004,9 @@ class Spiegazione:
         if context.user_data["glutenfree"] == 1:
             restr_list.append("gluten-free")
 
-        if hasattr(Recommendation_tre, 'img_url'):
+        if hasattr(SpecificRec, 'img_url'):
+            imgurl=SpecificRec.img_url
+        elif hasattr(Recommendation_tre, 'img_url'):
             imgurl=Recommendation_tre.img_url
         elif hasattr(Recommendation_due, 'img_url'):
             imgurl=Recommendation_due.img_url
@@ -2118,7 +2146,9 @@ class Spiegazione:
         if context.user_data["glutenfree"] == 1:
             restr_list.append("gluten-free")
 
-        if hasattr(Recommendation_tre, 'img_url'):
+        if hasattr(SpecificRec, 'img_url'):
+            imgurl=SpecificRec.img_url
+        elif hasattr(Recommendation_tre, 'img_url'):
             imgurl=Recommendation_tre.img_url
         elif hasattr(Recommendation_due, 'img_url'):
             imgurl=Recommendation_due.img_url

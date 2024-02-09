@@ -3,7 +3,7 @@ from telegram import Update, ReplyKeyboardMarkup, ReplyKeyboardRemove
 import google.cloud.dialogflow_v2 as dialogflow
 from telegram.ext import CommandHandler, MessageHandler, filters, ConversationHandler
 import constants as keys
-from recommender_script import Recommendation, Recommendation_due, Recommendation_tre
+from recommender_script import Recommendation, Recommendation_due, Recommendation_tre, SpecificRec
 from expl_script import Spiegazione
 import nest_asyncio
 import asyncio
@@ -1245,6 +1245,13 @@ async def dialogflow_mode(update: Update, context):
         await Spiegazione.spiegazione_sustainability_due_piatti(update, context)
     if intent == "Comparison seasonability":
         await Spiegazione.spiegazione_seasonability_due_piatti(update, context)
+
+    if intent == "Specific suggestion":
+        print("here")
+        IngredientName=response.query_result.parameters.get("IngredientName")
+        print("Specific suggestion variable:", IngredientName)
+        await SpecificRec.specific_sugg(update, context, IngredientName)
+
 
     confidence = response.query_result.intent_detection_confidence
     print("Intent:", intent)
