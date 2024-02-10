@@ -11,7 +11,8 @@ class Spiegazione:
     @staticmethod
     async def smart_explanation(update: Update, context):
         if not hasattr(Recommendation, 'img_url'):
-            return await update.message.reply_text("Sorry, I don't know what to say.\nYou should ask for a suggestion first.")
+            if not hasattr(SpecificRec, 'img_url'):
+                return await update.message.reply_text("Sorry, I don't know what to say.\nYou should ask for a suggestion first.")
 
         restr_list = []
 
@@ -157,7 +158,8 @@ class Spiegazione:
     @staticmethod
     async def spiegazione_restrizioni(update: Update, context):
         if not hasattr(Recommendation, 'img_url'):
-            return await update.message.reply_text("Sorry, I don't know what to say.\nYou should ask for a suggestion first.")
+            if not hasattr(SpecificRec, 'img_url'):
+                return await update.message.reply_text("Sorry, I don't know what to say.\nYou should ask for a suggestion first.")
         
         restr_list = []
 
@@ -304,7 +306,8 @@ class Spiegazione:
     @staticmethod
     async def controllo_piatto(update: Update, context):
         if not hasattr(Recommendation, 'img_url'):
-            return await update.message.reply_text("Sorry, I don't know what to say.\nYou should ask for a suggestion first.")
+            if not hasattr(SpecificRec, 'img_url'):
+                return await update.message.reply_text("Sorry, I don't know what to say.\nYou should ask for a suggestion first.")
         
         restr_list = []
 
@@ -453,7 +456,8 @@ class Spiegazione:
     @staticmethod
     async def spiegazione_obiettivo(update: Update, context):
         if not hasattr(Recommendation, 'img_url'):
-            return await update.message.reply_text("Sorry, I don't know what to say.\nYou should ask for a suggestion first.")
+            if not hasattr(SpecificRec, 'img_url'):
+                return await update.message.reply_text("Sorry, I don't know what to say.\nYou should ask for a suggestion first.")
         
         restr_list = []
 
@@ -526,7 +530,8 @@ class Spiegazione:
     @staticmethod
     async def spiegazione_benefici_salute(update: Update, context):
         if not hasattr(Recommendation, 'img_url'):
-            return await update.message.reply_text("Sorry, I don't know what to say.\nYou should ask for a suggestion first.")
+            if not hasattr(SpecificRec, 'img_url'):
+                return await update.message.reply_text("Sorry, I don't know what to say.\nYou should ask for a suggestion first.")
         
         restr_list = []
 
@@ -599,7 +604,8 @@ class Spiegazione:
     @staticmethod
     async def spiegazione_rischi_salute(update: Update, context):
         if not hasattr(Recommendation, 'img_url'):
-            return await update.message.reply_text("Sorry, I don't know what to say.\nYou should ask for a suggestion first.")
+            if not hasattr(SpecificRec, 'img_url'):
+                return await update.message.reply_text("Sorry, I don't know what to say.\nYou should ask for a suggestion first.")
         
         restr_list = []
 
@@ -822,7 +828,8 @@ class Spiegazione:
     @staticmethod
     async def spiegazione_costo(update: Update, context):
         if not hasattr(Recommendation, 'img_url'):
-            return await update.message.reply_text("Sorry, I don't know what to say.\nYou should ask for a suggestion first.")
+            if not hasattr(SpecificRec, 'img_url'):
+                return await update.message.reply_text("Sorry, I don't know what to say.\nYou should ask for a suggestion first.")
         
         restr_list = []
 
@@ -967,7 +974,8 @@ class Spiegazione:
     @staticmethod
     async def spiegazione_popolarita(update: Update, context):
         if not hasattr(Recommendation, 'img_url'):
-            return await update.message.reply_text("Sorry, I don't know what to say.\nYou should ask for a suggestion first.")
+            if not hasattr(SpecificRec, 'img_url'):
+                return await update.message.reply_text("Sorry, I don't know what to say.\nYou should ask for a suggestion first.")
         
         restr_list = []
 
@@ -1189,7 +1197,8 @@ class Spiegazione:
     @staticmethod
     async def spiegazione_tempo(update: Update, context):
         if not hasattr(Recommendation, 'img_url'):
-            return await update.message.reply_text("Sorry, I don't know what to say.\nYou should ask for a suggestion first.")
+            if not hasattr(SpecificRec, 'img_url'):
+                return await update.message.reply_text("Sorry, I don't know what to say.\nYou should ask for a suggestion first.")
         
         restr_list = []
 
@@ -1336,7 +1345,8 @@ class Spiegazione:
     @staticmethod
     async def spiegazione_lifestyle(update: Update, context):
         if not hasattr(Recommendation, 'img_url'):
-            return await update.message.reply_text("Sorry, I don't know what to say.\nYou should ask for a suggestion first.")
+            if not hasattr(SpecificRec, 'img_url'):
+                return await update.message.reply_text("Sorry, I don't know what to say.\nYou should ask for a suggestion first.")
         
         restr_list = []
 
@@ -1483,7 +1493,8 @@ class Spiegazione:
     @staticmethod
     async def spiegazione_eta(update: Update, context):
         if not hasattr(Recommendation, 'img_url'):
-            return await update.message.reply_text("Sorry, I don't know what to say.\nYou should ask for a suggestion first.")
+            if not hasattr(SpecificRec, 'img_url'):
+                return await update.message.reply_text("Sorry, I don't know what to say.\nYou should ask for a suggestion first.")
         
         restr_list = []
 
@@ -1630,7 +1641,8 @@ class Spiegazione:
     @staticmethod
     async def spiegazione_piatto(update: Update, context):
         if not hasattr(Recommendation, 'img_url'):
-            return await update.message.reply_text("Sorry, I don't know what to say.\nYou should ask for a suggestion first.")
+            if not hasattr(SpecificRec, 'img_url'):
+                return await update.message.reply_text("Sorry, I don't know what to say.\nYou should ask for a suggestion first.")
         
         restr_list = []
 
@@ -1777,7 +1789,8 @@ class Spiegazione:
     @staticmethod
     async def spiegazione_skill_cucina(update: Update, context):
         if not hasattr(Recommendation, 'img_url'):
-            return await update.message.reply_text("Sorry, I don't know what to say.\nYou should ask for a suggestion first.")
+            if not hasattr(SpecificRec, 'img_url'):
+                return await update.message.reply_text("Sorry, I don't know what to say.\nYou should ask for a suggestion first.")
         
         restr_list = []
 
@@ -1924,7 +1937,8 @@ class Spiegazione:
     @staticmethod
     async def spiegazione_macros(update: Update, context):
         if not hasattr(Recommendation, 'img_url'):
-            return await update.message.reply_text("Sorry, I don't know what to say.\nYou should ask for a suggestion first.")
+            if not hasattr(SpecificRec, 'img_url'):
+                return await update.message.reply_text("Sorry, I don't know what to say.\nYou should ask for a suggestion first.")
         
         restr_list = []
 
@@ -2072,7 +2086,8 @@ class Spiegazione:
     @staticmethod
     async def spiegazione_sustainability(update: Update, context):
         if not hasattr(Recommendation, 'img_url'):
-            return await update.message.reply_text("Sorry, I don't know what to say.\nYou should ask for a suggestion first.")
+            if not hasattr(SpecificRec, 'img_url'):
+                return await update.message.reply_text("Sorry, I don't know what to say.\nYou should ask for a suggestion first.")
         
         restr_list = []
 
@@ -2220,7 +2235,8 @@ class Spiegazione:
     @staticmethod
     async def spiegazione_seasonability(update: Update, context):
         if not hasattr(Recommendation, 'img_url'):
-            return await update.message.reply_text("Sorry, I don't know what to say.\nYou should ask for a suggestion first.")
+            if not hasattr(SpecificRec, 'img_url'):
+                return await update.message.reply_text("Sorry, I don't know what to say.\nYou should ask for a suggestion first.")
         
         restr_list = []
 
