@@ -11,6 +11,9 @@ class Recommendation:
         self.img_url = img_url
     @staticmethod
     async def suggerimento(update: Update, context):
+        if 'gender' not in context.user_data:
+            return await update.message.reply_text("You do not have a profile yet!\nJust /create it. ", parse_mode="Markdown")
+
         # Costruire l'URL di richiesta con i parametri
         url = 'http://127.0.0.1:3000/mood?'
         params = {
@@ -49,7 +52,7 @@ class Recommendation:
                 url_ricetta = recipe_data[0]
                 title = recipe_data[1]
                 Recommendation.img_url = recipe_data[4]
-        return await update.message.reply_text(f"Recipe: {title}\nURL: {url_ricetta}")
+        return await update.message.reply_text(f"Recipe: {title}\nURL: {url_ricetta} \n\nYou can ask me something about this recipe, such as:\nits nutritional facts, its cost, its popularity...and much more!\nOr we could focus on another recipe if you don't like it.\nJust try me.", parse_mode="Markdown")
 
 class Recommendation_due:
     

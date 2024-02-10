@@ -1174,6 +1174,7 @@ async def dialogflow_mode(update: Update, context):
     confidence = response.query_result.intent_detection_confidence
     
     if intent == "Suggestion":
+        #context.session= None
         await Recommendation.suggerimento(update, context)
     if intent == "Change suggestion 1":
         await Recommendation_due.altro_suggerimento2(update, context)
@@ -1261,6 +1262,54 @@ async def dialogflow_mode(update: Update, context):
     else:
         return
     
+async def clear_session(update: Update, context):
+    if hasattr(SpecificRec, 'img_url'):
+        del SpecificRec.img_url 
+    if hasattr(Recommendation_tre, 'img_url'):
+        del Recommendation_tre.img_url 
+    if hasattr(Recommendation_due, 'img_url'):
+        del Recommendation_due.img_url 
+    if hasattr(Recommendation, 'img_url'):
+        del Recommendation.img_url 
+    if context.user_data["category"]:
+        del context.user_data["category"] 
+    if context.user_data["nickel"]:
+        del context.user_data["nickel"] 
+    if context.user_data["vegetarian"]:
+        del context.user_data["vegetarian"] 
+    if context.user_data["lactosefree"]:
+        del context.user_data["lactosefree"] 
+    if context.user_data["glutenfree"]:
+        del context.user_data["glutenfree"] 
+    if context.user_data["diabetes"]:
+        del context.user_data["diabetes"] 
+    if context.user_data["pregnant"]:
+        del context.user_data["pregnant"] 
+    if context.user_data["cook_exp"]:
+        del context.user_data["cook_exp"] 
+    if context.user_data["ht_lifestyle"]:
+        del context.user_data["ht_lifestyle"] 
+    if context.user_data["goals"]:
+        del context.user_data["goals"] 
+    if context.user_data["max_cost_rec"]:
+        del context.user_data["max_cost_rec"] 
+    if context.user_data["time_cook"]:
+        del context.user_data["time_cook"] 
+    if context.user_data["weight"]:
+        del context.user_data["weight"] 
+    if context.user_data["age"]:
+       del context.user_data["age"] 
+    if context.user_data["gender"]:
+        del context.user_data["gender"] 
+    if context.user_data["ph_activity"]:
+        del context.user_data["ph_activity"] 
+    if context.user_data["stress"]:
+        del context.user_data["stress"] 
+    if context.user_data["sleep"]:
+        del context.user_data["sleep"]
+
+    await update.message.reply_text("Session cleared!", parse_mode='Markdown') 
+    return 
 
 async def main():
     nest_asyncio.apply()
@@ -1299,8 +1348,16 @@ async def main():
         },
         fallbacks=[MessageHandler(filters.TEXT, unknown)],
     )
+
+    session_handler = ConversationHandler(
+        entry_points=[CommandHandler("clear_session", clear_session)],
+        states={},
+        fallbacks=[MessageHandler(filters.TEXT, unknown)],
+    )
+
     application.add_handler(conv_handler)
     application.add_handler(modification_handler)
+    application.add_handler(session_handler)
 
     # Aggiunta del CommandHandler per il cambio modalità
     application.add_handler(MessageHandler(filters.TEXT, dialogflow_mode))

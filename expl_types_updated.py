@@ -2044,17 +2044,17 @@ def foodMacros_one(recipe, user):
 
     # Is this useful in this kind of explanation? 
     if user_activity == 'low':
-        ideal_macros["carbs"] += 5
-        ideal_macros["fats"] += 2
-        ideal_macros["proteins"] -= 3
+        ideal_macros["carbs"] += 3
+        ideal_macros["fats"] -= 2
+        ideal_macros["proteins"] -= 1
     elif user_activity == 'normal':
-        ideal_macros["carbs"] += 10
-        ideal_macros["fats"] += 5
-        ideal_macros["proteins"] += 5
+        ideal_macros["carbs"] += 3
+        ideal_macros["fats"] -= 5
+        ideal_macros["proteins"] += 2
     elif user_activity == 'high':
-        ideal_macros["carbs"] += 15
-        ideal_macros["fats"] += 8
-        ideal_macros["proteins"] += 10
+        ideal_macros["carbs"] += 3
+        ideal_macros["fats"] -= 8
+        ideal_macros["proteins"] += 5
 
     explanation += (
         "\nThe ideal macronutrient distribution for a "
