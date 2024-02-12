@@ -433,259 +433,55 @@ async def modify_profile(update: Update, context):
 async def choose_attribute(update: Update, context):
     attribute = update.message.text.lower()
 
-    if attribute in [
-        "category",
-        "low nickel",
-        "vegetarian",
-        "lactose free",
-        "gluten free",
-        "diabetes",
-        "pregnant",
-        "user skill",
-        "user lifestyle",
-        "goal",
-        "user budget",
-        "user time",
-        "weight",
-        "age",
-        "sex",
-        "activity",
-        "stress",
-        "sleep",
-    ]:
-        await update.message.reply_text(
-            f"Ok, you want to modify the _{attribute}_ attribute.", parse_mode='Markdown'
-        )
+    attribute_options = {
+        "category": ("Your choices are: First courses, Second courses, and Desserts. Please select one:",
+                     [["First courses", "Second courses", "Desserts"]]),
+        "low nickel": ("Your choices are: I want low nickel suggestions or I do NOT want low nickel suggestions. Please select one:",
+                       [["I want low nickel suggestions", "I do NOT want low nickel suggestions"]]),
+        "vegetarian": ("Your choices are: I am vegetarian or I am NOT vegetarian. Please select one:",
+                        [["I am vegetarian", "I am NOT vegetarian"]]),
+        "lactose free": ("Your choices are: I am lactose intolerant or I am NOT lactose intolerant. Please select one:",
+                          [["I am lactose intolerant", "I am NOT lactose intolerant"]]),
+        "gluten free": ("Your choices are: I am gluten intolerant or I am NOT gluten intolerant. Please select one:",
+                          [["I am gluten intolerant", "I am NOT gluten intolerant"]]),
+        "diabetic": ("Your choices are: I am diabetic or I am NOT diabetic. Please select one:",
+                      [["I am diabetic", "I am NOT diabetic"]]),
+        "pregnant": ("Your choices are: I am pregnant or I am NOT pregnant. Please select one:",
+                       [["I am pregnant", "I am NOT pregnant"]]),
+        "user skill": ("Your choices are: Very low-skilled, Low-skilled, Medium-skilled, High-skilled, Very High-skilled. Please select one:",
+                         [["Very low-skilled", "Low-skilled", "Medium-skilled", "High-skilled", "Very High-skilled"]]),
+        "user lifestyle": ("Your choices are: Very Unhealty-lifestyle, Unhealty-lifestyle, Normal-lifestyle, Healty-lifestyle, Very Healty-lifestyle. Please select one:",
+                             [["Very Unhealty-lifestyle", "Unhealty-lifestyle", "Normal-lifestyle", "Healty-lifestyle", "Very Healty-lifestyle"]]),
+        "goal": ("Your choices are: Lose, Maintain, and Gain. Please select one:",
+                    [["Lose", "Maintain", "Gain"]]),
+        "user budget": ("Your choices are: Very low-cost, Low-cost, Medium-cost, High-cost, Very High-cost. Please select one:",
+                            [["Very low-cost", "Low-cost", "Medium-cost", "High-cost", "Very High-cost"]]),
+        "user time": ("Your choices are: -30 minutes, 30-60 minutes, 60-90 minutes, 90-120 minutes, 120+ minutes. Please select one:",
+                          [["-30", "30-60", "60-90", "90-120", "120+"]]),
+        "weight": ("Your choices are: Under-weight, Normal-weight, and Over-weight. Please select one:",
+                      [["Under", "Normal", "Over"]]),
+        "age": ("Your choices are: Under20, Under30, Under40, Under50, Under60, Over60. Please select one:",
+                   [["U20", "U30", "U40", "U50", "U60", "O60"]]),
+        "sex": ("Your choices are: Male, Female, and Unspecified. Please select one:",
+                  [["Male", "Female", "Unspecified"]]),
+        "activity": ("Your choices are: Low-activity, Normal-activity, and High-activity. Please select one:",
+                          [["Low-activity", "Normal-activity", "High-activity"]]),
+        "stress": ("Your choices are: I am stressed or I am NOT stressed. Please select one:",
+                      [["I am stressed", "I am NOT stressed"]]),
+        "sleep": ("Your choices are: 8+ daily hours of sleep (good) or 8- daily hours of sleep (bad). Please select one:",
+                    [["8+", "8-"]])
+    }
 
-    if attribute == "category":
-        keyboard = [["First courses", "Second courses", "Desserts"]]
-        reply_markup = ReplyKeyboardMarkup(
-            keyboard, one_time_keyboard=True, resize_keyboard=True
-        )
-        await update.message.reply_text(
-            "Your choices are: \n'First courses', 'Second courses' and 'Desserts'.\nPlease select one:",
-            reply_markup=reply_markup,
-        )
+    if attribute in attribute_options:
+        message, options = attribute_options[attribute]
+        reply_markup = ReplyKeyboardMarkup(options, one_time_keyboard=True, resize_keyboard=True)
+        await update.message.reply_text(message, reply_markup=reply_markup)
         return TO_CHOICES
-
-    elif attribute == "low nickel":
-        keyboard = [
-            ["I want low nickel suggestions", "I do NOT want low nickel suggestions"]
-        ]
-        reply_markup = ReplyKeyboardMarkup(
-            keyboard, one_time_keyboard=True, resize_keyboard=True
-        )
-        await update.message.reply_text(
-            "Your choices are: \n'I want low-nickel suggestions (1)', 'I don't want low-nickel suggestions (0)'.\nPlease select one:",
-            reply_markup=reply_markup,
-        )
-        return TO_CHOICES
-
-    elif attribute == "vegetarian":
-        keyboard = [["I am vegetarian", "I am NOT vegetarian"]]
-        reply_markup = ReplyKeyboardMarkup(
-            keyboard, one_time_keyboard=True, resize_keyboard=True
-        )
-        await update.message.reply_text(
-            "Your choices are: \n'I am vegetarian (1)', 'I am not vegetarian (0)'.\nPlease select one:",
-            reply_markup=reply_markup,
-        )
-        return TO_CHOICES
-
-    elif attribute == "lactose free":
-        keyboard = [["I am lactose intolerant", "I am NOT lactose intolerant"]]
-        reply_markup = ReplyKeyboardMarkup(
-            keyboard, one_time_keyboard=True, resize_keyboard=True
-        )
-        await update.message.reply_text(
-            "Your choices are: \n'I am lactose intolerant (1)', 'I am NOT lactose intolerant (0)'.\nPlease select one:",
-            reply_markup=reply_markup,
-        )
-        return TO_CHOICES
-
-    elif attribute == "gluten free":
-        keyboard = [["I am gluten intolerant", "I am NOT gluten intolerant"]]
-        reply_markup = ReplyKeyboardMarkup(
-            keyboard, one_time_keyboard=True, resize_keyboard=True
-        )
-        await update.message.reply_text(
-            "Your choices are: \n'I am gluten intolerant (1)', 'I am NOT gluten intolerant (0)'.\nPlease select one:",
-            reply_markup=reply_markup,
-        )
-        return TO_CHOICES
-
-    elif attribute == "diabetes":
-        keyboard = [["I am diabetic", "I am NOT diabetic"]]
-        reply_markup = ReplyKeyboardMarkup(
-            keyboard, one_time_keyboard=True, resize_keyboard=True
-        )
-        await update.message.reply_text(
-            "Your choices are: \n'I am diabetic (1)', 'I am NOT diabetic (0)'.\nPlease select one:",
-            reply_markup=reply_markup,
-        )
-        return TO_CHOICES
-
-    elif attribute == "pregnant":
-        keyboard = [["I am pregnant", "I am NOT pregnant"]]
-        reply_markup = ReplyKeyboardMarkup(
-            keyboard, one_time_keyboard=True, resize_keyboard=True
-        )
-        await update.message.reply_text(
-            "Your choices are: \n'I am pregnant (1)', 'I am NOT pregnant (0)'.\nPlease select one:",
-            reply_markup=reply_markup,
-        )
-        return TO_CHOICES
-
-    elif attribute == "user skill":
-        keyboard = [
-            [
-                "Very low-skilled",
-                "Low-skilled",
-                "Medium-skilled",
-                "High-skilled",
-                "Very High-skilled",
-            ]
-        ]
-        reply_markup = ReplyKeyboardMarkup(
-            keyboard, one_time_keyboard=True, resize_keyboard=True
-        )
-        await update.message.reply_text(
-            "Your choices are: \n'Very low-skilled' (1), 'Low-skilled' (2), 'Medium-skilled' (3), 'High-skilled' (4), 'Very High-skilled' (5).\nPlease select one:",
-            reply_markup=reply_markup,
-        )
-        return TO_CHOICES
-    
-    elif attribute == "user lifestyle":
-        keyboard = [
-            [
-                "Very Unhealty-lifestyle",
-                "Unhealty-lifestyle",
-                "Normal-lifestyle",
-                "Healty-lifestyle",
-                "Very Healty-lifestyle",
-            ]
-        ]
-        reply_markup = ReplyKeyboardMarkup(
-            keyboard, one_time_keyboard=True, resize_keyboard=True
-        )
-        await update.message.reply_text(
-            "Your choices are: \n'Very Unhealty-lifestyle' (1), 'Unhealty-lifestyle' (2), 'Normal-lifestyle' (3), 'Healty-lifestyle' (4), 'Very Healty-lifestyle' (5).\nPlease select one:",
-            reply_markup=reply_markup,
-        )
-        return TO_CHOICES
-
-    elif attribute == "goal":
-        keyboard = [["Lose", "Maintain", "Gain"]]
-        reply_markup = ReplyKeyboardMarkup(
-            keyboard, one_time_keyboard=True, resize_keyboard=True
-        )
-        await update.message.reply_text(
-            "Your choices are: \n'Lose' (-1), 'Maintain' (0) and 'Gain' (1).\nPlease select one:",
-            reply_markup=reply_markup,
-        )
-        return TO_CHOICES
-
-    elif attribute == "user budget":
-        keyboard = [
-            ["Very low-cost", "Low-cost", "Medium-cost", "High-cost", "Very High-cost"]
-        ]
-        reply_markup = ReplyKeyboardMarkup(
-            keyboard, one_time_keyboard=True, resize_keyboard=True
-        )
-        await update.message.reply_text(
-            "Your choices are: \n'Very low-cost' (1), 'Low-cost' (2), 'Medium-cost' (3), 'High-cost' (4), 'Very High-cost' (5).\nPlease select one:",
-            reply_markup=reply_markup,
-        )
-        return TO_CHOICES
-
-    elif attribute == "user time":
-        keyboard = [["-30", "30-60", "60-90", "90-120", "120+"]]
-        reply_markup = ReplyKeyboardMarkup(
-            keyboard, one_time_keyboard=True, resize_keyboard=True
-        )
-        await update.message.reply_text(
-            "Your choices are: \n'-30 minutes', '30-60 minutes', '60-90 minutes' (3), '90-120 minutes', '120+ minutes'.\nPlease select one:",
-            reply_markup=reply_markup,
-        )
-        flag = "usertime"
-        return TO_CHOICES
-
-    elif attribute == "weight":
-        keyboard = [["Under", "Normal", "Over"]]
-        reply_markup = ReplyKeyboardMarkup(
-            keyboard, one_time_keyboard=True, resize_keyboard=True
-        )
-        await update.message.reply_text(
-            "Your choices are: \n'Under-weight', 'Normal-weight' and 'Over-weight'.\nPlease select one:",
-            reply_markup=reply_markup,
-        )
-        return TO_CHOICES
-
-    elif attribute == "age":
-        keyboard = [["U20", "U30", "U40", "U50", "U60", "O60"]]
-        reply_markup = ReplyKeyboardMarkup(
-            keyboard, one_time_keyboard=True, resize_keyboard=True
-        )
-        await update.message.reply_text(
-            "Your choices are: \n'Under20', 'Under30','Under40','Under50','Under60','Over60'.\nPlease select one:",
-            reply_markup=reply_markup,
-        )
-        return TO_CHOICES
-
-    elif attribute == "sex":
-        keyboard = [["Male", "Female", "Unspecified"]]
-        reply_markup = ReplyKeyboardMarkup(
-            keyboard, one_time_keyboard=True, resize_keyboard=True
-        )
-        await update.message.reply_text(
-            "Your choices are: \n'Male', 'Female' and 'Unspecified'.\nPlease select one:",
-            reply_markup=reply_markup,
-        )
-        return TO_CHOICES
-
-    elif attribute == "activity":
-        keyboard = [["Low-activity", "Normal-activity", "High-activity"]]
-        reply_markup = ReplyKeyboardMarkup(
-            keyboard, one_time_keyboard=True, resize_keyboard=True
-        )
-        await update.message.reply_text(
-            "Your choices are: \n'Low-activity', 'Normal-activity' and 'High-activity'.\nPlease select one:",
-            reply_markup=reply_markup,
-        )
-        return TO_CHOICES
-
-    elif attribute == "stress":
-        keyboard = [["I am stressed", "I am NOT stressed"]]
-        reply_markup = ReplyKeyboardMarkup(
-            keyboard, one_time_keyboard=True, resize_keyboard=True
-        )
-        await update.message.reply_text(
-            "Your choices are: \n'I am stressed' (1), 'I am NOT stressed' (0).\nPlease select one:",
-            reply_markup=reply_markup,
-        )
-        return TO_CHOICES
-
-    elif attribute == "sleep":
-        keyboard = [["8+", "8-"]]
-        reply_markup = ReplyKeyboardMarkup(
-            keyboard, one_time_keyboard=True, resize_keyboard=True
-        )
-        await update.message.reply_text(
-            "Your choices are: \n'8+ daily hours of sleep' (good), '8- daily hours of sleep' (bad).\nPlease select one:",
-            reply_markup=reply_markup,
-        )
-        return TO_CHOICES
-
     elif attribute == "none":
-        await update.message.reply_text(
-            "You changed your mind, that's ok.\nJust ask me a something then."
-        )
+        await update.message.reply_text("You changed your mind, that's ok. Just ask me something then.")
         return ConversationHandler.END
-
     else:
-        await update.message.reply_text(
-            "Sorry I did not get that. Can you repeat it please?"
-        )
+        await update.message.reply_text("Sorry, I did not get that. Can you repeat it please?")
 
 
 async def change_attribute_value(update: Update, context):
