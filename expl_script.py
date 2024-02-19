@@ -848,7 +848,9 @@ class Spiegazione:
         if context.user_data["glutenfree"] == 1:
             restr_list.append("gluten-free")
 
-        if hasattr(Recommendation_tre, 'img_url'):
+        if hasattr(SpecificRec, 'img_url'):
+            imgurl=SpecificRec.img_url
+        elif hasattr(Recommendation_tre, 'img_url'):
             imgurl=Recommendation_tre.img_url
         elif hasattr(Recommendation_due, 'img_url'):
             imgurl=Recommendation_due.img_url

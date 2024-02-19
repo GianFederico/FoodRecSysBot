@@ -120,3 +120,21 @@ compare them according to their sustainability
 compare them according to their seasonability
 
 TODO comparison\explanaion lifestyle
+
+
+
+restrizioni
+controllo
+obiettivo
+spiegazione_benefici_salute
+rischi
+costo
+popolarita
+tempo
+lifestyle
+eta
+piatto 
+skill
+macros
+sustainability
+seasonability

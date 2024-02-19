@@ -1451,7 +1451,7 @@ def ingredientsSustainability_one(recipe, sustainability):
 
     if not recipe_sustainable and not recipe_notSustainable:
         explanation += recipe["title"] + \
-                       " contains *no ingredient* that has either high or low carbon/water footprint sustainability."
+                       " contains ingredients with *moderate* _-neither high nor low-_ carbon/water footprint sustainability."
 
     return explanation, recipe_sustainable, recipe_notSustainable
 

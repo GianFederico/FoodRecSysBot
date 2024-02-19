@@ -174,7 +174,7 @@ class SpecificRec:
         # Costruire l'URL di richiesta con i parametri
         url = 'http://127.0.0.1:3000/mood?'
         params = {
-            'n':10,
+            'n':15,
             'category': context.user_data['category'],
             'isLowNickel': context.user_data['nickel'],
             'isVegetarian': context.user_data['vegetarian'],
@@ -209,11 +209,13 @@ class SpecificRec:
         recipe_data=None
         ingredient=ingredient.lower()
         single_ingredient= inflect.engine().singular_noun(ingredient) or ingredient
-        for i in range(9):
+        for i in range(14):
             recipe=data[i]
             ingredient_list = recipe[25][1:-1].split(", ")
+            title_words = recipe[1].split(" ")
             single_ingredient_list = convert_to_lowercase_and_singular(ingredient_list)
-            if single_ingredient in single_ingredient_list:
+            single_title_words= convert_to_lowercase_and_singular(title_words)
+            if single_ingredient in single_ingredient_list or single_ingredient in single_title_words:
                 recipe_data= data[i]
                 break
         if recipe_data:
@@ -221,6 +223,6 @@ class SpecificRec:
             title = recipe_data[1]
             SpecificRec.img_url = recipe_data[4]
         else:
-            return await update.message.reply_text(f"I'm sorry, but with the parameters you have chosen there is no good recipes with {ingredient} to suggest.\nYou can /modify you profile and try again.")
+            return await update.message.reply_text(f"I'm sorry, but with the parameters you have chosen there is no good recipe with {ingredient} to suggest.\nYou can /modify you profile and try again.")
 
         return await update.message.reply_text(f"Recipe: {title}\nURL: {url_ricetta}")
