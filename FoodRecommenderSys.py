@@ -48,7 +48,7 @@ from telegram.ext import (
 # Funzione di gestione del comando /start
 async def start(update: Update, context):
     await update.message.reply_text(
-        "Great! I'll ask you some questions to get to know you better.\nWhat is you gender?"
+        "NOOOOOOOOOOGreat! I'll ask you some questions to get to know you better.\nWhat is you gender?"
     )
     return GENDER
 
@@ -944,9 +944,9 @@ async def change_attribute_value(update: Update, context):
 # Funzione per inviare il messaggio a Dialogflow e restituire la risposta
 async def dialogflow_mode(update: Update, context):
     # Id del progetto Dialogflow
-    DIALOGFLOW_PROJECT_ID = "foodrecsys-kbji"
+    DIALOGFLOW_PROJECT_ID = "thesis-9rwt"
     # Credenziali del progetto Dialogflow
-    DIALOGFLOW_CREDENTIALS = "foodrecsys-kbji-ffc95c8f8749.json"
+    DIALOGFLOW_CREDENTIALS = "thesis-9rwt-c09b3317288e.json"
     # Recupera l'ID dell'utente e imposta la lingua del messaggio
     session_id = update.effective_user.id
     language_code = "it"
