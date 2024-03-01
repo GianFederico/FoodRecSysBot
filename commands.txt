@@ -138,3 +138,14 @@ skill
 macros
 sustainability
 seasonability
+
+
+foodgoal
+benefici salute
+rischi salute
+macros
+
+spiegazione_obiettivo
+spiegazione_benefici_salute
+spiegazione_rischi_salute
+spiegazione_macros

@@ -52,7 +52,7 @@ class Recommendation:
                 url_ricetta = recipe_data[0]
                 title = recipe_data[1]
                 Recommendation.img_url = recipe_data[4]
-        return await update.message.reply_text(f"Recipe: {title}\nURL: {url_ricetta} \n\nYou can ask me something about this recipe, such as:\nits nutritional facts, its cost, its popularity...and much more!\nOr we could focus on another recipe if you don't like it.\nJust try me.", parse_mode="Markdown")
+        return await update.message.reply_text(f"Recipe: {title}\nURL: {url_ricetta}")
 
 class Recommendation_due:
     

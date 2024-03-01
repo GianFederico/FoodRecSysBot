@@ -7,6 +7,7 @@ from recommender_script import Recommendation, Recommendation_due, Recommendatio
 from expl_script import Spiegazione
 import nest_asyncio
 import asyncio
+import random
 from telegram.ext import (
     Application,
     CommandHandler,
@@ -42,13 +43,29 @@ from telegram.ext import (
     CATEGORY,
     ATTRIBUTE,
     TO_CHOICES,
-) = range(25)
+
+    PRE_FIRST_COURSE_HEALTINESS,
+    PRE_SECOND_COURSE_HEALTINESS,
+    PRE_DESSERT_HEALTINESS,
+
+    PRE_FIRST_COURSE_SUSTAINABILITY,
+    PRE_SECOND_COURSE_SUSTAINABILITY,
+    PRE_DESSERT_SUSTAINABILITY,
+
+    POST_FIRST_COURSE_HEALTINESS,
+    POST_SECOND_COURSE_HEALTINESS,
+    POST_DESSERT_HEALTINESS,
+
+    POST_FIRST_COURSE_SUSTAINABILITY,
+    POST_SECOND_COURSE_SUSTAINABILITY,
+    POST_DESSERT_SUSTAINABILITY,
+) = range(37) #range(25)
 
 
 # Funzione di gestione del comando /start
 async def start(update: Update, context):
     await update.message.reply_text(
-        "NOOOOOOOOOOGreat! I'll ask you some questions to get to know you better.\nWhat is you gender?"
+        "Great! I'll ask you some questions to get to know you better.\nWhat is you gender?"
     )
     return GENDER
 
@@ -264,15 +281,24 @@ async def vegetarian(update: Update, context):
             context.user_data["vegetarian"] = 1
         if user_vegetarian == "no":
             context.user_data["vegetarian"] = 0
-        keyboard = [["First courses", "Second courses", "Desserts"]]
-        reply_markup = ReplyKeyboardMarkup(
-            keyboard, one_time_keyboard=True, resize_keyboard=True
-        )
+
+        context.user_data["category"] = "first courses"# default values for parameters that are not mandatory
+        context.user_data["ht_lifestyle_importance"] = 5 #assume users want to improve their lifestyle
+        context.user_data["ht_lifestyle"] = 3
+        context.user_data["cook_exp"] = 3
+        context.user_data["max_cost_rec"] = 3
+        context.user_data["time_cook"] = 0
+        context.user_data["mood"] = "neutral"
+        context.user_data["sleep"] = "good"
+        context.user_data["stress"] = 0
+        context.user_data["depress"] = 0
+        context.user_data["nickel"] = 0
+        context.user_data["light"] = 0
+
         await update.message.reply_text(
-            "Ok, we are done! Which type of recipes do you want me to suggest?",
-            reply_markup=reply_markup,
+            "Ok, we are done.\nThank you for your time! \nI've assumed some other values for you (averaging our users), if you want to check your profile out click here: /modify.\n\nOr you can /get_suggestions and I will provide 3 dishes for you:\nA first-course\nA second-course\nA dessert.",
         )
-        return CATEGORY
+        return ConversationHandler.END
 
 
 ############################################################################################################
@@ -337,39 +363,6 @@ async def diabetes(update: Update, context):
             "Are you vegetarian?", reply_markup=reply_markup
         )
         return VEGETERIAN
-
-
-############################################################################################################
-# Funzione di gestione della risposta sulla scelta dei piatti da suggerire
-async def category(update: Update, context):
-    user_category = update.message.text.lower()
-    if user_category not in ["first courses", "second courses", "desserts"]:
-        await update.message.reply_text(
-            "Please type one between 'First courses','Second courses' or 'Desserts'"
-        )
-        return CATEGORY
-    else:
-        context.user_data["category"] = user_category
-
-        # default values for parameters that are not mandatory
-        context.user_data["ht_lifestyle_importance"] = 5 #assume users want to improve their lifestyle
-        context.user_data["ht_lifestyle"] = 3
-        context.user_data["cook_exp"] = 3
-        context.user_data["max_cost_rec"] = 3
-        context.user_data["time_cook"] = 0
-        context.user_data["mood"] = "neutral"
-        context.user_data["sleep"] = "good"
-        context.user_data["stress"] = 0
-        context.user_data["depress"] = 0
-        context.user_data["nickel"] = 0
-        context.user_data["light"] = 0
-
-        reply_markup = ReplyKeyboardRemove()
-        await update.message.reply_text(
-            "Thank you for your time! \nI've assumed some other values for you (averaging our users), if you want to check your profile out click here: /modify.\n\nOr just ask me something to eat!",
-            reply_markup=reply_markup,
-        )
-        return ConversationHandler.END
 
 
 # UTILS
@@ -638,7 +631,7 @@ async def change_attribute_value(update: Update, context):
         )
         context.user_data["cook_exp"] = 5
         return ConversationHandler.END
-    
+
     elif value == "very unhealty-lifestyle":
         print(f"debug - value selected -> ({value})")
         await update.message.reply_text(
@@ -941,6 +934,341 @@ async def change_attribute_value(update: Update, context):
         )
 
 
+# Thesis functions
+async def healthiness_initialiation(update, context):
+    await Recommendation.suggerimento(update, context)
+    keyboard = [["1", "2", "3", "4", "5"]]
+    reply_markup = ReplyKeyboardMarkup(
+        keyboard, one_time_keyboard=True, resize_keyboard=True
+    )
+    await update.message.reply_text(
+        "How healthy do you think this recipe is?", reply_markup=reply_markup
+    )
+    return PRE_FIRST_COURSE_HEALTINESS
+
+
+async def first_suggestion_healthiness_explanation(update, context):
+    first_suggestion_unconditioned = update.message.text.lower()
+    name = update.message.from_user.first_name
+    with open("replies.txt", "a", encoding="utf-8") as file:
+        file.write(
+            name
+            + " "
+            + "PRE_FIRST_COURSE_HEALTINESS:"
+            + first_suggestion_unconditioned
+            + "\n"
+        )
+    await update.message.reply_text(
+        "Great, I will now prompt you with one of my explanations:"
+    )
+
+    random_number = random.randint(1, 4)
+    if (random_number==1):
+        await Spiegazione.spiegazione_obiettivo(update, context)
+    elif(random_number==2):
+        await Spiegazione.spiegazione_benefici_salute(update, context)
+    elif(random_number==3):
+        await Spiegazione.spiegazione_rischi_salute(update, context)
+    elif(random_number==4):
+        await Spiegazione.spiegazione_macros(update, context)
+
+    keyboard = [["1", "2", "3", "4", "5"]]
+    reply_markup = ReplyKeyboardMarkup(
+        keyboard, one_time_keyboard=True, resize_keyboard=True
+    )
+    await update.message.reply_text(
+        "How healthy do you think this recipe is now?", reply_markup=reply_markup
+    )
+    return POST_FIRST_COURSE_HEALTINESS
+
+
+async def second_suggestion(update, context):
+    first_suggestion_conditioned = update.message.text.lower()
+    name = update.message.from_user.first_name
+    with open("replies.txt", "a", encoding="utf-8") as file:
+        file.write(
+            name
+            + " "
+            + "POST_FIRST_COURSE_HEALTINESS:"
+            + first_suggestion_conditioned
+            + "\n"
+        )
+
+    await update.message.reply_text("Great, now a second course:")
+    context.user_data["category"] = "second courses"
+    await Recommendation.suggerimento(update, context)
+    keyboard = [["1", "2", "3", "4", "5"]]
+    reply_markup = ReplyKeyboardMarkup(
+        keyboard, one_time_keyboard=True, resize_keyboard=True
+    )
+    await update.message.reply_text(
+        "How healthy do you think this recipe is?", reply_markup=reply_markup
+    )
+    return PRE_SECOND_COURSE_HEALTINESS
+
+
+async def second_suggestion_healthiness_explanation(update, context):
+    second_suggestion_unconditioned = update.message.text.lower()
+    name = update.message.from_user.first_name
+    with open("replies.txt", "a", encoding="utf-8") as file:
+        file.write(
+            name
+            + " "
+            + "PRE_SECOND_COURSE_HEALTINESS:"
+            + second_suggestion_unconditioned
+            + "\n"
+        )
+    await update.message.reply_text(
+        "Wonderful, I'll now provide you with one of my explanations.:"
+    )
+
+    random_number = random.randint(1, 4)
+    if (random_number==1):
+        await Spiegazione.spiegazione_obiettivo(update, context)
+    elif(random_number==2):
+        await Spiegazione.spiegazione_benefici_salute(update, context)
+    elif(random_number==3):
+        await Spiegazione.spiegazione_rischi_salute(update, context)
+    elif(random_number==4):
+        await Spiegazione.spiegazione_macros(update, context)
+
+    keyboard = [["1", "2", "3", "4", "5"]]
+    reply_markup = ReplyKeyboardMarkup(
+        keyboard, one_time_keyboard=True, resize_keyboard=True
+    )
+    await update.message.reply_text(
+        "How healthy do you think this recipe is now?", reply_markup=reply_markup
+    )
+    return POST_SECOND_COURSE_HEALTINESS
+
+
+async def third_suggestion(update, context):
+    second_suggestion_conditioned = update.message.text.lower()
+    name = update.message.from_user.first_name
+    with open("replies.txt", "a", encoding="utf-8") as file:
+        file.write(
+            name
+            + " "
+            + "POST_SECOND_COURSE_HEALTINESS:"
+            + second_suggestion_conditioned
+            + "\n"
+        )
+
+    await update.message.reply_text("Great, now a dessert:")
+    context.user_data["category"] = "desserts"
+    await Recommendation.suggerimento(update, context)
+    keyboard = [["1", "2", "3", "4", "5"]]
+    reply_markup = ReplyKeyboardMarkup(
+        keyboard, one_time_keyboard=True, resize_keyboard=True
+    )
+    await update.message.reply_text(
+        "How healthy do you think this recipe is?", reply_markup=reply_markup
+    )
+    return PRE_DESSERT_HEALTINESS
+
+
+async def third_suggestion_healthiness_explanation(update, context):
+    third_suggestion_unconditioned = update.message.text.lower()
+    name = update.message.from_user.first_name
+    with open("replies.txt", "a", encoding="utf-8") as file:
+        file.write(
+            name
+            + " "
+            + "PRE_DESSERT_HEALTINESS:"
+            + third_suggestion_unconditioned
+            + "\n"
+        )
+    await update.message.reply_text(
+        "Excellent, I'll proceed to present you with one of my explanations:"
+    )
+
+    random_number = random.randint(1, 4)
+    if (random_number==1):
+        await Spiegazione.spiegazione_obiettivo(update, context)
+    elif(random_number==2):
+        await Spiegazione.spiegazione_benefici_salute(update, context)
+    elif(random_number==3):
+        await Spiegazione.spiegazione_rischi_salute(update, context)
+    elif(random_number==4):
+        await Spiegazione.spiegazione_macros(update, context)
+
+    keyboard = [["1", "2", "3", "4", "5"]]
+    reply_markup = ReplyKeyboardMarkup(
+        keyboard, one_time_keyboard=True, resize_keyboard=True
+    )
+    await update.message.reply_text(
+        "How healthy do you think this recipe is now?", reply_markup=reply_markup
+    )
+    return POST_DESSERT_HEALTINESS
+
+
+async def fourth_suggestion(update, context):
+    third_suggestion_conditioned = update.message.text.lower()
+    name = update.message.from_user.first_name
+    with open("replies.txt", "a", encoding="utf-8") as file:
+        file.write(
+            name
+            + " "
+            + "POST_DESSERT_HEALTINESS:"
+            + third_suggestion_conditioned
+            + "\n"
+        )
+
+    await update.message.reply_text(
+        "Good job! Now let's talk about the sustainability:")
+    context.user_data["category"] = "first courses"
+    await Recommendation_due.altro_suggerimento2(update, context)
+    keyboard = [["1", "2","3", "4","5"]]
+    reply_markup = ReplyKeyboardMarkup(
+    keyboard, one_time_keyboard=True, resize_keyboard=True
+    )
+    await update.message.reply_text(
+        "How sustainable do you think this recipe is?", reply_markup=reply_markup
+    )
+    return PRE_FIRST_COURSE_SUSTAINABILITY
+
+async def fourth_suggestion_sustainability_explanation(update, context):
+    fourth_suggestion_unconditioned = update.message.text.lower()
+    name = update.message.from_user.first_name
+    with open("replies.txt", "a", encoding="utf-8") as file:
+        file.write(
+            name
+            + " "
+            + "PRE_FIRST_COURSE_SUSTAINABILITY:"
+            + fourth_suggestion_unconditioned
+            + "\n"
+        )
+    await update.message.reply_text(
+        "Fantastic, I'll now offer you one of my explanations:"
+    )
+    await Spiegazione.spiegazione_sustainability(update, context)
+    keyboard = [["1", "2", "3", "4", "5"]]
+    reply_markup = ReplyKeyboardMarkup(
+        keyboard, one_time_keyboard=True, resize_keyboard=True
+    )
+    await update.message.reply_text(
+        "How sustainable do you think this recipe is now?", reply_markup=reply_markup
+    )
+    return POST_FIRST_COURSE_SUSTAINABILITY
+
+async def fifth_suggestion(update, context):
+    fourth_suggestion_conditioned = update.message.text.lower()
+    name = update.message.from_user.first_name
+    with open("replies.txt", "a", encoding="utf-8") as file:
+        file.write(
+            name
+            + " "
+            + "POST_FIRST_COURSE_SUSTAINABILITY:"
+            + fourth_suggestion_conditioned
+            + "\n"
+        )
+
+    await update.message.reply_text(
+        "Great, now a second course:")
+    context.user_data["category"] = "second courses"
+    await Recommendation_due.altro_suggerimento2(update, context)
+    keyboard = [["1", "2","3", "4","5"]]
+    reply_markup = ReplyKeyboardMarkup(
+    keyboard, one_time_keyboard=True, resize_keyboard=True
+    )
+    await update.message.reply_text(
+        "How sustainable do you think this recipe is?", reply_markup=reply_markup
+    )
+    return PRE_SECOND_COURSE_SUSTAINABILITY
+
+
+async def fifth_suggestion_sustainability_explanation(update, context):
+    fifth_suggestion_unconditioned = update.message.text.lower()
+    name = update.message.from_user.first_name
+    with open("replies.txt", "a", encoding="utf-8") as file:
+        file.write(
+            name
+            + " "
+            + "PRE_SECOND_COURSE_SUSTAINABILITY:"
+            + fifth_suggestion_unconditioned
+            + "\n"
+        )
+    await update.message.reply_text(
+        "Terrific, I'll now deliver one of my explanations to you:"
+    )
+    await Spiegazione.spiegazione_sustainability(update, context)
+    keyboard = [["1", "2", "3", "4", "5"]]
+    reply_markup = ReplyKeyboardMarkup(
+        keyboard, one_time_keyboard=True, resize_keyboard=True
+    )
+    await update.message.reply_text(
+        "How sustainable do you think this recipe is now?", reply_markup=reply_markup
+    )
+    return POST_SECOND_COURSE_SUSTAINABILITY
+
+async def sixth_suggestion(update, context):
+    fifth_suggestion_conditioned = update.message.text.lower()
+    name = update.message.from_user.first_name
+    with open("replies.txt", "a", encoding="utf-8") as file:
+        file.write(
+            name
+            + " "
+            + "POST_SECOND_COURSE_SUSTAINABILITY:"
+            + fifth_suggestion_conditioned
+            + "\n"
+        )
+
+    await update.message.reply_text(
+        "Great, now a dessert:")
+    context.user_data["category"] = "desserts"
+    await Recommendation_due.altro_suggerimento2(update, context)
+    keyboard = [["1", "2","3", "4","5"]]
+    reply_markup = ReplyKeyboardMarkup(
+    keyboard, one_time_keyboard=True, resize_keyboard=True
+    )
+    await update.message.reply_text(
+        "How sustainable do you think this recipe is?", reply_markup=reply_markup
+    )
+    return PRE_DESSERT_SUSTAINABILITY
+
+async def sixth_suggestion_sustainability_explanation(update, context):
+    sixth_suggestion_conditioned = update.message.text.lower()
+    name = update.message.from_user.first_name
+    with open("replies.txt", "a", encoding="utf-8") as file:
+        file.write(
+            name
+            + " "
+            + "PRE_DESSERT_SUSTAINABILITY:"
+            + sixth_suggestion_conditioned
+            + "\n"
+        )
+    await update.message.reply_text(
+        "Perfect, I'll now provide you with one of my explanations:"
+    )
+    await Spiegazione.spiegazione_sustainability(update, context)
+    keyboard = [["1", "2", "3", "4", "5"]]
+    reply_markup = ReplyKeyboardMarkup(
+        keyboard, one_time_keyboard=True, resize_keyboard=True
+    )
+    await update.message.reply_text(
+        "How sustainable do you think this recipe is now?", reply_markup=reply_markup
+    )
+    return POST_DESSERT_SUSTAINABILITY
+
+async def end_of_experiment(update, context):
+    sixth_suggestion_conditioned = update.message.text.lower()
+    name = update.message.from_user.first_name
+    with open("replies.txt", "a", encoding="utf-8") as file:
+        file.write(
+            name
+            + " "
+            + "POST_DESSERT_SUSTAINABILITY:"
+            + sixth_suggestion_conditioned
+            + "\n"
+        )
+
+    await update.message.reply_text(
+        "Thank you so much for your time, we are now done.")
+    
+    return ConversationHandler.END
+
+
+#########################################################################################################################à
 # Funzione per inviare il messaggio a Dialogflow e restituire la risposta
 async def dialogflow_mode(update: Update, context):
     # Id del progetto Dialogflow
@@ -970,7 +1298,6 @@ async def dialogflow_mode(update: Update, context):
     confidence = response.query_result.intent_detection_confidence
     
     if intent == "Suggestion":
-        #context.session= None
         await Recommendation.suggerimento(update, context)
     if intent == "Change suggestion 1":
         await Recommendation_due.altro_suggerimento2(update, context)
@@ -1057,7 +1384,7 @@ async def dialogflow_mode(update: Update, context):
         return await update.message.reply_text(response.query_result.fulfillment_text)
     else:
         return
-    
+
 async def clear_session(update: Update, context):
     if hasattr(SpecificRec, 'img_url'):
         del SpecificRec.img_url 
@@ -1131,10 +1458,33 @@ async def main():
             GLUTENFREE: [MessageHandler(filters.TEXT, glutenfree)],
             DIABETES: [MessageHandler(filters.TEXT, diabetes)],
             VEGETERIAN: [MessageHandler(filters.TEXT, vegetarian)],
-            CATEGORY: [MessageHandler(filters.TEXT, category)],
         },
         fallbacks=[MessageHandler(filters.TEXT, unknown)],
     )
+
+
+    ##################################################################
+    path_handler = ConversationHandler(
+        entry_points=[CommandHandler("get_suggestions", healthiness_initialiation)],
+        states={
+            PRE_FIRST_COURSE_HEALTINESS: [MessageHandler(filters.TEXT, first_suggestion_healthiness_explanation)],
+            POST_FIRST_COURSE_HEALTINESS: [MessageHandler(filters.TEXT, second_suggestion)],
+            PRE_SECOND_COURSE_HEALTINESS: [MessageHandler(filters.TEXT, second_suggestion_healthiness_explanation)],
+            POST_SECOND_COURSE_HEALTINESS: [MessageHandler(filters.TEXT, third_suggestion)],
+            PRE_DESSERT_HEALTINESS: [MessageHandler(filters.TEXT, third_suggestion_healthiness_explanation)],
+            POST_DESSERT_HEALTINESS: [MessageHandler(filters.TEXT, fourth_suggestion)],
+
+            PRE_FIRST_COURSE_SUSTAINABILITY: [MessageHandler(filters.TEXT, fourth_suggestion_sustainability_explanation)],
+            POST_FIRST_COURSE_SUSTAINABILITY: [MessageHandler(filters.TEXT, fifth_suggestion)],
+            PRE_SECOND_COURSE_SUSTAINABILITY: [MessageHandler(filters.TEXT, fifth_suggestion_sustainability_explanation)],
+            POST_SECOND_COURSE_SUSTAINABILITY: [MessageHandler(filters.TEXT, sixth_suggestion)],
+            PRE_DESSERT_SUSTAINABILITY: [MessageHandler(filters.TEXT, sixth_suggestion_sustainability_explanation)],
+            POST_DESSERT_SUSTAINABILITY: [MessageHandler(filters.TEXT, end_of_experiment)],
+        },
+        fallbacks=[MessageHandler(filters.TEXT, unknown)],
+    )
+    ##################################################################
+
 
     modification_handler = ConversationHandler(
         entry_points=[CommandHandler("modify", modify_profile)],
@@ -1154,6 +1504,7 @@ async def main():
     application.add_handler(conv_handler)
     application.add_handler(modification_handler)
     application.add_handler(session_handler)
+    application.add_handler(path_handler)
 
     # Aggiunta del CommandHandler per il cambio modalità
     application.add_handler(MessageHandler(filters.TEXT, dialogflow_mode))
@@ -1167,387 +1518,3 @@ async def main():
 
 if __name__ == "__main__":
     asyncio.run(main())
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# ###########################################################################################################################################################################
-# ###########################################################################################################################################################################
-# ###########_domande non obbligatorie_################################################################################################################################
-# #####################################################################################################################################################################
-# # Funzione di gestione della risposta sull'importanza di uno stile di vita healthy
-# async def ht_lifestyle_importance(update: Update, context):
-#     user_lifestyle_importance = update.message.text.lower()
-
-#     # Controllo sulla validità dell'importanza di uno stile di vita healthy
-#     if user_lifestyle_importance not in [
-#         "molto importante",
-#         "importante",
-#         "non importante",
-#         "poco importante",
-#         "assolutamente non importante",
-#     ]:
-#         await update.message.reply_text(
-#             "Devi inserire una tra le opzioni da me suggerite."
-#         )
-#         return HT_LIFESTYLE_IMPORTANCE
-#     else:
-#         if user_lifestyle_importance == "molto importante":
-#             context.user_data["ht_lifestyle_importance"] = 5
-#         elif user_lifestyle_importance == "importante":
-#             context.user_data["ht_lifestyle_importance"] = 4
-#         elif user_lifestyle_importance == "poco importante":
-#             context.user_data["ht_lifestyle_importance"] = 3
-#         elif user_lifestyle_importance == "non importante":
-#             context.user_data["ht_lifestyle_importance"] = 2
-#         elif user_lifestyle_importance == "assolutamente non importante":
-#             context.user_data["ht_lifestyle_importance"] = 1
-#         keyboard = [
-#             ["Molto salutare", "Salutare", "Poco salutare"],
-#             ["Non salutare", "Assolutamente non salutare"],
-#         ]
-#         reply_markup = ReplyKeyboardMarkup(
-#             keyboard, one_time_keyboard=True, resize_keyboard=True
-#         )
-#         await update.message.reply_text(
-#             "Tu invece come consideri il tuo stile di vita?\n(Hai a disposizione dei pulsanti per rispoe alla mia domanda)",
-#             reply_markup=reply_markup,
-#         )
-#         return HT_LIFESTYLE
-
-
-# #############################################################################################################
-# # Funzione di gestione della risposta sull'healthy lifestyle
-# async def ht_lifestyle(update: Update, context):
-#     user_lifestyle = update.message.text.lower()
-#     # Controllo sulla validità dell'healthy lifestyle
-#     if user_lifestyle not in [
-#         "molto salutare",
-#         "salutare",
-#         "non salutare",
-#         "poco salutare",
-#         "assolutamente non salutare",
-#     ]:
-#         await update.message.reply_text(
-#             "Gentilmente rispondimi con uno dei miei suggerimenti."
-#         )
-#         return HT_LIFESTYLE
-#     else:
-#         if user_lifestyle == "molto salutare":
-#             context.user_data["ht_lifestyle"] = 5
-#         elif user_lifestyle == "salutare":
-#             context.user_data["ht_lifestyle"] = 4
-#         elif user_lifestyle == "poco salutare":
-#             context.user_data["ht_lifestyle"] = 3
-#         elif user_lifestyle == "non salutare":
-#             context.user_data["ht_lifestyle"] = 2
-#         elif user_lifestyle == "assolutamente non salutare":
-#             context.user_data["ht_lifestyle"] = 1
-#         reply_markup = ReplyKeyboardRemove()
-#         await update.message.reply_text(
-#             "Sapresti dirmi la tua altezza in cm?", reply_markup=reply_markup
-#         )
-#         return CM
-
-
-# ############################################################################################################
-# # Funzione di gestione della risposta sull'esperienza di cucina
-# async def cook_exp(update: Update, context):
-#     user_cook_exp = update.message.text.lower()
-#     # Controllo sulla validità dell'esperienza di cucina
-#     if user_cook_exp not in [
-#         "molto facile",
-#         "facile",
-#         "media",
-#         "difficile",
-#         "molto difficile",
-#     ]:
-#         await update.message.reply_text(
-#             "Gentilmente rispondimi con uno dei miei suggerimenti."
-#         )
-#         return COOK_EXP
-#     else:
-#         if user_cook_exp == "molto facile":
-#             context.user_data["cook_exp"] = 1
-#         elif user_cook_exp == "facile":
-#             context.user_data["cook_exp"] = 2
-#         elif user_cook_exp == "media":
-#             context.user_data["cook_exp"] = 3
-#         elif user_cook_exp == "difficile":
-#             context.user_data["cook_exp"] = 4
-#         elif user_cook_exp == "molto difficile":
-#             context.user_data["cook_exp"] = 5
-
-#         keyboard = [["Molto basso", "Basso"], ["Medio", "Elevato", "Non importante"]]
-#         reply_markup = ReplyKeyboardMarkup(
-#             keyboard, one_time_keyboard=True, resize_keyboard=True
-#         )
-#         await update.message.reply_text(
-#             "Quanto potrebbe essere il tuo budget per preparare una ricetta?\n(Hai a disposizione dei pulsanti per rispoe alla mia domanda)",
-#             reply_markup=reply_markup,
-#         )
-#         return MAX_COST_REC
-
-
-# ############################################################################################################
-# # Funzione di gestione della risposta sul costo massimo di una ricetta
-# async def max_cost_rec(update: Update, context):
-#     user_max_cost_rec = update.message.text.lower()
-#     # Controllo sulla validità del costo massimo di una ricetta
-#     if user_max_cost_rec not in [
-#         "molto basso",
-#         "basso",
-#         "medio",
-#         "elevato",
-#         "non importante",
-#     ]:
-#         await update.message.reply_text(
-#             "Devi inserire una tra le opzioni da me suggerite."
-#         )
-#         return MAX_COST_REC
-#     else:
-#         if user_max_cost_rec == "molto basso":
-#             context.user_data["max_cost_rec"] = 1
-#         elif user_max_cost_rec == "basso":
-#             context.user_data["max_cost_rec"] = 2
-#         elif user_max_cost_rec == "medio":
-#             context.user_data["max_cost_rec"] = 3
-#         elif user_max_cost_rec == "elevato":
-#             context.user_data["max_cost_rec"] = 4
-#         elif user_max_cost_rec == "non importante":
-#             context.user_data["max_cost_rec"] = 5
-
-#         reply_markup = ReplyKeyboardRemove()
-#         await update.message.reply_text(
-#             "Quanto è in media il tuo tempo disponibile per cucinare espresso in minuti?\n(Puoi inserire un numero da 0 a 200) ",
-#             reply_markup=reply_markup,
-#         )
-#         return TIME_COOK
-
-
-# ############################################################################################################
-# # Funzione di gestione della risposta sul tempo di cucina
-# async def time_cook(update: Update, context):
-#     user_time_cook = update.message.text.lower()
-
-#     # Controllo sulla validità del tempo di cucina
-#     if (
-#         not user_time_cook.isdigit()
-#         or int(user_time_cook) < 0
-#         or int(user_time_cook) > 200
-#     ):
-#         await update.message.reply_text(
-#             "Devi inserire un numero intero indicativo per la mia domanda."
-#         )
-#         return TIME_COOK
-#     else:
-#         context.user_data["time_cook"] = int(user_time_cook)
-#         keyboard = [["Perderne", "Acquisirne"], ["Nessuno"]]
-#         reply_markup = ReplyKeyboardMarkup(
-#             keyboard, one_time_keyboard=True, resize_keyboard=True
-#         )
-#         await update.message.reply_text(
-#             "Qual è il tuo obiettivo in termini di peso?\n(Hai a disposizione dei pulsanti per rispoe alla mia domanda)",
-#             reply_markup=reply_markup,
-#         )
-#         return GOALS
-
-
-# ############################################################################################################
-# # Funzione di gestione della risposta sul mood
-# async def mood(update: Update, context):
-#     user_mood = update.message.text.lower()
-#     # Controllo sulla validità del mood
-#     if user_mood not in ["bene", "neutro", "male"]:
-#         await update.message.reply_text(
-#             "Gentilmente rispondimi con uno dei miei suggerimenti."
-#         )
-#         return MOOD
-#     else:
-#         if user_mood == "bene":
-#             context.user_data["mood"] = "good"
-#         elif user_mood == "male":
-#             context.user_data["mood"] = "bad"
-#         else:
-#             context.user_data["mood"] = "neutral"
-#         keyboard = [["Tanta", "Media"], ["Poca"]]
-#         reply_markup = ReplyKeyboardMarkup(
-#             keyboard, one_time_keyboard=True, resize_keyboard=True
-#         )
-#         await update.message.reply_text(
-#             "Quanta attività fisica fai in una settimana?\n(Hai a disposizione dei pulsanti per rispoe alla mia domanda)",
-#             reply_markup=reply_markup,
-#         )
-#         return PH_ACTIVITY
-
-
-# ############################################################################################################
-# # Funzione di gestione della risposta sul sonno
-# async def sleep(update: Update, context):
-#     user_sleep = update.message.text.lower()
-#     # Controllo sulla validità del sonno
-#     if user_sleep not in ["8-", "8+"]:
-#         await update.message.reply_text(
-#             "Gentilmente rispondimi con uno dei miei suggerimenti."
-#         )
-#         return SLEEP
-#     else:
-#         if user_sleep == "8-":
-#             context.user_data["sleep"] = "low"
-#         if user_sleep == "8+":
-#             context.user_data["sleep"] = "good"
-#         keyboard = [["Si", "No"]]
-#         reply_markup = ReplyKeyboardMarkup(
-#             keyboard, one_time_keyboard=True, resize_keyboard=True
-#         )
-#         await update.message.reply_text(
-#             "Ti senti stressato in questo periodo?\n(Hai a disposizione dei pulsanti per rispoe alla mia domanda)",
-#             reply_markup=reply_markup,
-#         )
-#         return STRESS
-
-
-# ############################################################################################################
-# # Funzione di gestione della risposta sullo stress
-# async def stress(update: Update, context):
-#     user_stress = update.message.text.lower()
-#     # Controllo sulla validità dello stress
-#     if user_stress not in ["sì", "no", "si"]:
-#         await update.message.reply_text(
-#             "Devi inserire una tra le opzioni da me suggerite."
-#         )
-#         return STRESS
-#     else:
-#         if user_stress == "si" or "sì":
-#             context.user_data["stress"] = 1
-#         if user_stress == "no":
-#             context.user_data["stress"] = 0
-#         keyboard = [["Si", "No"]]
-#         reply_markup = ReplyKeyboardMarkup(
-#             keyboard, one_time_keyboard=True, resize_keyboard=True
-#         )
-#         await update.message.reply_text(
-#             "Ti senti depresso in questo periodo?\n(Hai a disposizione dei pulsanti per rispoe alla mia domanda)",
-#             reply_markup=reply_markup,
-#         )
-
-#         return DEPRESS
-
-
-# ############################################################################################################
-# # Funzione di gestione della risposta sulla depressione
-# async def depress(update: Update, context):
-#     user_depress = update.message.text.lower()
-#     if user_depress not in ["sì", "no", "si"]:
-#         await update.message.reply_text(
-#             "Gentilmente rispondimi con uno dei miei suggerimenti."
-#         )
-#         return DEPRESS
-#     else:
-#         if user_depress == "si" or "Si" or "Sì" or "sì":
-#             context.user_data["depress"] = 1
-#         if user_depress == "no":
-#             context.user_data["depress"] = 0
-#         keyboard = [["Si", "No"]]
-#         reply_markup = ReplyKeyboardMarkup(
-#             keyboard, one_time_keyboard=True, resize_keyboard=True
-#         )
-#         await update.message.reply_text(
-#             "Grazie! Ancora poche domande ed abbiamo terminato. Hai bisogno di ricette con basso Nickel?\n(Hai a disposizione dei pulsanti per rispoe alla mia domanda)",
-#             reply_markup=reply_markup,
-#         )
-#         return LOWNICKEL
-
-
-# ############################################################################################################
-# # Funzione di gestione della risposta sul nickel basso
-# async def nickel(update: Update, context):
-#     user_nickel = update.message.text.lower()
-#     # Controllo sulla validità dello stress
-#     if user_nickel not in ["sì", "no", "si"]:
-#         await update.message.reply_text(
-#             "Devi inserire una tra le opzioni da me suggerite."
-#         )
-#         return LOWNICKEL
-#     else:
-#         if user_nickel == "si" or "Si" or "Sì" or "sì":
-#             context.user_data["nickel"] = 1
-#         if user_nickel == "no":
-#             context.user_data["nickel"] = 0
-#         keyboard = [["Si", "No"]]
-#         reply_markup = ReplyKeyboardMarkup(
-#             keyboard, one_time_keyboard=True, resize_keyboard=True
-#         )
-#         await update.message.reply_text(
-#             "Sei vegetariano?\n(Hai a disposizione dei pulsanti per rispoe alla mia domanda)",
-#             reply_markup=reply_markup,
-#         )
-#         return VEGETERIAN
-
-
-# ############################################################################################################
-# # Funzione di gestione della risposta sui pochi grassi
-# async def light(update: Update, context):
-#     user_light = update.message.text.lower()
-#     if user_light not in ["sì", "no", "si"]:
-#         await update.message.reply_text(
-#             "Gentilmente rispondimi con uno dei miei suggerimenti."
-#         )
-#         return LIGHT
-#     else:
-#         if user_light == "si" or "sì":
-#             context.user_data["light"] = 1
-#         if user_light == "no":
-#             context.user_data["light"] = 0
-#         keyboard = [["Si", "No"]]
-#         reply_markup = ReplyKeyboardMarkup(
-#             keyboard, one_time_keyboard=True, resize_keyboard=True
-#         )
-#         await update.message.reply_text(
-#             "Sei diabetico/a?\n(Hai a disposizione dei pulsanti per rispoe alla mia domanda)",
-#             reply_markup=reply_markup,
-#         )
-#         return DIABETES
-
-
-# ############################################################################################################
-# ############################################################################################################
