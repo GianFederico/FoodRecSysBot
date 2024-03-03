@@ -81,4 +81,3 @@ urllib3
 Werkzeug
 zope.interface
 inflect
-nest_asyncio
