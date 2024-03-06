@@ -936,15 +936,21 @@ async def change_attribute_value(update: Update, context):
 
 # Thesis functions
 async def healthiness_initialiation(update, context):
-    await Recommendation.suggerimento(update, context)
-    keyboard = [["1", "2", "3", "4", "5"]]
-    reply_markup = ReplyKeyboardMarkup(
-        keyboard, one_time_keyboard=True, resize_keyboard=True
-    )
-    await update.message.reply_text(
-        "How healthy do you think this recipe is?", reply_markup=reply_markup
-    )
-    return PRE_FIRST_COURSE_HEALTINESS
+    if "gender" not in context.user_data:
+        await update.message.reply_text(
+            "You have *not* created your profile yet. \nTry /create first.", parse_mode='Markdown'
+        )
+        return
+    else:
+        await Recommendation.suggerimento(update, context)
+        keyboard = [["Unhealthy", "Somewhat Unhealthy"], ["Moderately Healthy"], ["Healthy", "Very Healthy"]]
+        reply_markup = ReplyKeyboardMarkup(
+            keyboard, one_time_keyboard=True, resize_keyboard=True
+        )
+        await update.message.reply_text(
+            "How healthy do you think this recipe is?", reply_markup=reply_markup
+        )
+        return PRE_FIRST_COURSE_HEALTINESS
 
 
 async def first_suggestion_healthiness_explanation(update, context):
@@ -972,7 +978,7 @@ async def first_suggestion_healthiness_explanation(update, context):
     elif(random_number==4):
         await Spiegazione.spiegazione_macros(update, context)
 
-    keyboard = [["1", "2", "3", "4", "5"]]
+    keyboard = [["Unhealthy", "Somewhat Unhealthy"], ["Moderately Healthy"], ["Healthy", "Very Healthy"]]
     reply_markup = ReplyKeyboardMarkup(
         keyboard, one_time_keyboard=True, resize_keyboard=True
     )
@@ -997,7 +1003,7 @@ async def second_suggestion(update, context):
     await update.message.reply_text("Great, now a second course:")
     context.user_data["category"] = "second courses"
     await Recommendation.suggerimento(update, context)
-    keyboard = [["1", "2", "3", "4", "5"]]
+    keyboard = [["Unhealthy", "Somewhat Unhealthy"], ["Moderately Healthy"], ["Healthy", "Very Healthy"]]
     reply_markup = ReplyKeyboardMarkup(
         keyboard, one_time_keyboard=True, resize_keyboard=True
     )
@@ -1032,7 +1038,7 @@ async def second_suggestion_healthiness_explanation(update, context):
     elif(random_number==4):
         await Spiegazione.spiegazione_macros(update, context)
 
-    keyboard = [["1", "2", "3", "4", "5"]]
+    keyboard = [["Unhealthy", "Somewhat Unhealthy"], ["Moderately Healthy"], ["Healthy", "Very Healthy"]]
     reply_markup = ReplyKeyboardMarkup(
         keyboard, one_time_keyboard=True, resize_keyboard=True
     )
@@ -1057,7 +1063,7 @@ async def third_suggestion(update, context):
     await update.message.reply_text("Great, now a dessert:")
     context.user_data["category"] = "desserts"
     await Recommendation.suggerimento(update, context)
-    keyboard = [["1", "2", "3", "4", "5"]]
+    keyboard = [["Unhealthy", "Somewhat Unhealthy"], ["Moderately Healthy"], ["Healthy", "Very Healthy"]]
     reply_markup = ReplyKeyboardMarkup(
         keyboard, one_time_keyboard=True, resize_keyboard=True
     )
@@ -1092,7 +1098,7 @@ async def third_suggestion_healthiness_explanation(update, context):
     elif(random_number==4):
         await Spiegazione.spiegazione_macros(update, context)
 
-    keyboard = [["1", "2", "3", "4", "5"]]
+    keyboard = [["Unhealthy", "Somewhat Unhealthy"], ["Moderately Healthy"], ["Healthy", "Very Healthy"]]
     reply_markup = ReplyKeyboardMarkup(
         keyboard, one_time_keyboard=True, resize_keyboard=True
     )
@@ -1118,7 +1124,7 @@ async def fourth_suggestion(update, context):
         "Good job! Now let's talk about the sustainability:")
     context.user_data["category"] = "first courses"
     await Recommendation_due.altro_suggerimento2(update, context)
-    keyboard = [["1", "2","3", "4","5"]]
+    keyboard = [["Unsustainable", "Somewhat Unsustainable"],["Moderately Sustainable"], ["Sustainable","Very Sustainable"]]
     reply_markup = ReplyKeyboardMarkup(
     keyboard, one_time_keyboard=True, resize_keyboard=True
     )
@@ -1141,8 +1147,12 @@ async def fourth_suggestion_sustainability_explanation(update, context):
     await update.message.reply_text(
         "Fantastic, I'll now offer you one of my explanations:"
     )
-    await Spiegazione.spiegazione_sustainability(update, context)
-    keyboard = [["1", "2", "3", "4", "5"]]
+    random_number = random.randint(1, 2)
+    if (random_number==1):
+        await Spiegazione.spiegazione_sustainability(update, context)
+    elif(random_number==2):
+        await Spiegazione.spiegazione_piatto(update, context)
+    keyboard = [["Unsustainable", "Somewhat Unsustainable"],["Moderately Sustainable"], ["Sustainable","Very Sustainable"]]
     reply_markup = ReplyKeyboardMarkup(
         keyboard, one_time_keyboard=True, resize_keyboard=True
     )
@@ -1167,7 +1177,7 @@ async def fifth_suggestion(update, context):
         "Great, now a second course:")
     context.user_data["category"] = "second courses"
     await Recommendation_due.altro_suggerimento2(update, context)
-    keyboard = [["1", "2","3", "4","5"]]
+    keyboard = [["Unsustainable", "Somewhat Unsustainable"],["Moderately Sustainable"], ["Sustainable","Very Sustainable"]]
     reply_markup = ReplyKeyboardMarkup(
     keyboard, one_time_keyboard=True, resize_keyboard=True
     )
@@ -1191,8 +1201,12 @@ async def fifth_suggestion_sustainability_explanation(update, context):
     await update.message.reply_text(
         "Terrific, I'll now deliver one of my explanations to you:"
     )
-    await Spiegazione.spiegazione_sustainability(update, context)
-    keyboard = [["1", "2", "3", "4", "5"]]
+    random_number = random.randint(1, 2)
+    if (random_number==1):
+        await Spiegazione.spiegazione_sustainability(update, context)
+    elif(random_number==2):
+        await Spiegazione.spiegazione_piatto(update, context)
+    keyboard = [["Unsustainable", "Somewhat Unsustainable"],["Moderately Sustainable"], ["Sustainable","Very Sustainable"]]
     reply_markup = ReplyKeyboardMarkup(
         keyboard, one_time_keyboard=True, resize_keyboard=True
     )
@@ -1217,7 +1231,7 @@ async def sixth_suggestion(update, context):
         "Great, now a dessert:")
     context.user_data["category"] = "desserts"
     await Recommendation_due.altro_suggerimento2(update, context)
-    keyboard = [["1", "2","3", "4","5"]]
+    keyboard = [["Unsustainable", "Somewhat Unsustainable"],["Moderately Sustainable"], ["Sustainable","Very Sustainable"]]
     reply_markup = ReplyKeyboardMarkup(
     keyboard, one_time_keyboard=True, resize_keyboard=True
     )
@@ -1240,8 +1254,12 @@ async def sixth_suggestion_sustainability_explanation(update, context):
     await update.message.reply_text(
         "Perfect, I'll now provide you with one of my explanations:"
     )
-    await Spiegazione.spiegazione_sustainability(update, context)
-    keyboard = [["1", "2", "3", "4", "5"]]
+    random_number = random.randint(1, 2)
+    if (random_number==1):
+        await Spiegazione.spiegazione_sustainability(update, context)
+    elif(random_number==2):
+        await Spiegazione.spiegazione_piatto(update, context)
+    keyboard =[["Unsustainable", "Somewhat Unsustainable"],["Moderately Sustainable"], ["Sustainable","Very Sustainable"]]
     reply_markup = ReplyKeyboardMarkup(
         keyboard, one_time_keyboard=True, resize_keyboard=True
     )
