@@ -59,7 +59,11 @@ from telegram.ext import (
     POST_FIRST_COURSE_SUSTAINABILITY,
     POST_SECOND_COURSE_SUSTAINABILITY,
     POST_DESSERT_SUSTAINABILITY,
-) = range(37) #range(25)
+    HEALTHINESS_LEVEL,
+    HEALTHINESS_INTEREST,
+    SUSTAINABILITY_LEVEL,
+    SUSTAINABILITY_INTEREST
+) = range(41) #range(25)
 
 
 # Funzione di gestione del comando /start
@@ -270,38 +274,6 @@ async def ph_activity(update: Update, context):
 
 
 ############################################################################################################
-# Funzione di gestione della risposta sull'essere vegetariani
-async def vegetarian(update: Update, context):
-    user_vegetarian = update.message.text.lower()
-    if user_vegetarian not in ["yes", "no"]:
-        await update.message.reply_text("Sorry I did not get that, can you repeat it?")
-        return VEGETERIAN
-    else:
-        if user_vegetarian == "yes":
-            context.user_data["vegetarian"] = 1
-        if user_vegetarian == "no":
-            context.user_data["vegetarian"] = 0
-
-        context.user_data["category"] = "first courses"# default values for parameters that are not mandatory
-        context.user_data["ht_lifestyle_importance"] = 5 #assume users want to improve their lifestyle
-        context.user_data["ht_lifestyle"] = 3
-        context.user_data["cook_exp"] = 3
-        context.user_data["max_cost_rec"] = 3
-        context.user_data["time_cook"] = 0
-        context.user_data["mood"] = "neutral"
-        context.user_data["sleep"] = "good"
-        context.user_data["stress"] = 0
-        context.user_data["depress"] = 0
-        context.user_data["nickel"] = 0
-        context.user_data["light"] = 0
-
-        await update.message.reply_text(
-            "Ok, we are done.\nThank you for your time! \nI've assumed some other values for you (averaging our users), if you want to check your profile out click here: /modify.\n\nOr you can /get_suggestions and I will provide 3 dishes for you:\nA first-course\nA second-course\nA dessert.",
-        )
-        return ConversationHandler.END
-
-
-############################################################################################################
 # Funzione di gestione della risposta sull'intolleranza al lattosio
 async def lactosefree(update: Update, context):
     user_lactosefree = update.message.text.lower()
@@ -360,10 +332,139 @@ async def diabetes(update: Update, context):
             keyboard, one_time_keyboard=True, resize_keyboard=True
         )
         await update.message.reply_text(
-            "Are you vegetarian?", reply_markup=reply_markup
+            "Are you VEGETARIAN?", reply_markup=reply_markup
         )
         return VEGETERIAN
 
+
+
+############################################################################################################
+# Funzione di gestione della risposta sull'essere vegetariani
+async def vegetarian(update: Update, context):
+    user_vegetarian = update.message.text.lower()
+    if user_vegetarian not in ["yes", "no"]:
+        await update.message.reply_text("Sorry I did not get that, can you repeat it?")
+        return VEGETERIAN
+    else:
+        if user_vegetarian == "yes":
+            context.user_data["vegetarian"] = 1
+        if user_vegetarian == "no":
+            context.user_data["vegetarian"] = 0
+
+        context.user_data["category"] = "first courses"# default values for parameters that are not mandatory
+        context.user_data["ht_lifestyle_importance"] = 5 #assume users want to improve their lifestyle
+        context.user_data["ht_lifestyle"] = 3
+        context.user_data["cook_exp"] = 3
+        context.user_data["max_cost_rec"] = 3
+        context.user_data["time_cook"] = 0
+        context.user_data["mood"] = "neutral"
+        context.user_data["sleep"] = "good"
+        context.user_data["stress"] = 0
+        context.user_data["depress"] = 0
+        context.user_data["nickel"] = 0
+        context.user_data["light"] = 0
+
+        keyboard = [["Low", "Moderate", "High"]]
+        reply_markup = ReplyKeyboardMarkup(
+            keyboard, one_time_keyboard=True, resize_keyboard=True
+        )
+        await update.message.reply_text(
+            "How would you define your *knowledge* about the HEALTHINESS of the recipes?", reply_markup=reply_markup, parse_mode='Markdown'
+        )
+        return HEALTHINESS_LEVEL
+
+async def healthiness_level(update: Update, context):
+    user_HT_LEVEL = update.message.text.lower()
+    if user_HT_LEVEL not in ["low", "moderate", "high"]:
+        await update.message.reply_text("Sorry I did not get that, can you repeat it?")
+        return HEALTHINESS_LEVEL
+    else:
+        if user_HT_LEVEL == "low":
+            context.user_data["ht_level"] = "low ht knowledge"
+        if user_HT_LEVEL == "moderate":
+            context.user_data["ht_level"] = "moderate ht knowledge"
+        if user_HT_LEVEL == "high":
+            context.user_data["ht_level"] = "high ht knowledge"
+
+
+        keyboard = [["Low", "Moderate", "High"]]
+        reply_markup = ReplyKeyboardMarkup(
+            keyboard, one_time_keyboard=True, resize_keyboard=True
+        )
+        await update.message.reply_text(
+            "How much *interest* do you have in the HEALTHINESS of the recipes?", reply_markup=reply_markup, parse_mode='Markdown'
+        )
+        return HEALTHINESS_INTEREST
+    
+async def healthiness_interest(update: Update, context):
+    user_HT_INTEREST = update.message.text.lower()
+    if user_HT_INTEREST not in ["low", "moderate", "high"]:
+        await update.message.reply_text("Sorry I did not get that, can you repeat it?")
+        return HEALTHINESS_INTEREST
+    else:
+        if user_HT_INTEREST == "low":
+            context.user_data["ht_interest"] = "low ht interest"
+        if user_HT_INTEREST == "moderate":
+            context.user_data["ht_interest"] = "moderate ht interest"
+        if user_HT_INTEREST == "high":
+            context.user_data["ht_interest"] = "high ht interest"
+
+
+        keyboard = [["Low", "Moderate", "High"]]
+        reply_markup = ReplyKeyboardMarkup(
+            keyboard, one_time_keyboard=True, resize_keyboard=True
+        )
+        await update.message.reply_text(
+            "How would you define your *knowledge* about the SUSTAINABILITY of the recipes?", reply_markup=reply_markup, parse_mode='Markdown'
+        )
+        return SUSTAINABILITY_LEVEL
+
+async def sustainability_level(update: Update, context):
+    user_sus_level = update.message.text.lower()
+    if user_sus_level not in ["low", "moderate", "high"]:
+        await update.message.reply_text("Sorry I did not get that, can you repeat it?")
+        return SUSTAINABILITY_LEVEL
+    else:
+        if user_sus_level == "low":
+            context.user_data["sus_level"] = "low sus knowledge"
+        if user_sus_level == "moderate":
+            context.user_data["sus_level"] = "moderate sus knowledge"
+        if user_sus_level == "high":
+            context.user_data["sus_level"] = "high sus knowledge"
+
+
+        keyboard = [["Low", "Moderate", "High"]]
+        reply_markup = ReplyKeyboardMarkup(
+            keyboard, one_time_keyboard=True, resize_keyboard=True
+        )
+        await update.message.reply_text(
+            "How much *interest* do you have in the SUSTAINABILITY of the recipes?", reply_markup=reply_markup, parse_mode='Markdown'
+        )
+        return SUSTAINABILITY_INTEREST
+    
+
+async def sustainability_interest(update: Update, context):
+    user_sus_interest = update.message.text.lower()
+    if user_sus_interest not in ["low", "moderate", "high"]:
+        await update.message.reply_text("Sorry I did not get that, can you repeat it?")
+        return SUSTAINABILITY_INTEREST
+    else:
+        if user_sus_interest == "low":
+            context.user_data["sus_interest"] = "low sus interest"
+        if user_sus_interest == "moderate":
+            context.user_data["sus_interest"] = "moderate sus interest"
+        if user_sus_interest == "high":
+            context.user_data["sus_interest"] = "high sus interest"
+
+
+        keyboard = [["Low", "Moderate", "High"]]
+        reply_markup = ReplyKeyboardMarkup(
+            keyboard, one_time_keyboard=True, resize_keyboard=True
+        )
+        await update.message.reply_text(
+            "Ok, you have just created your profile.\nThank you for your time! \nI've assumed some other values for you (averaging our users), if you want to check your profile out click here: /modify.\n\nOr you can /get_suggestions and I will provide 3 dishes for you:\n- A first-course\n- A second-course\n- A dessert."
+        )
+        return ConversationHandler.END
 
 # UTILS
 def error(update, context):
@@ -414,6 +515,10 @@ async def modify_profile(update: Update, context):
             f" •  *Activity*:  {context.user_data['ph_activity']}\n"
             f" •  *Stress*:  {context.user_data['stress']}\n"
             f" •  *Sleep*:  {context.user_data['sleep']}\n\n"
+            f" •  *Healthiness Knowledge*:  {context.user_data['ht_level']}\n"
+            f" •  *Healthiness Interest*:  {context.user_data['ht_interest']}\n"
+            f" •  *Sustainability Knowledge*:  {context.user_data['sus_level']}\n"
+            f" •  *Sustainability Interest*:  {context.user_data['sus_interest']}\n\n"
             "What would you like to modify?\n"
             "Please type in the attribute you want to modify or '*none*' if you changed your mind:"
             # f"Depression: {context.user_data['depress']}\n"
@@ -462,7 +567,15 @@ async def choose_attribute(update: Update, context):
         "stress": ("Your choices are: I am stressed or I am NOT stressed. Please select one:",
                       [["I am stressed", "I am NOT stressed"]]),
         "sleep": ("Your choices are: 8+ daily hours of sleep (good) or 8- daily hours of sleep (bad). Please select one:",
-                    [["8+", "8-"]])
+                    [["8+", "8-"]]),
+        "healthiness knowledge": ("Your choices are: Low Knowledge, Moderate Knowledge or High Knowledge. Please select one:",
+                    [["Low Ht Knowledge", "Moderate Ht Knowledge", "High Ht Knowledge"]]),
+        "healthiness interest": ("Your choices are: Low Interest, Moderate Interest or High Interest. Please select one:",
+                    [["Low Ht Interest", "Moderate Ht Interest", "High Ht Interest"]]),
+        "sustainability knowledge": ("Your choices are: Low, Moderate or High. Please select one:",
+                    [["Low Sus Knowledge", "Moderate Sus Knowledge", "High Sus Knowledge"]]),
+        "sustainability interest": ("Your choices are: Low Interest, Moderate Interest or High Interest. Please select one:",
+                    [["Low Sus Interest", "Moderate Sus Interest", "High Sus Interest"]]),
     }
 
     if attribute in attribute_options:
@@ -471,7 +584,7 @@ async def choose_attribute(update: Update, context):
         await update.message.reply_text(message, reply_markup=reply_markup)
         return TO_CHOICES
     elif attribute == "none":
-        await update.message.reply_text("You changed your mind, that's ok. Just ask me something then.")
+        await update.message.reply_text("You changed your mind, that's ok. Try to /get_suggestions")
         return ConversationHandler.END
     else:
         await update.message.reply_text("Sorry, I did not get that. Can you repeat it please?")
@@ -480,10 +593,118 @@ async def choose_attribute(update: Update, context):
 async def change_attribute_value(update: Update, context):
     value = update.message.text.lower()
 
+    if value == "low ht knowledge":
+        print(f"debug - value selected -> ({value})")
+        await update.message.reply_text(
+            f"You successefully changed attribute 'Healthiness Knowledge'\nfrom:  {context.user_data['ht_level']} -> {value}.\n\nYou can now /modify something else, or /get_suggestions"
+        )
+        context.user_data["ht_level"] = value
+        return ConversationHandler.END
+
+    if value == "moderate ht knowledge":
+        print(f"debug - value selected -> ({value})")
+        await update.message.reply_text(
+            f"You successefully changed attribute 'Healthiness Knowledge'\nfrom:  {context.user_data['ht_level']} -> {value}.\n\nYou can now /modify something else, or /get_suggestions"
+        )
+        context.user_data["ht_level"] = value
+        return ConversationHandler.END
+
+    if value == "high ht knowledge":
+        print(f"debug - value selected -> ({value})")
+        await update.message.reply_text(
+            f"You successefully changed attribute 'Healthiness Knowledge'\nfrom:  {context.user_data['ht_level']} -> {value}.\n\nYou can now /modify something else, or /get_suggestions"
+        )
+        context.user_data["ht_level"] = value
+        return ConversationHandler.END
+    
+    if value == "low ht interest":
+        print(f"debug - value selected -> ({value})")
+        await update.message.reply_text(
+            f"You successefully changed attribute 'Healthiness Interest'\nfrom:  {context.user_data['ht_level']} -> {value}.\n\nYou can now /modify something else, or /get_suggestions"
+        )
+        context.user_data["ht_interest"] = value
+        return ConversationHandler.END
+    
+    if value == "moderate ht interest":
+        print(f"debug - value selected -> ({value})")
+        await update.message.reply_text(
+            f"You successefully changed attribute 'Healthiness Interest'\nfrom:  {context.user_data['ht_interest']} -> {value}.\n\nYou can now /modify something else, or /get_suggestions"
+        )
+        context.user_data["ht_interest"] = value
+        return ConversationHandler.END
+    
+    if value == "high ht interest":
+        print(f"debug - value selected -> ({value})")
+        await update.message.reply_text(
+            f"You successefully changed attribute 'Healthiness Interest'\nfrom:  {context.user_data['ht_interest']} -> {value}.\n\nYou can now /modify something else, or /get_suggestions"
+        )
+        context.user_data["ht_interest"] = value
+        return ConversationHandler.END
+    
+    if value == "low sus knowledge":
+        print(f"debug - value selected -> ({value})")
+        await update.message.reply_text(
+            f"You successefully changed attribute 'Category'\nfrom:  {context.user_data['sus_level']} -> {value}.\n\nYou can now /modify something else, or /get_suggestions"
+        )
+        context.user_data["sus_level"] = value
+        return ConversationHandler.END
+    
+    if value == "moderate sus knowledge":
+        print(f"debug - value selected -> ({value})")
+        await update.message.reply_text(
+            f"You successefully changed attribute 'Category'\nfrom:  {context.user_data['sus_level']} -> {value}.\n\nYou can now /modify something else, or /get_suggestions"
+        )
+        context.user_data["sus_level"] = value
+        return ConversationHandler.END
+    
+    if value == "high sus knowledge":
+        print(f"debug - value selected -> ({value})")
+        await update.message.reply_text(
+            f"You successefully changed attribute 'Category'\nfrom:  {context.user_data['sus_level']} -> {value}.\n\nYou can now /modify something else, or /get_suggestions"
+        )
+        context.user_data["sus_level"] = value
+        return ConversationHandler.END
+    
+    if value == "low sus interest":
+        print(f"debug - value selected -> ({value})")
+        await update.message.reply_text(
+            f"You successefully changed attribute 'Category'\nfrom:  {context.user_data['sus_interest']} -> {value}.\n\nYou can now /modify something else, or /get_suggestions"
+        )
+        context.user_data["sus_interest"] = value
+        return ConversationHandler.END
+    
+    if value == "moderate sus interest":
+        print(f"debug - value selected -> ({value})")
+        await update.message.reply_text(
+            f"You successefully changed attribute 'Category'\nfrom:  {context.user_data['sus_interest']} -> {value}.\n\nYou can now /modify something else, or /get_suggestions"
+        )
+        context.user_data["sus_interest"] = value
+        return ConversationHandler.END
+    
+    if value == "high sus interest":
+        print(f"debug - value selected -> ({value})")
+        await update.message.reply_text(
+            f"You successefully changed attribute 'Category'\nfrom:  {context.user_data['sus_interest']} -> {value}.\n\nYou can now /modify something else, or /get_suggestions"
+        )
+        context.user_data["sus_interest"] = value
+        return ConversationHandler.END
+    
+
+
+
+
+
+
+
+
+
+
+
+
     if value == "first courses":
         print(f"debug - value selected -> ({value})")
         await update.message.reply_text(
-            f"You successefully changed attribute 'Category'\nfrom:  {context.user_data['category']} -> {value}.\n\nNow you can ask me to suggest something again."
+            f"You successefully changed attribute 'Category'\nfrom:  {context.user_data['category']} -> {value}.\n\nYou can now /modify something else, or /get_suggestions"
         )
         context.user_data["category"] = value
         return ConversationHandler.END
@@ -491,7 +712,7 @@ async def change_attribute_value(update: Update, context):
     elif value == "second courses":
         print(f"debug - value selected -> ({value})")
         await update.message.reply_text(
-            f"You successefully changed attribute 'Category'\nfrom:  {context.user_data['category']} -> {value}.\n\nNow you can ask me to suggest something again."
+            f"You successefully changed attribute 'Category'\nfrom:  {context.user_data['category']} -> {value}.\n\nYou can now /modify something else, or /get_suggestions"
         )
         context.user_data["category"] = value
         return ConversationHandler.END
@@ -499,7 +720,7 @@ async def change_attribute_value(update: Update, context):
     elif value == "desserts":
         print(f"debug - value selected -> ({value})")
         await update.message.reply_text(
-            f"You successefully changed attribute 'Category'\nfrom:  {context.user_data['category']} -> {value}.\n\nNow you can ask me to suggest something again."
+            f"You successefully changed attribute 'Category'\nfrom:  {context.user_data['category']} -> {value}.\n\nYou can now /modify something else, or /get_suggestions"
         )
         context.user_data["category"] = value
         return ConversationHandler.END
@@ -507,7 +728,7 @@ async def change_attribute_value(update: Update, context):
     elif value == "i do not want low nickel suggestions":
         print(f"debug - value selected -> ({value})")
         await update.message.reply_text(
-            f"You successfully changed attribute 'Low Nickel'\nfrom:  {context.user_data['nickel']} -> 0.\n\nNow you can ask me to suggest something again."
+            f"You successfully changed attribute 'Low Nickel'\nfrom:  {context.user_data['nickel']} -> 0.\n\nYou can now /modify something else, or /get_suggestions"
         )
         context.user_data["nickel"] = 0
         return ConversationHandler.END
@@ -515,7 +736,7 @@ async def change_attribute_value(update: Update, context):
     elif value == "i am vegetarian":
         print(f"debug - value selected -> ({value})")
         await update.message.reply_text(
-            f"You successfully changed attribute 'Vegetarian'\nfrom:  {context.user_data['vegetarian']} -> 1.\n\nNow you can ask me to suggest something again."
+            f"You successfully changed attribute 'Vegetarian'\nfrom:  {context.user_data['vegetarian']} -> 1.\n\nYou can now /modify something else, or /get_suggestions"
         )
         context.user_data["vegetarian"] = 1
         return ConversationHandler.END
@@ -523,7 +744,7 @@ async def change_attribute_value(update: Update, context):
     elif value == "i am not vegetarian":
         print(f"debug - value selected -> ({value})")
         await update.message.reply_text(
-            f"You successfully changed attribute 'Vegetarian'\nfrom:  {context.user_data['vegetarian']} -> 0.\n\nNow you can ask me to suggest something again."
+            f"You successfully changed attribute 'Vegetarian'\nfrom:  {context.user_data['vegetarian']} -> 0.\n\nYou can now /modify something else, or /get_suggestions"
         )
         context.user_data["vegetarian"] = 0
         return ConversationHandler.END
@@ -531,7 +752,7 @@ async def change_attribute_value(update: Update, context):
     elif value == "i am lactose intolerant":
         print(f"debug - value selected -> ({value})")
         await update.message.reply_text(
-            f"You successfully changed attribute 'Lactose-Free'\nfrom:  {context.user_data['lactosefree']} -> 1.\n\nNow you can ask me to suggest something again."
+            f"You successfully changed attribute 'Lactose-Free'\nfrom:  {context.user_data['lactosefree']} -> 1.\n\nYou can now /modify something else, or /get_suggestions"
         )
         context.user_data["lactosefree"] = 1
         return ConversationHandler.END
@@ -539,7 +760,7 @@ async def change_attribute_value(update: Update, context):
     elif value == "i am not lactose intolerant":
         print(f"debug - value selected -> ({value})")
         await update.message.reply_text(
-            f"You successfully changed attribute 'Lactose-Free'\nfrom:  {context.user_data['lactosefree']} -> 0.\n\nNow you can ask me to suggest something again."
+            f"You successfully changed attribute 'Lactose-Free'\nfrom:  {context.user_data['lactosefree']} -> 0.\n\nYou can now /modify something else, or /get_suggestions"
         )
         context.user_data["lactosefree"] = 0
         return ConversationHandler.END
@@ -547,7 +768,7 @@ async def change_attribute_value(update: Update, context):
     elif value == "i am gluten intolerant":
         print(f"debug - value selected -> ({value})")
         await update.message.reply_text(
-            f"You successfully changed attribute 'Gluten-Free'\nfrom:  {context.user_data['glutenfree']} -> 1.\n\nNow you can ask me to suggest something again."
+            f"You successfully changed attribute 'Gluten-Free'\nfrom:  {context.user_data['glutenfree']} -> 1.\n\nYou can now /modify something else, or /get_suggestions"
         )
         context.user_data["glutenfree"] = 1
         return ConversationHandler.END
@@ -555,7 +776,7 @@ async def change_attribute_value(update: Update, context):
     elif value == "i am not gluten intolerant":
         print(f"debug - value selected -> ({value})")
         await update.message.reply_text(
-            f"You successfully changed attribute 'Gluten-Free'\nfrom:  {context.user_data['glutenfree']} -> 0.\n\nNow you can ask me to suggest something again."
+            f"You successfully changed attribute 'Gluten-Free'\nfrom:  {context.user_data['glutenfree']} -> 0.\n\nYou can now /modify something else, or /get_suggestions"
         )
         context.user_data["glutenfree"] = 0
         return ConversationHandler.END
@@ -563,7 +784,7 @@ async def change_attribute_value(update: Update, context):
     elif value == "i am diabetic":
         print(f"debug - value selected -> ({value})")
         await update.message.reply_text(
-            f"You successfully changed attribute 'Diabetes'\nfrom:  {context.user_data['diabetes']} -> 1.\n\nNow you can ask me to suggest something again."
+            f"You successfully changed attribute 'Diabetes'\nfrom:  {context.user_data['diabetes']} -> 1.\n\nYou can now /modify something else, or /get_suggestions"
         )
         context.user_data["diabetes"] = 1
         return ConversationHandler.END
@@ -571,7 +792,7 @@ async def change_attribute_value(update: Update, context):
     elif value == "i am not diabetic":
         print(f"debug - value selected -> ({value})")
         await update.message.reply_text(
-            f"You successfully changed attribute 'Diabetes'\nfrom:  {context.user_data['diabetes']} -> 0.\n\nNow you can ask me to suggest something again."
+            f"You successfully changed attribute 'Diabetes'\nfrom:  {context.user_data['diabetes']} -> 0.\n\nYou can now /modify something else, or /get_suggestions"
         )
         context.user_data["diabetes"] = 0
         return ConversationHandler.END
@@ -579,7 +800,7 @@ async def change_attribute_value(update: Update, context):
     elif value == "i am pregnant":
         print(f"debug - value selected -> ({value})")
         await update.message.reply_text(
-            f"You successfully changed attribute 'Pregnant'\nfrom:  {context.user_data['pregnant']} -> 1.\n\nNow you can ask me to suggest something again."
+            f"You successfully changed attribute 'Pregnant'\nfrom:  {context.user_data['pregnant']} -> 1.\n\nYou can now /modify something else, or /get_suggestions"
         )
         context.user_data["pregnant"] = 1
         return ConversationHandler.END
@@ -587,7 +808,7 @@ async def change_attribute_value(update: Update, context):
     elif value == "i am not pregnant":
         print(f"debug - value selected -> ({value})")
         await update.message.reply_text(
-            f"You successfully changed attribute 'Pregnant'\nfrom:  {context.user_data['pregnant']} -> 0.\n\nNow you can ask me to suggest something again."
+            f"You successfully changed attribute 'Pregnant'\nfrom:  {context.user_data['pregnant']} -> 0.\n\nYou can now /modify something else, or /get_suggestions"
         )
         context.user_data["pregnant"] = 0
         return ConversationHandler.END
@@ -595,7 +816,7 @@ async def change_attribute_value(update: Update, context):
     elif value == "very low-skilled":
         print(f"debug - value selected -> ({value})")
         await update.message.reply_text(
-            f"You successfully changed attribute 'User Skill'\nfrom:  {context.user_data['cook_exp']} -> 1.\n\nNow you can ask me to suggest something again."
+            f"You successfully changed attribute 'User Skill'\nfrom:  {context.user_data['cook_exp']} -> 1.\n\nYou can now /modify something else, or /get_suggestions"
         )
         context.user_data["cook_exp"] = 1
         return ConversationHandler.END
@@ -603,7 +824,7 @@ async def change_attribute_value(update: Update, context):
     elif value == "low-skilled":
         print(f"debug - value selected -> ({value})")
         await update.message.reply_text(
-            f"You successfully changed attribute 'User Skill'\nfrom:  {context.user_data['cook_exp']} -> 2.\n\nNow you can ask me to suggest something again."
+            f"You successfully changed attribute 'User Skill'\nfrom:  {context.user_data['cook_exp']} -> 2.\n\nYou can now /modify something else, or /get_suggestions"
         )
         context.user_data["cook_exp"] = 2
         return ConversationHandler.END
@@ -611,7 +832,7 @@ async def change_attribute_value(update: Update, context):
     elif value == "medium-skilled":
         print(f"debug - value selected -> ({value})")
         await update.message.reply_text(
-            f"You successfully changed attribute 'User Skill'\nfrom:  {context.user_data['cook_exp']} -> 3.\n\nNow you can ask me to suggest something again."
+            f"You successfully changed attribute 'User Skill'\nfrom:  {context.user_data['cook_exp']} -> 3.\n\nYou can now /modify something else, or /get_suggestions"
         )
         context.user_data["cook_exp"] = 3
         return ConversationHandler.END
@@ -619,7 +840,7 @@ async def change_attribute_value(update: Update, context):
     elif value == "high-skilled":
         print(f"debug - value selected -> ({value})")
         await update.message.reply_text(
-            f"You successfully changed attribute 'User Skill'\nfrom:  {context.user_data['cook_exp']} -> 4.\n\nNow you can ask me to suggest something again."
+            f"You successfully changed attribute 'User Skill'\nfrom:  {context.user_data['cook_exp']} -> 4.\n\nYou can now /modify something else, or /get_suggestions"
         )
         context.user_data["cook_exp"] = 4
         return ConversationHandler.END
@@ -627,7 +848,7 @@ async def change_attribute_value(update: Update, context):
     elif value == "very high-skilled":
         print(f"debug - value selected -> ({value})")
         await update.message.reply_text(
-            f"You successfully changed attribute 'User Skill'\nfrom:  {context.user_data['cook_exp']} -> 5.\n\nNow you can ask me to suggest something again."
+            f"You successfully changed attribute 'User Skill'\nfrom:  {context.user_data['cook_exp']} -> 5.\n\nYou can now /modify something else, or /get_suggestions"
         )
         context.user_data["cook_exp"] = 5
         return ConversationHandler.END
@@ -635,7 +856,7 @@ async def change_attribute_value(update: Update, context):
     elif value == "very unhealty-lifestyle":
         print(f"debug - value selected -> ({value})")
         await update.message.reply_text(
-            f"You successfully changed attribute 'User Lifestyle'\nfrom:  {context.user_data['ht_lifestyle']} -> 1.\n\nNow you can ask me to suggest something again."
+            f"You successfully changed attribute 'User Lifestyle'\nfrom:  {context.user_data['ht_lifestyle']} -> 1.\n\nYou can now /modify something else, or /get_suggestions"
         )
         context.user_data["ht_lifestyle"] = 1
         return ConversationHandler.END
@@ -643,7 +864,7 @@ async def change_attribute_value(update: Update, context):
     elif value == "unhealty-lifestyle":
         print(f"debug - value selected -> ({value})")
         await update.message.reply_text(
-            f"You successfully changed attribute 'User Lifestyle'\nfrom:  {context.user_data['ht_lifestyle']} -> 2.\n\nNow you can ask me to suggest something again."
+            f"You successfully changed attribute 'User Lifestyle'\nfrom:  {context.user_data['ht_lifestyle']} -> 2.\n\nYou can now /modify something else, or /get_suggestions"
         )
         context.user_data["ht_lifestyle"] = 2
         return ConversationHandler.END
@@ -651,7 +872,7 @@ async def change_attribute_value(update: Update, context):
     elif value == "normal-lifestyle":
         print(f"debug - value selected -> ({value})")
         await update.message.reply_text(
-            f"You successfully changed attribute 'User Lifestyle'\nfrom:  {context.user_data['ht_lifestyle']} -> 3.\n\nNow you can ask me to suggest something again."
+            f"You successfully changed attribute 'User Lifestyle'\nfrom:  {context.user_data['ht_lifestyle']} -> 3.\n\nYou can now /modify something else, or /get_suggestions"
         )
         context.user_data["ht_lifestyle"] = 3
         return ConversationHandler.END
@@ -659,7 +880,7 @@ async def change_attribute_value(update: Update, context):
     elif value == "healty-lifestyle":
         print(f"debug - value selected -> ({value})")
         await update.message.reply_text(
-            f"You successfully changed attribute 'User Lifestyle'\nfrom:  {context.user_data['ht_lifestyle']} -> 4.\n\nNow you can ask me to suggest something again."
+            f"You successfully changed attribute 'User Lifestyle'\nfrom:  {context.user_data['ht_lifestyle']} -> 4.\n\nYou can now /modify something else, or /get_suggestions"
         )
         context.user_data["ht_lifestyle"] = 4
         return ConversationHandler.END
@@ -667,7 +888,7 @@ async def change_attribute_value(update: Update, context):
     elif value == "very healty-lifestyle":
         print(f"debug - value selected -> ({value})")
         await update.message.reply_text(
-            f"You successfully changed attribute 'User Lifestyle'\nfrom:  {context.user_data['ht_lifestyle']} -> 5.\n\nNow you can ask me to suggest something again."
+            f"You successfully changed attribute 'User Lifestyle'\nfrom:  {context.user_data['ht_lifestyle']} -> 5.\n\nYou can now /modify something else, or /get_suggestions"
         )
         context.user_data["ht_lifestyle"] = 5
         return ConversationHandler.END
@@ -675,7 +896,7 @@ async def change_attribute_value(update: Update, context):
     elif value == "lose":
         print(f"debug - value selected -> ({value})")
         await update.message.reply_text(
-            f"You successfully changed attribute 'Goal'\nfrom:  {context.user_data['goal']} -> -1.\n\nNow you can ask me to suggest something again."
+            f"You successfully changed attribute 'Goal'\nfrom:  {context.user_data['goal']} -> -1.\n\nYou can now /modify something else, or /get_suggestions"
         )
         context.user_data["goal"] = -1
         return ConversationHandler.END
@@ -683,7 +904,7 @@ async def change_attribute_value(update: Update, context):
     elif value == "maintain":
         print(f"debug - value selected -> ({value})")
         await update.message.reply_text(
-            f"You successfully changed attribute 'Goal'\nfrom:  {context.user_data['goal']} -> 0.\n\nNow you can ask me to suggest something again."
+            f"You successfully changed attribute 'Goal'\nfrom:  {context.user_data['goal']} -> 0.\n\nYou can now /modify something else, or /get_suggestions"
         )
         context.user_data["goal"] = 0
         return ConversationHandler.END
@@ -691,7 +912,7 @@ async def change_attribute_value(update: Update, context):
     elif value == "gain":
         print(f"debug - value selected -> ({value})")
         await update.message.reply_text(
-            f"You successfully changed attribute 'Goal'\nfrom:  {context.user_data['goals']} -> 1.\n\nNow you can ask me to suggest something again."
+            f"You successfully changed attribute 'Goal'\nfrom:  {context.user_data['goals']} -> 1.\n\nYou can now /modify something else, or /get_suggestions"
         )
         context.user_data["goal"] = 1
         return ConversationHandler.END
@@ -699,7 +920,7 @@ async def change_attribute_value(update: Update, context):
     elif value == "very low-cost":
         print(f"debug - value selected -> ({value})")
         await update.message.reply_text(
-            f"You successfully changed attribute 'User Budget'\nfrom:  {context.user_data['max_cost_rec']} -> 1.\n\nNow you can ask me to suggest something again."
+            f"You successfully changed attribute 'User Budget'\nfrom:  {context.user_data['max_cost_rec']} -> 1.\n\nYou can now /modify something else, or /get_suggestions"
         )
         context.user_data["max_cost_rec"] = 1
         return ConversationHandler.END
@@ -707,7 +928,7 @@ async def change_attribute_value(update: Update, context):
     elif value == "low-cost":
         print(f"debug - value selected -> ({value})")
         await update.message.reply_text(
-            f"You successfully changed attribute 'User Budget'\nfrom:  {context.user_data['max_cost_rec']} -> 2.\n\nNow you can ask me to suggest something again."
+            f"You successfully changed attribute 'User Budget'\nfrom:  {context.user_data['max_cost_rec']} -> 2.\n\nYou can now /modify something else, or /get_suggestions"
         )
         context.user_data["max_cost_rec"] = 2
         return ConversationHandler.END
@@ -715,7 +936,7 @@ async def change_attribute_value(update: Update, context):
     elif value == "medium-cost":
         print(f"debug - value selected -> ({value})")
         await update.message.reply_text(
-            f"You successfully changed attribute 'User Budget'\nfrom:  {context.user_data['max_cost_rec']} -> 3.\n\nNow you can ask me to suggest something again."
+            f"You successfully changed attribute 'User Budget'\nfrom:  {context.user_data['max_cost_rec']} -> 3.\n\nYou can now /modify something else, or /get_suggestions"
         )
         context.user_data["max_cost_rec"] = 3
         return ConversationHandler.END
@@ -723,7 +944,7 @@ async def change_attribute_value(update: Update, context):
     elif value == "high-cost":
         print(f"debug - value selected -> ({value})")
         await update.message.reply_text(
-            f"You successfully changed attribute 'User Budget'\nfrom:  {context.user_data['max_cost_rec']} -> 4.\n\nNow you can ask me to suggest something again."
+            f"You successfully changed attribute 'User Budget'\nfrom:  {context.user_data['max_cost_rec']} -> 4.\n\nYou can now /modify something else, or /get_suggestions"
         )
         context.user_data["max_cost_rec"] = 4
         return ConversationHandler.END
@@ -731,7 +952,7 @@ async def change_attribute_value(update: Update, context):
     elif value == "very high-cost":
         print(f"debug - value selected -> ({value})")
         await update.message.reply_text(
-            f"You successfully changed attribute 'User Budget'\nfrom:  {context.user_data['max_cost_rec']} -> 5.\n\nNow you can ask me to suggest something again."
+            f"You successfully changed attribute 'User Budget'\nfrom:  {context.user_data['max_cost_rec']} -> 5.\n\nYou can now /modify something else, or /get_suggestions"
         )
         context.user_data["max_cost_rec"] = 5
         return ConversationHandler.END
@@ -739,7 +960,7 @@ async def change_attribute_value(update: Update, context):
     elif value == "-30":
         print(f"debug - value selected -> ({value})")
         await update.message.reply_text(
-            f"You successfully changed attribute 'User Time'\nfrom:  {context.user_data['time_cook']} -> 20.\n\nNow you can ask me to suggest something again."
+            f"You successfully changed attribute 'User Time'\nfrom:  {context.user_data['time_cook']} -> 20.\n\nYou can now /modify something else, or /get_suggestions"
         )
         context.user_data["time_cook"] = 20
         return ConversationHandler.END
@@ -747,7 +968,7 @@ async def change_attribute_value(update: Update, context):
     elif value == "30-60":
         print(f"debug - value selected -> ({value})")
         await update.message.reply_text(
-            f"You successfully changed attribute 'User Time'\nfrom:  {context.time_cook['usertime']} -> 30.\n\nNow you can ask me to suggest something again."
+            f"You successfully changed attribute 'User Time'\nfrom:  {context.time_cook['usertime']} -> 30.\n\nYou can now /modify something else, or /get_suggestions"
         )
         context.user_data["time_cook"] = 30
         return ConversationHandler.END
@@ -755,7 +976,7 @@ async def change_attribute_value(update: Update, context):
     elif value == "60-90":
         print(f"debug - value selected -> ({value})")
         await update.message.reply_text(
-            f"You successfully changed attribute 'User Time'\nfrom:  {context.user_data['time_cook']} -> 75.\n\nNow you can ask me to suggest something again."
+            f"You successfully changed attribute 'User Time'\nfrom:  {context.user_data['time_cook']} -> 75.\n\nYou can now /modify something else, or /get_suggestions"
         )
         context.user_data["time_cook"] = 75
         return ConversationHandler.END
@@ -763,7 +984,7 @@ async def change_attribute_value(update: Update, context):
     elif value == "90-120":
         print(f"debug - value selected -> ({value})")
         await update.message.reply_text(
-            f"You successfully changed attribute 'User Time'\nfrom:  {context.user_data['time_cook']} -> 105.\n\nNow you can ask me to suggest something again."
+            f"You successfully changed attribute 'User Time'\nfrom:  {context.user_data['time_cook']} -> 105.\n\nYou can now /modify something else, or /get_suggestions"
         )
         context.user_data["time_cook"] = 90
         return ConversationHandler.END
@@ -771,7 +992,7 @@ async def change_attribute_value(update: Update, context):
     elif value == "120+":
         print(f"debug - value selected -> ({value})")
         await update.message.reply_text(
-            f"You successfully changed attribute 'User Time'\nfrom:  {context.user_data['time_cook']} -> 135.\n\nNow you can ask me to suggest something again."
+            f"You successfully changed attribute 'User Time'\nfrom:  {context.user_data['time_cook']} -> 135.\n\nYou can now /modify something else, or /get_suggestions"
         )
         context.user_data["time_cook"] = 120
         return ConversationHandler.END
@@ -779,7 +1000,7 @@ async def change_attribute_value(update: Update, context):
     elif value == "under":
         print(f"debug - value selected -> ({value})")
         await update.message.reply_text(
-            f"You successfully changed attribute 'Weight'\nfrom:  {context.user_data['weight']} -> Under-weight.\n\nNow you can ask me to suggest something again."
+            f"You successfully changed attribute 'Weight'\nfrom:  {context.user_data['weight']} -> Under-weight.\n\nYou can now /modify something else, or /get_suggestions"
         )
         context.user_data["weight"] = "under"
         return ConversationHandler.END
@@ -787,7 +1008,7 @@ async def change_attribute_value(update: Update, context):
     elif value == "normal":
         print(f"debug - value selected -> ({value})")
         await update.message.reply_text(
-            f"You successfully changed attribute 'Weight'\nfrom:  {context.user_data['weight']} -> Normal-weight.\n\nNow you can ask me to suggest something again."
+            f"You successfully changed attribute 'Weight'\nfrom:  {context.user_data['weight']} -> Normal-weight.\n\nYou can now /modify something else, or /get_suggestions"
         )
         context.user_data["weight"] = "normal"
         return ConversationHandler.END
@@ -795,7 +1016,7 @@ async def change_attribute_value(update: Update, context):
     elif value == "over":
         print(f"debug - value selected -> ({value})")
         await update.message.reply_text(
-            f"You successfully changed attribute 'Weight'\nfrom:  {context.user_data['weight']} -> Over-weight.\n\nNow you can ask me to suggest something again."
+            f"You successfully changed attribute 'Weight'\nfrom:  {context.user_data['weight']} -> Over-weight.\n\nYou can now /modify something else, or /get_suggestions"
         )
         context.user_data["weight"] = "over"
         return ConversationHandler.END
@@ -803,7 +1024,7 @@ async def change_attribute_value(update: Update, context):
     elif value == "u20":
         print(f"debug - value selected -> ({value})")
         await update.message.reply_text(
-            f"You successfully changed attribute 'Age'\nfrom:  {context.user_data['age']} -> U20.\n\nNow you can ask me to suggest something again."
+            f"You successfully changed attribute 'Age'\nfrom:  {context.user_data['age']} -> U20.\n\nYou can now /modify something else, or /get_suggestions"
         )
         context.user_data["age"] = "U20"
         return ConversationHandler.END
@@ -811,7 +1032,7 @@ async def change_attribute_value(update: Update, context):
     elif value == "u30":
         print(f"debug - value selected -> ({value})")
         await update.message.reply_text(
-            f"You successfully changed attribute 'Age'\nfrom:  {context.user_data['age']} -> U30.\n\nNow you can ask me to suggest something again."
+            f"You successfully changed attribute 'Age'\nfrom:  {context.user_data['age']} -> U30.\n\nYou can now /modify something else, or /get_suggestions"
         )
         context.user_data["age"] = "U30"
         return ConversationHandler.END
@@ -819,7 +1040,7 @@ async def change_attribute_value(update: Update, context):
     elif value == "u40":
         print(f"debug - value selected -> ({value})")
         await update.message.reply_text(
-            f"You successfully changed attribute 'Age'\nfrom:  {context.user_data['age']} -> U40.\n\nNow you can ask me to suggest something again."
+            f"You successfully changed attribute 'Age'\nfrom:  {context.user_data['age']} -> U40.\n\nYou can now /modify something else, or /get_suggestions"
         )
         context.user_data["age"] = "U40"
         return ConversationHandler.END
@@ -827,7 +1048,7 @@ async def change_attribute_value(update: Update, context):
     elif value == "u50":
         print(f"debug - value selected -> ({value})")
         await update.message.reply_text(
-            f"You successfully changed attribute 'Age'\nfrom:  {context.user_data['age']} -> U50.\n\nNow you can ask me to suggest something again."
+            f"You successfully changed attribute 'Age'\nfrom:  {context.user_data['age']} -> U50.\n\nYou can now /modify something else, or /get_suggestions"
         )
         context.user_data["age"] = "U50"
         return ConversationHandler.END
@@ -835,7 +1056,7 @@ async def change_attribute_value(update: Update, context):
     elif value == "u60":
         print(f"debug - value selected -> ({value})")
         await update.message.reply_text(
-            f"You successfully changed attribute 'Age'\nfrom:  {context.user_data['age']} -> U60.\n\nNow you can ask me to suggest something again."
+            f"You successfully changed attribute 'Age'\nfrom:  {context.user_data['age']} -> U60.\n\nYou can now /modify something else, or /get_suggestions"
         )
         context.user_data["age"] = "U60"
         return ConversationHandler.END
@@ -843,7 +1064,7 @@ async def change_attribute_value(update: Update, context):
     elif value == "o60":
         print(f"debug - value selected -> ({value})")
         await update.message.reply_text(
-            f"You successfully changed attribute 'Age'\nfrom:  {context.user_data['age']} -> O60.\n\nNow you can ask me to suggest something again."
+            f"You successfully changed attribute 'Age'\nfrom:  {context.user_data['age']} -> O60.\n\nYou can now /modify something else, or /get_suggestions"
         )
         context.user_data["age"] = "O60"
         return ConversationHandler.END
@@ -851,7 +1072,7 @@ async def change_attribute_value(update: Update, context):
     elif value == "male":
         print(f"debug - value selected -> ({value})")
         await update.message.reply_text(
-            f"You successfully changed attribute 'Gender'\nfrom:  {context.user_data['gender']} -> {value}.\n\nNow you can ask me to suggest something again."
+            f"You successfully changed attribute 'Gender'\nfrom:  {context.user_data['gender']} -> {value}.\n\nYou can now /modify something else, or /get_suggestions"
         )
         context.user_data["gender"] = "m"
         return ConversationHandler.END
@@ -859,7 +1080,7 @@ async def change_attribute_value(update: Update, context):
     elif value == "female":
         print(f"debug - value selected -> ({value})")
         await update.message.reply_text(
-            f"You successfully changed attribute 'Gender'\nfrom:  {context.user_data['gender']} -> {value}.\n\nNow you can ask me to suggest something again."
+            f"You successfully changed attribute 'Gender'\nfrom:  {context.user_data['gender']} -> {value}.\n\nYou can now /modify something else, or /get_suggestions"
         )
         context.user_data["gender"] = "f"
         return ConversationHandler.END
@@ -867,7 +1088,7 @@ async def change_attribute_value(update: Update, context):
     elif value == "unspecified":
         print(f"debug - value selected -> ({value})")
         await update.message.reply_text(
-            f"You successfully changed attribute 'Gender'\nfrom:  {context.user_data['gender']} -> {value}.\n\nNow you can ask me to suggest something again."
+            f"You successfully changed attribute 'Gender'\nfrom:  {context.user_data['gender']} -> {value}.\n\nYou can now /modify something else, or /get_suggestions"
         )
         context.user_data["gender"] = "u"
         return ConversationHandler.END
@@ -875,7 +1096,7 @@ async def change_attribute_value(update: Update, context):
     elif value == "low-activity":
         print(f"debug - value selected -> ({value})")
         await update.message.reply_text(
-            f"You successfully changed attribute 'Activity'\nfrom:  {context.user_data['ph_activity']} -> {value}.\n\nNow you can ask me to suggest something again."
+            f"You successfully changed attribute 'Activity'\nfrom:  {context.user_data['ph_activity']} -> {value}.\n\nYou can now /modify something else, or /get_suggestions"
         )
         context.user_data["ph_activity"] = "low"
         return ConversationHandler.END
@@ -883,7 +1104,7 @@ async def change_attribute_value(update: Update, context):
     elif value == "normal-activity":
         print(f"debug - value selected -> ({value})")
         await update.message.reply_text(
-            f"You successfully changed attribute 'Activity'\nfrom:  {context.user_data['ph_activity']} -> {value}.\n\nNow you can ask me to suggest something again."
+            f"You successfully changed attribute 'Activity'\nfrom:  {context.user_data['ph_activity']} -> {value}.\n\nYou can now /modify something else, or /get_suggestions"
         )
         context.user_data["ph_activity"] = "normal"
         return ConversationHandler.END
@@ -891,7 +1112,7 @@ async def change_attribute_value(update: Update, context):
     elif value == "high-activity":
         print(f"debug - value selected -> ({value})")
         await update.message.reply_text(
-            f"You successfully changed attribute 'Activity'\nfrom:  {context.user_data['ph_activity']} -> {value}.\n\nNow you can ask me to suggest something again."
+            f"You successfully changed attribute 'Activity'\nfrom:  {context.user_data['ph_activity']} -> {value}.\n\nYou can now /modify something else, or /get_suggestions"
         )
         context.user_data["ph_activity"] = "high"
         return ConversationHandler.END
@@ -899,7 +1120,7 @@ async def change_attribute_value(update: Update, context):
     elif value == "i am stressed":
         print(f"debug - value selected -> ({value})")
         await update.message.reply_text(
-            f"You successfully changed attribute 'Stress'\nfrom:  {context.user_data['stress']} -> 1.\n\nNow you can ask me to suggest something again."
+            f"You successfully changed attribute 'Stress'\nfrom:  {context.user_data['stress']} -> 1.\n\nYou can now /modify something else, or /get_suggestions"
         )
         context.user_data["stress"] = 1
         return ConversationHandler.END
@@ -907,7 +1128,7 @@ async def change_attribute_value(update: Update, context):
     elif value == "i am not stressed":
         print(f"debug - value selected -> ({value})")
         await update.message.reply_text(
-            f"You successfully changed attribute 'Stress'\nfrom:  {context.user_data['stress']} -> 0.\n\nNow you can ask me to suggest something again."
+            f"You successfully changed attribute 'Stress'\nfrom:  {context.user_data['stress']} -> 0.\n\nYou can now /modify something else, or /get_suggestions"
         )
         context.user_data["stress"] = 0
         return ConversationHandler.END
@@ -915,7 +1136,7 @@ async def change_attribute_value(update: Update, context):
     elif value == "8+ daily hours of sleep":
         print(f"debug - value selected -> ({value})")
         await update.message.reply_text(
-            f"You successfully changed attribute 'Sleep'\nfrom:  {context.user_data['sleep']} -> {value}.\n\nNow you can ask me to suggest something again."
+            f"You successfully changed attribute 'Sleep'\nfrom:  {context.user_data['sleep']} -> {value}.\n\nYou can now /modify something else, or /get_suggestions"
         )
         context.user_data["sleep"] = "good"
         return ConversationHandler.END
@@ -923,7 +1144,7 @@ async def change_attribute_value(update: Update, context):
     elif value == "8- daily hours of sleep":
         print(f"debug - value selected -> ({value})")
         await update.message.reply_text(
-            f"You successfully changed attribute 'Sleep'\nfrom:  {context.user_data['sleep']} -> {value}.\n\nNow you can ask me to suggest something again."
+            f"You successfully changed attribute 'Sleep'\nfrom:  {context.user_data['sleep']} -> {value}.\n\nYou can now /modify something else, or /get_suggestions"
         )
         context.user_data["sleep"] = "bad"
         return ConversationHandler.END
@@ -938,12 +1159,17 @@ async def change_attribute_value(update: Update, context):
 async def healthiness_initialiation(update, context):
     if "gender" not in context.user_data:
         await update.message.reply_text(
-            "You have *not* created your profile yet. \nTry /create first.", parse_mode='Markdown'
+            "You have *not* created your profile yet. \nTry /create first.",
+            parse_mode="Markdown",
         )
         return
     else:
         await Recommendation.suggerimento(update, context)
-        keyboard = [["Unhealthy", "Somewhat Unhealthy"], ["Moderately Healthy"], ["Healthy", "Very Healthy"]]
+        keyboard = [
+            ["Unhealthy", "Somewhat Unhealthy"],
+            ["Moderately Healthy"],
+            ["Healthy", "Very Healthy"],
+        ]
         reply_markup = ReplyKeyboardMarkup(
             keyboard, one_time_keyboard=True, resize_keyboard=True
         )
@@ -959,26 +1185,82 @@ async def first_suggestion_healthiness_explanation(update, context):
     with open("replies.txt", "a", encoding="utf-8") as file:
         file.write(
             name
-            + " "
-            + "PRE_FIRST_COURSE_HEALTINESS:"
+            + ","
+            + str(context.user_data["category"])
+            + ","
+            + str(context.user_data["nickel"])
+            + ","
+            + str(context.user_data["vegetarian"])
+            + ","
+            + str(context.user_data["lactosefree"])
+            + ","
+            + str(context.user_data["glutenfree"])
+            + ","
+            + str(context.user_data["ht_lifestyle"])
+            + ","
+            + str(context.user_data["diabetes"])
+            + ","
+            + str(context.user_data["pregnant"])
+            + ","
+            + str(context.user_data["cook_exp"])
+            + ","
+            + str(context.user_data["goals"])
+            + ","
+            + str(context.user_data["max_cost_rec"])
+            + ","
+            + str(context.user_data["time_cook"])
+            + ","
+            + str(context.user_data["weight"])
+            + ","
+            + str(context.user_data["age"])
+            + ","
+            + str(context.user_data["gender"])
+            + ","
+            + str(context.user_data["ph_activity"])
+            + ","
+            + str(context.user_data["stress"])
+            + ","
+            + str(context.user_data["sleep"])
+            + ","
+            + str(context.user_data["ht_level"])
+            + ","
+            + str(context.user_data["ht_interest"])
+            + ","
+            + str(context.user_data["sus_level"])
+            + ","
+            + str(context.user_data["sus_interest"])
+            + ","
+            + Recommendation.img_url
+            + ","
             + first_suggestion_unconditioned
-            + "\n"
+            + ","
         )
     await update.message.reply_text(
         "Great, I will now prompt you with one of my explanations:"
     )
 
     random_number = random.randint(1, 4)
-    if (random_number==1):
+    if random_number == 1:
         await Spiegazione.spiegazione_obiettivo(update, context)
-    elif(random_number==2):
+        expl_type = "goals"
+    elif random_number == 2:
         await Spiegazione.spiegazione_benefici_salute(update, context)
-    elif(random_number==3):
+        expl_type = "health-benefits"
+    elif random_number == 3:
         await Spiegazione.spiegazione_rischi_salute(update, context)
-    elif(random_number==4):
+        expl_type = "health-risks"
+    elif random_number == 4:
         await Spiegazione.spiegazione_macros(update, context)
+        expl_type = "macros"
 
-    keyboard = [["Unhealthy", "Somewhat Unhealthy"], ["Moderately Healthy"], ["Healthy", "Very Healthy"]]
+    with open("replies.txt", "a", encoding="utf-8") as file:
+        file.write(expl_type + ",")
+
+    keyboard = [
+        ["Unhealthy", "Somewhat Unhealthy"],
+        ["Moderately Healthy"],
+        ["Healthy", "Very Healthy"],
+    ]
     reply_markup = ReplyKeyboardMarkup(
         keyboard, one_time_keyboard=True, resize_keyboard=True
     )
@@ -990,20 +1272,18 @@ async def first_suggestion_healthiness_explanation(update, context):
 
 async def second_suggestion(update, context):
     first_suggestion_conditioned = update.message.text.lower()
-    name = update.message.from_user.first_name
-    with open("replies.txt", "a", encoding="utf-8") as file:
-        file.write(
-            name
-            + " "
-            + "POST_FIRST_COURSE_HEALTINESS:"
-            + first_suggestion_conditioned
-            + "\n"
-        )
-
     await update.message.reply_text("Great, now a second course:")
     context.user_data["category"] = "second courses"
     await Recommendation.suggerimento(update, context)
-    keyboard = [["Unhealthy", "Somewhat Unhealthy"], ["Moderately Healthy"], ["Healthy", "Very Healthy"]]
+
+    with open("replies.txt", "a", encoding="utf-8") as file:
+        file.write(first_suggestion_conditioned + "," + Recommendation.img_url + ",") ##############################àà
+
+    keyboard = [
+        ["Unhealthy", "Somewhat Unhealthy"],
+        ["Moderately Healthy"],
+        ["Healthy", "Very Healthy"],
+    ]
     reply_markup = ReplyKeyboardMarkup(
         keyboard, one_time_keyboard=True, resize_keyboard=True
     )
@@ -1015,30 +1295,31 @@ async def second_suggestion(update, context):
 
 async def second_suggestion_healthiness_explanation(update, context):
     second_suggestion_unconditioned = update.message.text.lower()
-    name = update.message.from_user.first_name
+    random_number = random.randint(1, 4)
+    if random_number == 1:
+        await Spiegazione.spiegazione_obiettivo(update, context)
+        expl_type = "goals"
+    elif random_number == 2:
+        await Spiegazione.spiegazione_benefici_salute(update, context)
+        expl_type = "health-benefits"
+    elif random_number == 3:
+        await Spiegazione.spiegazione_rischi_salute(update, context)
+        expl_type = "health-risks"
+    elif random_number == 4:
+        await Spiegazione.spiegazione_macros(update, context)
+        expl_type = "macros"
+
     with open("replies.txt", "a", encoding="utf-8") as file:
-        file.write(
-            name
-            + " "
-            + "PRE_SECOND_COURSE_HEALTINESS:"
-            + second_suggestion_unconditioned
-            + "\n"
-        )
+        file.write(second_suggestion_unconditioned + "," + expl_type + ",")
     await update.message.reply_text(
-        "Wonderful, I'll now provide you with one of my explanations.:"
+        "Wonderful, I'll now provide you with one of my explanations:"
     )
 
-    random_number = random.randint(1, 4)
-    if (random_number==1):
-        await Spiegazione.spiegazione_obiettivo(update, context)
-    elif(random_number==2):
-        await Spiegazione.spiegazione_benefici_salute(update, context)
-    elif(random_number==3):
-        await Spiegazione.spiegazione_rischi_salute(update, context)
-    elif(random_number==4):
-        await Spiegazione.spiegazione_macros(update, context)
-
-    keyboard = [["Unhealthy", "Somewhat Unhealthy"], ["Moderately Healthy"], ["Healthy", "Very Healthy"]]
+    keyboard = [
+        ["Unhealthy", "Somewhat Unhealthy"],
+        ["Moderately Healthy"],
+        ["Healthy", "Very Healthy"],
+    ]
     reply_markup = ReplyKeyboardMarkup(
         keyboard, one_time_keyboard=True, resize_keyboard=True
     )
@@ -1050,20 +1331,18 @@ async def second_suggestion_healthiness_explanation(update, context):
 
 async def third_suggestion(update, context):
     second_suggestion_conditioned = update.message.text.lower()
-    name = update.message.from_user.first_name
-    with open("replies.txt", "a", encoding="utf-8") as file:
-        file.write(
-            name
-            + " "
-            + "POST_SECOND_COURSE_HEALTINESS:"
-            + second_suggestion_conditioned
-            + "\n"
-        )
-
     await update.message.reply_text("Great, now a dessert:")
     context.user_data["category"] = "desserts"
     await Recommendation.suggerimento(update, context)
-    keyboard = [["Unhealthy", "Somewhat Unhealthy"], ["Moderately Healthy"], ["Healthy", "Very Healthy"]]
+
+    with open("replies.txt", "a", encoding="utf-8") as file:
+        file.write(second_suggestion_conditioned + "," + Recommendation.img_url + ",")
+
+    keyboard = [
+        ["Unhealthy", "Somewhat Unhealthy"],
+        ["Moderately Healthy"],
+        ["Healthy", "Very Healthy"],
+    ]
     reply_markup = ReplyKeyboardMarkup(
         keyboard, one_time_keyboard=True, resize_keyboard=True
     )
@@ -1075,30 +1354,32 @@ async def third_suggestion(update, context):
 
 async def third_suggestion_healthiness_explanation(update, context):
     third_suggestion_unconditioned = update.message.text.lower()
-    name = update.message.from_user.first_name
-    with open("replies.txt", "a", encoding="utf-8") as file:
-        file.write(
-            name
-            + " "
-            + "PRE_DESSERT_HEALTINESS:"
-            + third_suggestion_unconditioned
-            + "\n"
-        )
     await update.message.reply_text(
         "Excellent, I'll proceed to present you with one of my explanations:"
     )
 
     random_number = random.randint(1, 4)
-    if (random_number==1):
+    if random_number == 1:
         await Spiegazione.spiegazione_obiettivo(update, context)
-    elif(random_number==2):
+        expl_type = "goals"
+    elif random_number == 2:
         await Spiegazione.spiegazione_benefici_salute(update, context)
-    elif(random_number==3):
+        expl_type = "health-benefits"
+    elif random_number == 3:
         await Spiegazione.spiegazione_rischi_salute(update, context)
-    elif(random_number==4):
+        expl_type = "health-risks"
+    elif random_number == 4:
         await Spiegazione.spiegazione_macros(update, context)
+        expl_type = "macros"
 
-    keyboard = [["Unhealthy", "Somewhat Unhealthy"], ["Moderately Healthy"], ["Healthy", "Very Healthy"]]
+    with open("replies.txt", "a", encoding="utf-8") as file:
+        file.write(third_suggestion_unconditioned + "," + expl_type + ",")
+
+    keyboard = [
+        ["Unhealthy", "Somewhat Unhealthy"],
+        ["Moderately Healthy"],
+        ["Healthy", "Very Healthy"],
+    ]
     reply_markup = ReplyKeyboardMarkup(
         keyboard, one_time_keyboard=True, resize_keyboard=True
     )
@@ -1110,49 +1391,52 @@ async def third_suggestion_healthiness_explanation(update, context):
 
 async def fourth_suggestion(update, context):
     third_suggestion_conditioned = update.message.text.lower()
-    name = update.message.from_user.first_name
-    with open("replies.txt", "a", encoding="utf-8") as file:
-        file.write(
-            name
-            + " "
-            + "POST_DESSERT_HEALTINESS:"
-            + third_suggestion_conditioned
-            + "\n"
-        )
-
     await update.message.reply_text(
-        "Good job! Now let's talk about the sustainability:")
+        "Good job! Now let's talk about the sustainability:"
+    )
     context.user_data["category"] = "first courses"
     await Recommendation_due.altro_suggerimento2(update, context)
-    keyboard = [["Unsustainable", "Somewhat Unsustainable"],["Moderately Sustainable"], ["Sustainable","Very Sustainable"]]
+
+    with open("replies.txt", "a", encoding="utf-8") as file:
+        file.write(third_suggestion_conditioned + "," + Recommendation_due.img_url + ",")
+
+    keyboard = [
+        ["Unsustainable", "Somewhat Unsustainable"],
+        ["Moderately Sustainable"],
+        ["Sustainable", "Very Sustainable"],
+    ]
     reply_markup = ReplyKeyboardMarkup(
-    keyboard, one_time_keyboard=True, resize_keyboard=True
+        keyboard, one_time_keyboard=True, resize_keyboard=True
     )
     await update.message.reply_text(
         "How sustainable do you think this recipe is?", reply_markup=reply_markup
     )
     return PRE_FIRST_COURSE_SUSTAINABILITY
 
+
 async def fourth_suggestion_sustainability_explanation(update, context):
     fourth_suggestion_unconditioned = update.message.text.lower()
-    name = update.message.from_user.first_name
     with open("replies.txt", "a", encoding="utf-8") as file:
-        file.write(
-            name
-            + " "
-            + "PRE_FIRST_COURSE_SUSTAINABILITY:"
-            + fourth_suggestion_unconditioned
-            + "\n"
-        )
+        file.write(fourth_suggestion_unconditioned + ",")
     await update.message.reply_text(
         "Fantastic, I'll now offer you one of my explanations:"
     )
     random_number = random.randint(1, 2)
-    if (random_number==1):
+    if random_number == 1:
         await Spiegazione.spiegazione_sustainability(update, context)
-    elif(random_number==2):
+        expl_type = "sustainability"
+    elif random_number == 2:
         await Spiegazione.spiegazione_piatto(update, context)
-    keyboard = [["Unsustainable", "Somewhat Unsustainable"],["Moderately Sustainable"], ["Sustainable","Very Sustainable"]]
+        expl_type = "description"
+
+    with open("replies.txt", "a", encoding="utf-8") as file:
+        file.write(fourth_suggestion_unconditioned + "," + expl_type + ",")
+
+    keyboard = [
+        ["Unsustainable", "Somewhat Unsustainable"],
+        ["Moderately Sustainable"],
+        ["Sustainable", "Very Sustainable"],
+    ]
     reply_markup = ReplyKeyboardMarkup(
         keyboard, one_time_keyboard=True, resize_keyboard=True
     )
@@ -1161,25 +1445,23 @@ async def fourth_suggestion_sustainability_explanation(update, context):
     )
     return POST_FIRST_COURSE_SUSTAINABILITY
 
+
 async def fifth_suggestion(update, context):
     fourth_suggestion_conditioned = update.message.text.lower()
-    name = update.message.from_user.first_name
-    with open("replies.txt", "a", encoding="utf-8") as file:
-        file.write(
-            name
-            + " "
-            + "POST_FIRST_COURSE_SUSTAINABILITY:"
-            + fourth_suggestion_conditioned
-            + "\n"
-        )
-
-    await update.message.reply_text(
-        "Great, now a second course:")
+    await update.message.reply_text("Great, now a second course:")
     context.user_data["category"] = "second courses"
     await Recommendation_due.altro_suggerimento2(update, context)
-    keyboard = [["Unsustainable", "Somewhat Unsustainable"],["Moderately Sustainable"], ["Sustainable","Very Sustainable"]]
+    with open("replies.txt", "a", encoding="utf-8") as file:
+        file.write(
+            fourth_suggestion_conditioned + "," + Recommendation_due.img_url + ","
+        )
+    keyboard = [
+        ["Unsustainable", "Somewhat Unsustainable"],
+        ["Moderately Sustainable"],
+        ["Sustainable", "Very Sustainable"],
+    ]
     reply_markup = ReplyKeyboardMarkup(
-    keyboard, one_time_keyboard=True, resize_keyboard=True
+        keyboard, one_time_keyboard=True, resize_keyboard=True
     )
     await update.message.reply_text(
         "How sustainable do you think this recipe is?", reply_markup=reply_markup
@@ -1189,24 +1471,24 @@ async def fifth_suggestion(update, context):
 
 async def fifth_suggestion_sustainability_explanation(update, context):
     fifth_suggestion_unconditioned = update.message.text.lower()
-    name = update.message.from_user.first_name
-    with open("replies.txt", "a", encoding="utf-8") as file:
-        file.write(
-            name
-            + " "
-            + "PRE_SECOND_COURSE_SUSTAINABILITY:"
-            + fifth_suggestion_unconditioned
-            + "\n"
-        )
     await update.message.reply_text(
         "Terrific, I'll now deliver one of my explanations to you:"
     )
     random_number = random.randint(1, 2)
-    if (random_number==1):
+    if random_number == 1:
         await Spiegazione.spiegazione_sustainability(update, context)
-    elif(random_number==2):
+        expl_type = "sustainability"
+    elif random_number == 2:
         await Spiegazione.spiegazione_piatto(update, context)
-    keyboard = [["Unsustainable", "Somewhat Unsustainable"],["Moderately Sustainable"], ["Sustainable","Very Sustainable"]]
+        expl_type = "description"
+
+    with open("replies.txt", "a", encoding="utf-8") as file:
+        file.write(fifth_suggestion_unconditioned + "," + expl_type)
+    keyboard = [
+        ["Unsustainable", "Somewhat Unsustainable"],
+        ["Moderately Sustainable"],
+        ["Sustainable", "Very Sustainable"],
+    ]
     reply_markup = ReplyKeyboardMarkup(
         keyboard, one_time_keyboard=True, resize_keyboard=True
     )
@@ -1215,51 +1497,53 @@ async def fifth_suggestion_sustainability_explanation(update, context):
     )
     return POST_SECOND_COURSE_SUSTAINABILITY
 
+
 async def sixth_suggestion(update, context):
     fifth_suggestion_conditioned = update.message.text.lower()
-    name = update.message.from_user.first_name
-    with open("replies.txt", "a", encoding="utf-8") as file:
-        file.write(
-            name
-            + " "
-            + "POST_SECOND_COURSE_SUSTAINABILITY:"
-            + fifth_suggestion_conditioned
-            + "\n"
-        )
-
-    await update.message.reply_text(
-        "Great, now a dessert:")
+    await update.message.reply_text("Great, now a dessert:")
     context.user_data["category"] = "desserts"
     await Recommendation_due.altro_suggerimento2(update, context)
-    keyboard = [["Unsustainable", "Somewhat Unsustainable"],["Moderately Sustainable"], ["Sustainable","Very Sustainable"]]
+
+    with open("replies.txt", "a", encoding="utf-8") as file:
+        file.write(
+            fifth_suggestion_conditioned + "," + Recommendation_due.img_url + ","
+        )
+
+    keyboard = [
+        ["Unsustainable", "Somewhat Unsustainable"],
+        ["Moderately Sustainable"],
+        ["Sustainable", "Very Sustainable"],
+    ]
     reply_markup = ReplyKeyboardMarkup(
-    keyboard, one_time_keyboard=True, resize_keyboard=True
+        keyboard, one_time_keyboard=True, resize_keyboard=True
     )
     await update.message.reply_text(
         "How sustainable do you think this recipe is?", reply_markup=reply_markup
     )
     return PRE_DESSERT_SUSTAINABILITY
 
+
 async def sixth_suggestion_sustainability_explanation(update, context):
-    sixth_suggestion_conditioned = update.message.text.lower()
-    name = update.message.from_user.first_name
-    with open("replies.txt", "a", encoding="utf-8") as file:
-        file.write(
-            name
-            + " "
-            + "PRE_DESSERT_SUSTAINABILITY:"
-            + sixth_suggestion_conditioned
-            + "\n"
-        )
+    sixth_suggestion_unconditioned = update.message.text.lower()
+
     await update.message.reply_text(
         "Perfect, I'll now provide you with one of my explanations:"
     )
     random_number = random.randint(1, 2)
-    if (random_number==1):
+    if random_number == 1:
         await Spiegazione.spiegazione_sustainability(update, context)
-    elif(random_number==2):
+        expl_type = "sustainability"
+    elif random_number == 2:
         await Spiegazione.spiegazione_piatto(update, context)
-    keyboard =[["Unsustainable", "Somewhat Unsustainable"],["Moderately Sustainable"], ["Sustainable","Very Sustainable"]]
+        expl_type = "description"
+
+    with open("replies.txt", "a", encoding="utf-8") as file:
+        file.write(sixth_suggestion_unconditioned + "," + expl_type + ",")
+    keyboard = [
+        ["Unsustainable", "Somewhat Unsustainable"],
+        ["Moderately Sustainable"],
+        ["Sustainable", "Very Sustainable"],
+    ]
     reply_markup = ReplyKeyboardMarkup(
         keyboard, one_time_keyboard=True, resize_keyboard=True
     )
@@ -1268,21 +1552,14 @@ async def sixth_suggestion_sustainability_explanation(update, context):
     )
     return POST_DESSERT_SUSTAINABILITY
 
+
 async def end_of_experiment(update, context):
     sixth_suggestion_conditioned = update.message.text.lower()
-    name = update.message.from_user.first_name
     with open("replies.txt", "a", encoding="utf-8") as file:
-        file.write(
-            name
-            + " "
-            + "POST_DESSERT_SUSTAINABILITY:"
-            + sixth_suggestion_conditioned
-            + "\n"
-        )
+        file.write(sixth_suggestion_conditioned + "\n")
 
-    await update.message.reply_text(
-        "Thank you so much for your time, we are now done.")
-    
+    await update.message.reply_text("Thank you so much for your time, we are now done.")
+
     return ConversationHandler.END
 
 
@@ -1476,6 +1753,10 @@ async def main():
             GLUTENFREE: [MessageHandler(filters.TEXT, glutenfree)],
             DIABETES: [MessageHandler(filters.TEXT, diabetes)],
             VEGETERIAN: [MessageHandler(filters.TEXT, vegetarian)],
+            HEALTHINESS_LEVEL: [MessageHandler(filters.TEXT, healthiness_level)],
+            HEALTHINESS_INTEREST: [MessageHandler(filters.TEXT, healthiness_interest)],
+            SUSTAINABILITY_LEVEL: [MessageHandler(filters.TEXT, sustainability_level)],
+            SUSTAINABILITY_INTEREST: [MessageHandler(filters.TEXT, sustainability_interest)],
         },
         fallbacks=[MessageHandler(filters.TEXT, unknown)],
     )
