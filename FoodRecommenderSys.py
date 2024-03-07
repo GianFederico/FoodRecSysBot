@@ -1182,7 +1182,7 @@ async def healthiness_initialiation(update, context):
 async def first_suggestion_healthiness_explanation(update, context):
     first_suggestion_unconditioned = update.message.text.lower()
     name = update.message.from_user.first_name
-    with open("replies.txt", "a", encoding="utf-8") as file:
+    with open("replies.csv", "a", encoding="utf-8") as file:
         file.write(
             name
             + ","
@@ -1253,7 +1253,7 @@ async def first_suggestion_healthiness_explanation(update, context):
         await Spiegazione.spiegazione_macros(update, context)
         expl_type = "macros"
 
-    with open("replies.txt", "a", encoding="utf-8") as file:
+    with open("replies.csv", "a", encoding="utf-8") as file:
         file.write(expl_type + ",")
 
     keyboard = [
@@ -1276,7 +1276,7 @@ async def second_suggestion(update, context):
     context.user_data["category"] = "second courses"
     await Recommendation.suggerimento(update, context)
 
-    with open("replies.txt", "a", encoding="utf-8") as file:
+    with open("replies.csv", "a", encoding="utf-8") as file:
         file.write(first_suggestion_conditioned + "," + Recommendation.img_url + ",") ##############################àà
 
     keyboard = [
@@ -1309,7 +1309,7 @@ async def second_suggestion_healthiness_explanation(update, context):
         await Spiegazione.spiegazione_macros(update, context)
         expl_type = "macros"
 
-    with open("replies.txt", "a", encoding="utf-8") as file:
+    with open("replies.csv", "a", encoding="utf-8") as file:
         file.write(second_suggestion_unconditioned + "," + expl_type + ",")
     await update.message.reply_text(
         "Wonderful, I'll now provide you with one of my explanations:"
@@ -1335,7 +1335,7 @@ async def third_suggestion(update, context):
     context.user_data["category"] = "desserts"
     await Recommendation.suggerimento(update, context)
 
-    with open("replies.txt", "a", encoding="utf-8") as file:
+    with open("replies.csv", "a", encoding="utf-8") as file:
         file.write(second_suggestion_conditioned + "," + Recommendation.img_url + ",")
 
     keyboard = [
@@ -1372,7 +1372,7 @@ async def third_suggestion_healthiness_explanation(update, context):
         await Spiegazione.spiegazione_macros(update, context)
         expl_type = "macros"
 
-    with open("replies.txt", "a", encoding="utf-8") as file:
+    with open("replies.csv", "a", encoding="utf-8") as file:
         file.write(third_suggestion_unconditioned + "," + expl_type + ",")
 
     keyboard = [
@@ -1397,7 +1397,7 @@ async def fourth_suggestion(update, context):
     context.user_data["category"] = "first courses"
     await Recommendation_due.altro_suggerimento2(update, context)
 
-    with open("replies.txt", "a", encoding="utf-8") as file:
+    with open("replies.csv", "a", encoding="utf-8") as file:
         file.write(third_suggestion_conditioned + "," + Recommendation_due.img_url + ",")
 
     keyboard = [
@@ -1416,7 +1416,7 @@ async def fourth_suggestion(update, context):
 
 async def fourth_suggestion_sustainability_explanation(update, context):
     fourth_suggestion_unconditioned = update.message.text.lower()
-    with open("replies.txt", "a", encoding="utf-8") as file:
+    with open("replies.csv", "a", encoding="utf-8") as file:
         file.write(fourth_suggestion_unconditioned + ",")
     await update.message.reply_text(
         "Fantastic, I'll now offer you one of my explanations:"
@@ -1429,7 +1429,7 @@ async def fourth_suggestion_sustainability_explanation(update, context):
         await Spiegazione.spiegazione_piatto(update, context)
         expl_type = "description"
 
-    with open("replies.txt", "a", encoding="utf-8") as file:
+    with open("replies.csv", "a", encoding="utf-8") as file:
         file.write(fourth_suggestion_unconditioned + "," + expl_type + ",")
 
     keyboard = [
@@ -1451,7 +1451,7 @@ async def fifth_suggestion(update, context):
     await update.message.reply_text("Great, now a second course:")
     context.user_data["category"] = "second courses"
     await Recommendation_due.altro_suggerimento2(update, context)
-    with open("replies.txt", "a", encoding="utf-8") as file:
+    with open("replies.csv", "a", encoding="utf-8") as file:
         file.write(
             fourth_suggestion_conditioned + "," + Recommendation_due.img_url + ","
         )
@@ -1482,7 +1482,7 @@ async def fifth_suggestion_sustainability_explanation(update, context):
         await Spiegazione.spiegazione_piatto(update, context)
         expl_type = "description"
 
-    with open("replies.txt", "a", encoding="utf-8") as file:
+    with open("replies.csv", "a", encoding="utf-8") as file:
         file.write(fifth_suggestion_unconditioned + "," + expl_type)
     keyboard = [
         ["Unsustainable", "Somewhat Unsustainable"],
@@ -1504,7 +1504,7 @@ async def sixth_suggestion(update, context):
     context.user_data["category"] = "desserts"
     await Recommendation_due.altro_suggerimento2(update, context)
 
-    with open("replies.txt", "a", encoding="utf-8") as file:
+    with open("replies.csv", "a", encoding="utf-8") as file:
         file.write(
             fifth_suggestion_conditioned + "," + Recommendation_due.img_url + ","
         )
@@ -1537,7 +1537,7 @@ async def sixth_suggestion_sustainability_explanation(update, context):
         await Spiegazione.spiegazione_piatto(update, context)
         expl_type = "description"
 
-    with open("replies.txt", "a", encoding="utf-8") as file:
+    with open("replies.csv", "a", encoding="utf-8") as file:
         file.write(sixth_suggestion_unconditioned + "," + expl_type + ",")
     keyboard = [
         ["Unsustainable", "Somewhat Unsustainable"],
@@ -1555,7 +1555,7 @@ async def sixth_suggestion_sustainability_explanation(update, context):
 
 async def end_of_experiment(update, context):
     sixth_suggestion_conditioned = update.message.text.lower()
-    with open("replies.txt", "a", encoding="utf-8") as file:
+    with open("replies.csv", "a", encoding="utf-8") as file:
         file.write(sixth_suggestion_conditioned + "\n")
 
     await update.message.reply_text("Thank you so much for your time, we are now done.")
