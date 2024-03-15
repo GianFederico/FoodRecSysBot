@@ -183,9 +183,9 @@ async def height(update: Update, context):
 async def weight(update: Update, context):
     user_weight = update.message.text
     # Controllo sulla validità del peso
-    if not user_weight.isdigit() or int(user_weight) < 30 or int(user_weight) > 150:
+    if not user_weight.isdigit() or int(user_weight) < 25 or int(user_weight) > 190:
         await update.message.reply_text(
-            "You must insert a number, round it up to the nearest integer. "
+            "You must insert a valid number in between 25 and 190, round it up to the nearest integer. "
         )
         return KG
     else:
