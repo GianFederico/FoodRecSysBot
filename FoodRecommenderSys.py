@@ -1182,11 +1182,12 @@ async def healthiness_initialiation(update, context):
 async def first_suggestion_healthiness_explanation(update, context):
     first_suggestion_unconditioned = update.message.text.lower()
     name = update.message.from_user.first_name
+    user_id = update.message.from_user.id
     with open("replies.csv", "a", encoding="utf-8") as file:
         file.write(
             name
             + ","
-            + str(context.user_data["category"])
+            + str(user_id)
             + ","
             + str(context.user_data["nickel"])
             + ","
@@ -1277,7 +1278,7 @@ async def second_suggestion(update, context):
     await Recommendation.suggerimento(update, context)
 
     with open("replies.csv", "a", encoding="utf-8") as file:
-        file.write(first_suggestion_conditioned + "," + Recommendation.img_url + ",") ##############################àà
+        file.write(first_suggestion_conditioned + "," + Recommendation.img_url + ",")
 
     keyboard = [
         ["Unhealthy", "Somewhat Unhealthy"],
@@ -1426,7 +1427,7 @@ async def fourth_suggestion_sustainability_explanation(update, context):
         await Spiegazione.spiegazione_sustainability(update, context)
         expl_type = "sustainability"
     elif random_number == 2:
-        await Spiegazione.spiegazione_piatto(update, context)
+        await Spiegazione.controllo_piatto(update, context)
         expl_type = "description"
 
     with open("replies.csv", "a", encoding="utf-8") as file:
@@ -1479,7 +1480,7 @@ async def fifth_suggestion_sustainability_explanation(update, context):
         await Spiegazione.spiegazione_sustainability(update, context)
         expl_type = "sustainability"
     elif random_number == 2:
-        await Spiegazione.spiegazione_piatto(update, context)
+        await Spiegazione.controllo_piatto(update, context)
         expl_type = "description"
 
     with open("replies.csv", "a", encoding="utf-8") as file:
@@ -1534,7 +1535,7 @@ async def sixth_suggestion_sustainability_explanation(update, context):
         await Spiegazione.spiegazione_sustainability(update, context)
         expl_type = "sustainability"
     elif random_number == 2:
-        await Spiegazione.spiegazione_piatto(update, context)
+        await Spiegazione.controllo_piatto(update, context)
         expl_type = "description"
 
     with open("replies.csv", "a", encoding="utf-8") as file:
@@ -1554,11 +1555,12 @@ async def sixth_suggestion_sustainability_explanation(update, context):
 
 
 async def end_of_experiment(update, context):
+    user_id = str(update.message.from_user.id)
     sixth_suggestion_conditioned = update.message.text.lower()
     with open("replies.csv", "a", encoding="utf-8") as file:
         file.write(sixth_suggestion_conditioned + "\n")
 
-    await update.message.reply_text("Thank you so much for your time, we are now done.")
+    await update.message.reply_text(f"Thank you so much for your time, we are now done.\nPlease remember your ID: *{user_id}* \nyou will need this for the final questionnaire.", parse_mode='Markdown')
 
     return ConversationHandler.END
 
