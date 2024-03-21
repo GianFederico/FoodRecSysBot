@@ -1560,7 +1560,7 @@ async def end_of_experiment(update, context):
     with open("replies.csv", "a", encoding="utf-8") as file:
         file.write(sixth_suggestion_conditioned + "\n")
 
-    await update.message.reply_text(f"Thank you so much for your time, we are now done.\nPlease remember your ID: *{user_id}* \nyou will need this for the final questionnaire.", parse_mode='Markdown')
+    await update.message.reply_text(f"Thank you so much for your time, we are now done.\nPlease click your ID to copy it: `{user_id}` \nyou will need this for the final questionnaire.\n\nTo proceed please follow this link: https://forms.gle/z9EzKyioQ5xvDdtR8", parse_mode='Markdown')
 
     return ConversationHandler.END
 
