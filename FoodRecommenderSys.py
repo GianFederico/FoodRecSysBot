@@ -1424,10 +1424,10 @@ async def fourth_suggestion_sustainability_explanation(update, context):
     )
     random_number = random.randint(1, 2)
     if random_number == 1:
-        await Spiegazione.spiegazione_sustainability(update, context)
-        expl_type = "sustainability"
+        await Spiegazione.spiegazione_sustainability_alternativa(update, context)
+        expl_type = "ingredients"
     elif random_number == 2:
-        await Spiegazione.controllo_piatto(update, context)
+        await Spiegazione.spiegazione_sustainability(update, context)
         expl_type = "description"
 
     with open("replies.csv", "a", encoding="utf-8") as file:
@@ -1480,8 +1480,8 @@ async def fifth_suggestion_sustainability_explanation(update, context):
         await Spiegazione.spiegazione_sustainability(update, context)
         expl_type = "sustainability"
     elif random_number == 2:
-        await Spiegazione.controllo_piatto(update, context)
-        expl_type = "description"
+        await Spiegazione.spiegazione_sustainability_alternativa(update, context)
+        expl_type = "ingredients"
 
     with open("replies.csv", "a", encoding="utf-8") as file:
         file.write(fifth_suggestion_unconditioned + "," + expl_type)
@@ -1535,8 +1535,8 @@ async def sixth_suggestion_sustainability_explanation(update, context):
         await Spiegazione.spiegazione_sustainability(update, context)
         expl_type = "sustainability"
     elif random_number == 2:
-        await Spiegazione.controllo_piatto(update, context)
-        expl_type = "description"
+        await Spiegazione.spiegazione_sustainability_alternativa(update, context)
+        expl_type = "ingredients"
 
     with open("replies.csv", "a", encoding="utf-8") as file:
         file.write(sixth_suggestion_unconditioned + "," + expl_type + ",")
@@ -1561,7 +1561,6 @@ async def end_of_experiment(update, context):
         file.write(sixth_suggestion_conditioned + "\n")
 
     await update.message.reply_text(f"Thank you so much for your time, we are now done.\nPlease click your ID to copy it: `{user_id}` \nyou will need this for the final questionnaire.\n\nTo proceed please follow this link: https://forms.gle/z9EzKyioQ5xvDdtR8", parse_mode='Markdown')
-
     return ConversationHandler.END
 
 

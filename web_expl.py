@@ -158,7 +158,8 @@ def get_expl():
             "ingredientsDopamine_one",          # 16
             "description",                      # 17
             "smartExplanation_one",             # 18 
-            "foodMacros_one"                    # 19
+            "foodMacros_one",                   # 19
+            "recipeIngredients_one"             # 20
         ]
 
         explanations = {}

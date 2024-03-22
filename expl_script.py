@@ -2160,6 +2160,87 @@ class Spiegazione:
             #message = str(explanation_text)[2:-2].replace(r"\n", "\n")
             return await update.message.reply_text(str(explanation_text)[2:-2].replace(r"\n", "\n"), parse_mode='Markdown')
 
+
+
+    @staticmethod
+    async def spiegazione_sustainability_alternativa(update: Update, context):
+        print("hola")
+        if not hasattr(Recommendation, 'img_url'):
+            if not hasattr(SpecificRec, 'img_url'):
+                return await update.message.reply_text("Sorry, I don't know what to say.\nYou should ask for a suggestion first.")
+        
+        restr_list = []
+
+        if context.user_data["nickel"] == 1:
+            restr_list.append("low_nickel")
+
+        if context.user_data["vegetarian"] == 1:
+            restr_list.append("vegetarian")
+
+        if context.user_data["lactosefree"] == 1:
+            restr_list.append("lactose-free")
+
+        # if context.user_data["light"] == 1:
+        #     restr_list.append("light")
+
+        if context.user_data["glutenfree"] == 1:
+            restr_list.append("gluten-free")
+
+        if hasattr(SpecificRec, 'img_url'):
+            imgurl=SpecificRec.img_url
+        elif hasattr(Recommendation_tre, 'img_url'):
+            imgurl=Recommendation_tre.img_url
+        elif hasattr(Recommendation_due, 'img_url'):
+            imgurl=Recommendation_due.img_url
+        elif hasattr(Recommendation, 'img_url'):
+            imgurl=Recommendation.img_url
+
+        restr = ",".join(restr_list) if restr_list else None
+        url = "http://127.0.0.1:5000/expl?"
+        params = {
+            "type": 20,
+            "style":0,
+            "imgurl1": imgurl,
+            "difficulty": context.user_data["cook_exp"],
+            "goal": context.user_data["goals"],
+            "user_cost": context.user_data["max_cost_rec"],
+            "user_time": context.user_data["time_cook"],
+            "user_age": context.user_data["age"],
+            "sex": context.user_data["gender"],
+            "mood": context.user_data["mood"],
+            "bmi": context.user_data["weight"],
+            "activity": context.user_data["ph_activity"],
+            "stress": context.user_data["stress"],
+            "health_style": context.user_data["ht_lifestyle"],
+            "health_condition": context.user_data["ht_lifestyle_importance"],
+            "sleep": context.user_data["sleep"],
+            "depression": context.user_data["depress"],
+            "restr": restr,
+        }
+        full_url = url + urlencode(params)
+        print(full_url)
+        response = requests.get(full_url)
+        risposta_spiegazione = response.json()
+        print("Response text:", risposta_spiegazione)
+        explanation = risposta_spiegazione.get("explanations", {}).get("recipeIngredients_oneA")
+        if explanation:
+            max_length = 5000
+            segments = [
+                explanation[i : i + max_length]
+                for i in range(0, len(explanation), max_length)
+            ]
+
+            explanation_text=[]
+            for segment in segments:
+                explanation_text.append(segment)
+
+            print("@@@@@@@@@@@@@@@@ EXPLANATION TEXT:", explanation_text)
+            #message = str(explanation_text)[2:-2].replace(r"\n", "\n")
+            return await update.message.reply_text(str(explanation_text)[2:-2].replace(r"\n", "\n"), parse_mode='Markdown')
+
+
+
+
     @staticmethod
     async def spiegazione_sustainability_due_piatti(update: Update, context):
         if not hasattr(Recommendation_due, 'img_url'):

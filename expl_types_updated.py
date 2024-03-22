@@ -1192,6 +1192,16 @@ def checkRecipeIngredientsInList(ingredients, recipe_values):
     return ingredients_found
 
 
+
+def recipeIngredients_one(recipe_values):
+
+    explanation= recipe_values['ingredients']
+    explanation= "This recipe contains: " + explanation[1:-1] + "."
+    explanation = explanation.replace('\\', '').replace('"', '')
+
+    return explanation
+
+
 """
 The listFavIngredientsInRecipe function is used in userIngredients_one and userIngredients_two
 to show a list of the user's favourite ingredients contained in a given recipe.
@@ -1997,6 +2007,10 @@ def get_str_exp(user,
         expl, _ = foodMacros_one(recipeA_values, user)
     elif type_explanation == 'foodMacros_two':
         expl = foodMacros_two(recipeA_values, recipeB_values, user)
+
+    #TYPE: recipeIngredients
+    elif type_explanation == 'recipeIngredients_one':
+        expl = recipeIngredients_one(recipeA_values)
 
     return expl
 
