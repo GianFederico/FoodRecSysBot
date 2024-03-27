@@ -1199,6 +1199,8 @@ def recipeIngredients_one(recipe_values):
     explanation= "This recipe contains: " + explanation[1:-1] + "."
     explanation = explanation.replace('\\', '').replace('"', '')
 
+    print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@hereeeeeeeeeee",rsa_score(recipe_values))
+
     return explanation
 
 
