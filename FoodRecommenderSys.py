@@ -1560,7 +1560,52 @@ async def end_of_experiment(update, context):
     with open("replies.csv", "a", encoding="utf-8") as file:
         file.write(sixth_suggestion_conditioned + "\n")
 
-    await update.message.reply_text(f"Thank you so much for your time, we are now done.\nPlease click your ID to copy it: `{user_id}` \nyou will need this for the final questionnaire.\n\nTo proceed please follow this link: https://forms.gle/z9EzKyioQ5xvDdtR8", parse_mode='Markdown')
+    if hasattr(SpecificRec, 'img_url'):
+        del SpecificRec.img_url 
+    if hasattr(Recommendation_tre, 'img_url'):
+        del Recommendation_tre.img_url 
+    if hasattr(Recommendation_due, 'img_url'):
+        del Recommendation_due.img_url 
+    if hasattr(Recommendation, 'img_url'):
+        del Recommendation.img_url 
+    if context.user_data["category"]:
+        del context.user_data["category"] 
+    if context.user_data["nickel"]:
+        del context.user_data["nickel"] 
+    if context.user_data["vegetarian"]:
+        del context.user_data["vegetarian"] 
+    if context.user_data["lactosefree"]:
+        del context.user_data["lactosefree"] 
+    if context.user_data["glutenfree"]:
+        del context.user_data["glutenfree"] 
+    if context.user_data["diabetes"]:
+        del context.user_data["diabetes"] 
+    if context.user_data["pregnant"]:
+        del context.user_data["pregnant"] 
+    if context.user_data["cook_exp"]:
+        del context.user_data["cook_exp"] 
+    if context.user_data["ht_lifestyle"]:
+        del context.user_data["ht_lifestyle"] 
+    if context.user_data["goals"]:
+        del context.user_data["goals"] 
+    if context.user_data["max_cost_rec"]:
+        del context.user_data["max_cost_rec"] 
+    if context.user_data["time_cook"]:
+        del context.user_data["time_cook"] 
+    if context.user_data["weight"]:
+        del context.user_data["weight"] 
+    if context.user_data["age"]:
+       del context.user_data["age"] 
+    if context.user_data["gender"]:
+        del context.user_data["gender"] 
+    if context.user_data["ph_activity"]:
+        del context.user_data["ph_activity"] 
+    if context.user_data["stress"]:
+        del context.user_data["stress"] 
+    if context.user_data["sleep"]:
+        del context.user_data["sleep"]
+
+    await update.message.reply_text(f"Session completed.\n\nThank you so much for your time, we are now done.\nPlease click your ID to copy it: `{user_id}` \nyou will need this for the final questionnaire.\n\nTo proceed please follow this link: https://forms.gle/z9EzKyioQ5xvDdtR8", parse_mode='Markdown')
     return ConversationHandler.END
 
 
