@@ -1,18 +1,18 @@
 import pandas as pd
 from fuzzywuzzy import fuzz
+# from sklearn.preprocessing import MinMaxScaler, StandardScaler, RobustScaler
+import numpy as np
 
 # Load the CSV file into a pandas DataFrame
 recipe_df = pd.read_csv('dataset_en.csv')
 commodity_df = pd.read_csv('CSEL_df_cleaned.csv')
 
 
-
 def FSAscore(url):
-    url_to_find = url #'https://www.giallozafferano.it/images/ricette/201/20113/foto_hd/hd650x433_wm.jpg'
+    #'https://www.giallozafferano.it/images/ricette/201/20113/foto_hd/hd650x433_wm.jpg'
 
     # Filter the DataFrame based on the URL
-    filtered_recipe_df = recipe_df[recipe_df['imageURL'] == url_to_find]
-
+    filtered_recipe_df = recipe_df[recipe_df['imageURL'] == url]
     recipe_values = filtered_recipe_df.iloc[0][['fat', 'saturatedFat', 'sugars', 'sodium']].to_dict()
 
     # Divide each value by 1.2 for FSA score calculation
@@ -51,8 +51,19 @@ def FSAscore(url):
     else:
         score += 3
 
+    if score <= 5.6:
+        score_level_str = "Very Healthy"
+    elif (score > 5.6) and (score <= 7.2):
+        score_level_str = "Healthy"
+    elif (score > 7.2) and (score <= 8.6):
+        score_level_str = "Moderately Healthy"
+    elif (score > 8.6) and (score <= 10.2):
+        score_level_str = "Somewhat Unhealthy"
+    else:
+        score_level_str = "Unhealthy"
+
     # Print the FSA score
-    print(f"FSA Score for the recipe: {score}")
+    print(f"FSA Score for the recipe: {score_level_str}")
 
 def calculate_iss(ingredient, co2_value, wfp_value, min_co2, max_co2, min_wfp, max_wfp):
     a = 0.8
@@ -76,7 +87,7 @@ def find_scores(url):
     e=2.71
     iss_values = []
 
-    url_to_find = url #'https://www.giallozafferano.it/images/ricette/201/20113/foto_hd/hd650x433_wm.jpg'  # Replace this with the actual URL you want to search for
+    url_to_find = url #'https://www.giallozafferano.it/images/ricette/201/20113/foto_hd/hd650x433_wm.jpg'
 
     # Minumum values of co2 and wf
     min_co2 = 0.19
@@ -84,10 +95,6 @@ def find_scores(url):
     max_co2 = 25.23
     max_wfp = 126505.0
 
-    min_dss = 0
-    max_dss = 0
-
-    DSSs=[]
     # Filter the DataFrame based on the URL
     filtered_recipe_df = recipe_df[recipe_df['imageURL'] == url_to_find]
 
@@ -123,16 +130,64 @@ def find_scores(url):
             iss_values_sorted = sorted(iss_values, reverse=True)
             for i, iss in enumerate(iss_values_sorted):
                 final_DSS += iss * (e**i)
-                dss_rounded=round(final_DSS,2)
+                #dss_rounded=round(final_DSS,2)
+                scaled_value = np.log(1 + final_DSS)
 
-            recipe_sustainability_score=dss_rounded/303#137770.39
-            print("recipe sustainability score:", round(recipe_sustainability_score,10))
+                with open('sust_scores.txt', 'a') as file:
+                    file.write(str(round(scaled_value,4)) + ',')
+
+                if scaled_value <= 0.6303:
+                    sus_score_level_str = "Very Sustainable"
+                elif (scaled_value > 0.6303) and (scaled_value <= 0.8355):
+                    sus_score_level_str = "Sustainable"
+                elif (scaled_value > 0.8355) and (scaled_value <= 0.9242):
+                    sus_score_level_str = "Moderately Sustainable"
+                elif (scaled_value > 0.9242) and (scaled_value <= 0.9651):
+                    sus_score_level_str = "Somewhat Unsustainable"
+                else:
+                    sus_score_level_str = "Unsustainable"
+            
+            print("Sustainability Score for the recipe:",sus_score_level_str) #, round(scaled_value,5)
+            print("_____________________________________________________")
                 
 
     else:
         print(f"URL {url_to_find} not found in the CSV file.")
 
-find_scores('https://www.giallozafferano.it/images/ricette/193/19351/foto_hd/hd650x433_wm.jpg')
+
+for url_to_find in recipe_df['imageURL'].unique():
+    find_scores(url_to_find)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # #___________________________________________________________________________
 # e=2.71
