@@ -1417,8 +1417,6 @@ async def fourth_suggestion(update, context):
 
 async def fourth_suggestion_sustainability_explanation(update, context):
     fourth_suggestion_unconditioned = update.message.text.lower()
-    with open("replies.csv", "a", encoding="utf-8") as file:
-        file.write(fourth_suggestion_unconditioned + ",")
     await update.message.reply_text(
         "Fantastic, I'll now offer you one of my explanations:"
     )
