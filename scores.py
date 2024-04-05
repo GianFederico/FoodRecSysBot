@@ -1,11 +1,11 @@
 import pandas as pd
 from fuzzywuzzy import fuzz
-# from sklearn.preprocessing import MinMaxScaler, StandardScaler, RobustScaler
 import numpy as np
 
-# Load the CSV file into a pandas DataFrame
+# Load the CSVs file into a pandas DataFrame
 recipe_df = pd.read_csv('dataset_en.csv')
 commodity_df = pd.read_csv('CSEL_df_cleaned.csv')
+replies_df = pd.read_csv('replies.csv')
 
 
 def FSAscore(url):
@@ -155,8 +155,8 @@ def find_scores(url):
         print(f"URL {url_to_find} not found in the CSV file.")
 
 
-for url_to_find in recipe_df['imageURL'].unique():
-    find_scores(url_to_find)
+for url in recipe_df['imageURL'].unique():
+    find_scores(url)
 
 
 

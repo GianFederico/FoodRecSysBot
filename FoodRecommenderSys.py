@@ -1484,7 +1484,7 @@ async def fifth_suggestion_sustainability_explanation(update, context):
         expl_type = "ingredients"
 
     with open("replies.csv", "a", encoding="utf-8") as file:
-        file.write(fifth_suggestion_unconditioned + "," + expl_type)
+        file.write(fifth_suggestion_unconditioned + "," + expl_type + ",")
     keyboard = [
         ["Unsustainable", "Somewhat Unsustainable"],
         ["Moderately Sustainable"],
