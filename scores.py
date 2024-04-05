@@ -133,8 +133,9 @@ def find_scores(url):
                 #dss_rounded=round(final_DSS,2)
                 scaled_value = np.log(1 + final_DSS)
 
-                with open('sust_scores.txt', 'a') as file:
-                    file.write(str(round(scaled_value,4)) + ',')
+                #this was to gather all the scores for every recipe in the dataset
+                # with open('sust_scores.txt', 'a') as file:
+                #     file.write(str(round(scaled_value,4)) + ',')
 
                 if scaled_value <= 0.6303:
                     sus_score_level_str = "Very Sustainable"
@@ -155,11 +156,28 @@ def find_scores(url):
         print(f"URL {url_to_find} not found in the CSV file.")
 
 
-for url in recipe_df['imageURL'].unique():
-    find_scores(url)
+i=1
+# for url in recipe_df['imageURL'].unique():
+#     print("--------RICETTA ",i, ":")
+#     find_scores(url)
+#     if i==7:
+#         i=1
+#     else:
+#         i=i+1
 
 
 
+url_columns = ['RICETTA1_URL', 'RICETTA2_URL', 'RICETTA3_URL', 'RICETTA4_URL', 'RICETTA5_URL', 'RICETTA6_URL']
+for index, row in replies_df.iterrows():
+    for column in url_columns:
+        user = row['Utente']
+        url = row[column]
+        print(f"----------User: {user} - RICETTA {i}:")
+        find_scores(url)
+        if i==6:
+            i=1
+        else:
+            i=i+1
 
 
 
