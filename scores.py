@@ -152,20 +152,20 @@ def find_scores(url):
                 # dss_rounded=round(final_DSS,2)
                 scaled_value = np.log(1 + final_DSS)
 
-                # this was to gather all the scores for every recipe in the dataset
-                # with open('sust_scores.txt', 'a') as file:
-                #     file.write(str(round(scaled_value,4)) + ',')
+            ##this was to gather all the scores for every recipe in the dataset
+            with open('sust_scores.txt', 'a') as file:
+                file.write(str(round(scaled_value,4)) + ',')
 
-                if scaled_value <= 0.6303:
-                    sus_score_level_str = "Very Sustainable"
-                elif (scaled_value > 0.6303) and (scaled_value <= 0.8355):
-                    sus_score_level_str = "Sustainable"
-                elif (scaled_value > 0.8355) and (scaled_value <= 0.9242):
-                    sus_score_level_str = "Moderately Sustainable"
-                elif (scaled_value > 0.9242) and (scaled_value <= 0.9651):
-                    sus_score_level_str = "Somewhat Unsustainable"
-                else:
-                    sus_score_level_str = "Unsustainable"
+            if scaled_value <= 0.49:
+                sus_score_level_str = "Very Sustainable"
+            elif (scaled_value > 0.49) and (scaled_value <= 1.256):
+                sus_score_level_str = "Sustainable"
+            elif (scaled_value > 1.256) and (scaled_value <= 3.05):
+                sus_score_level_str = "Moderately Sustainable"
+            elif (scaled_value > 3.05) and (scaled_value <= 10.36):
+                sus_score_level_str = "Somewhat Unsustainable"
+            else:
+                sus_score_level_str = "Unsustainable"
 
             print(
                 "Sustainability Score for the recipe:", sus_score_level_str
@@ -249,7 +249,7 @@ for index, row in replies_df.iterrows():
 # max_co2 = 25.23
 # max_wfp = 126505.0
 
-# # min_co2 = float(commodity_df['final_co2'].min().replace(',', '.'))
+# min_co2 = float(commodity_df['final_co2'].min().replace(',', '.'))
 # # min_wfp = float(commodity_df['final_wfp'].min().replace(',', '.'))
 # # max_co2 = float(commodity_df['final_co2'].max().replace(',', '.'))
 # # max_wfp = float(commodity_df['final_wfp'].max().replace(',', '.'))
@@ -301,7 +301,9 @@ for index, row in replies_df.iterrows():
 #             for i, iss in enumerate(iss_values_sorted):
 #                 final_DSS += iss * (e**i)
 #                 dss_rounded=round(final_DSS,2)
-#                 DSSs.append(dss_rounded)
+#             DSSs.append(dss_rounded)
+#             with open('sust_scores1.txt', 'a') as file:
+#                 file.write(str(round(dss_rounded,4)) + ',')
 
 #             # Update min_dss and max_dss if necessary
 #             min_dss = min(min_dss, final_DSS)

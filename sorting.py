@@ -14,36 +14,24 @@
 # with open(sorted_file_path, 'w') as file:
 #     for number in sorted_numbers:
 #         file.write(str(number) + '\n')
-#_____________________________________________________________________________________________________________
+# ##_____________________________________________________________________________________________________________
 
 
-# calculates the breakpoints based on the distribution of values of soretd_sust_scores. 
-# It iterates over each range, calculates the percentage of total values in that range, computes the cumulative percentage, and then calculates the breakpoint. 
-ranges_counts = [
-    (0, 17129),
-    (1, 22707),
-    (2, 25117),
-    (3, 26226),
-    (4, 27178)
-]
+import numpy as np
 
-# Calculate the breakpoints
-breakpoints = []
-total_values = ranges_counts[-1][1]  # Total count of values
+with open('sorted_DSS.txt', 'r') as file:
+    # Read the contents of the file
+    data = file.read()
 
-# Iterate over each range and calculate the breakpoints
-for i in range(len(ranges_counts) - 1):
-    range_start, count = ranges_counts[i]
-    next_range_start, _ = ranges_counts[i + 1] if i < len(ranges_counts) - 1 else (None, None)
-    percentage_of_total = count / total_values  # Percentage of total values in this range
-    cumulative_percentage = sum(b[1] / total_values for b in breakpoints)  # Cumulative percentage
-    breakpoint = cumulative_percentage + percentage_of_total
-    breakpoints.append((range_start, breakpoint))
+data = [float(number) for number in data.split('\n')]
 
-# Add the last breakpoint for the final range
-breakpoints.append((ranges_counts[-1][0], 1.0))
+# Convert the list into a NumPy array
+data_array = np.array(data)
 
-# Print the breakpoints
-for i, (range_start, breakpoint) in enumerate(breakpoints, start=1):
-    next_range_start = ranges_counts[i][0] if i < len(ranges_counts) else None
-    print(f"Breakpoint {i}: {breakpoint:.4f} (Range {range_start} - {next_range_start - 1 if next_range_start is not None else 'end'})")
+# Calculate quartiles (20th, 40th, 60th, 80th, 100th  percentiles)
+quartiles = np.percentile(data, [20, 40, 60, 80, 100])
+
+# Calculate thresholds
+thresholds = [quartiles[0], quartiles[1], quartiles[2], quartiles[3], quartiles[4]]
+
+print("Thresholds:", thresholds)
